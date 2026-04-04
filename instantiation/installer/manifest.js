@@ -24,6 +24,7 @@ const SCAFFOLD_TEMPLATE_MAP = Object.freeze({
   config_gemini_projects:   'runtime-configs/gemini/projects.json.tmpl',
   config_gemini_trusted:    'runtime-configs/gemini/trustedFolders.json.tmpl',
   config_openclaw_json:     'runtime-configs/openclaw/openclaw.json.tmpl',
+  config_claude_settings:   'runtime-configs/claude/settings.json.tmpl',
 });
 
 // Surface IDs that have a dedicated .tmpl file under template_source_root/
@@ -50,6 +51,7 @@ const SCAFFOLD_PATH_KEY_MAP = Object.freeze({
   config_gemini_projects: { runtime: 'Gemini',   key: 'projects' },
   config_gemini_trusted:  { runtime: 'Gemini',   key: 'trustedFolders' },
   config_openclaw_json:   { runtime: 'OpenClaw', key: 'config' },
+  config_claude_settings: { runtime: 'Claude',   key: 'settings' },
 });
 
 // ---------------------------------------------------------------------------

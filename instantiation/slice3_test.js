@@ -10,6 +10,7 @@ const { placeTemplates } = require('./installer/template_placer');
 const { generateScaffolds } = require('./installer/scaffold_generator');
 const { runOnboarding, runSlice3Onboarding } = require('./onboarding/orchestrator');
 const { loadFileMatrix } = require('./shared/file_matrix');
+const MEMENTO_SOURCE = path.resolve(process.env.HOME, 'VIK', 'Coding', 'Memento');
 
 // ---------------------------------------------------------------------------
 // Fake user: Pauline (continued from Slice 2)
@@ -253,6 +254,7 @@ async function runSlice3Test() {
     targetInstallRoot: TARGET_VAULT,
     homeRoot: TARGET_HOME,
     targetWorkspaceRoot: TARGET_WORKSPACE,
+    mementoSourceRoot: MEMENTO_SOURCE,
     mockConnections: MOCK_CONNECTIONS,
     mockSyncResults: MOCK_SYNC_RESULTS,
     mockCapturedData: MOCK_CAPTURED_DATA,
@@ -394,6 +396,7 @@ async function runSlice3Test() {
       targetInstallRoot: laterVault,
       homeRoot: laterHome,
       targetWorkspaceRoot: laterWorkspace,
+      mementoSourceRoot: MEMENTO_SOURCE,
     });
 
     const laterConfigPath = path.join(laterWorkspace, 'state', 'runtime', 'pipeline_config.json');

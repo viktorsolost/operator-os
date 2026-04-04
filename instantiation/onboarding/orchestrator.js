@@ -90,7 +90,7 @@ function runOnboarding({ installerManifest, onboardingAnswers, templateSourceRoo
  * @param {object} [options.mockCapturedData] - for dry testing (voice profiler)
  * @returns {object}
  */
-function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorkspaceRoot, mockConnections, mockSyncResults, mockCapturedData }) {
+function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorkspaceRoot, mementoSourceRoot, mockConnections, mockSyncResults, mockCapturedData }) {
   // 1. Connect accounts
   const connections = connectAccounts({ packet, mockConnections });
 
@@ -104,8 +104,8 @@ function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorksp
 
   // 3. Generate pipeline config
   const pipelineResult = connections.skipped
-    ? generateEmptyPipelineConfig({ packet, targetWorkspaceRoot })
-    : generatePipelineConfig({ packet, accountConnections: connections, targetWorkspaceRoot });
+    ? generateEmptyPipelineConfig({ packet, targetWorkspaceRoot, mementoSourceRoot })
+    : generatePipelineConfig({ packet, accountConnections: connections, targetWorkspaceRoot, mementoSourceRoot });
 
   // 4. Bootstrap registry
   const registryResult = bootstrapRegistry({ packet, targetWorkspaceRoot });

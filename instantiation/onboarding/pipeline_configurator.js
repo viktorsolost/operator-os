@@ -37,8 +37,8 @@ const REQUIRED_PATCHES = [
  * @param {string} options.targetWorkspaceRoot - where Memento workspace lives
  * @returns {object} Report: { configPath, config }
  */
-function generatePipelineConfig({ packet, accountConnections, targetWorkspaceRoot }) {
-  ensurePipelineWorkspace(targetWorkspaceRoot);
+function generatePipelineConfig({ packet, accountConnections, targetWorkspaceRoot, mementoSourceRoot }) {
+  ensurePipelineWorkspace(targetWorkspaceRoot, mementoSourceRoot);
 
   const gmailAccounts = (accountConnections && accountConnections.gmail) || [];
   const basecampConfig = (accountConnections && accountConnections.basecamp) || null;
@@ -110,11 +110,12 @@ function generatePipelineConfig({ packet, accountConnections, targetWorkspaceRoo
 /**
  * Generate an empty pipeline config (for "later" flow).
  */
-function generateEmptyPipelineConfig({ packet, targetWorkspaceRoot }) {
+function generateEmptyPipelineConfig({ packet, targetWorkspaceRoot, mementoSourceRoot }) {
   return generatePipelineConfig({
     packet,
     accountConnections: { gmail: [], basecamp: null },
     targetWorkspaceRoot,
+    mementoSourceRoot,
   });
 }
 
@@ -140,11 +141,11 @@ function verifyPipelineCompatibility(targetWorkspaceRoot) {
   return report;
 }
 
-function ensurePipelineWorkspace(targetWorkspaceRoot) {
-  const sourcePipelineRoot = path.resolve(__dirname, '../../pipeline');
+function ensurePipelineWorkspace(targetWorkspaceRoot, mementoSourceRoot) {
+  const sourcePipelineRoot = mementoSourceRoot ? path.join(mementoSourceRoot, 'pipeline') : null;
   const targetPipelineRoot = path.join(targetWorkspaceRoot, 'pipeline');
 
-  if (!fs.existsSync(sourcePipelineRoot)) {
+  if (!sourcePipelineRoot || !fs.existsSync(sourcePipelineRoot)) {
     return;
   }
 
