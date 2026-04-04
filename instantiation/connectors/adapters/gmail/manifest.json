@@ -1,0 +1,10 @@
+{
+  "id": "gmail",
+  "display_name": "Gmail (via gws CLI)",
+  "category": "email",
+  "capabilities": ["email"],
+  "auth_adapter": "auth.js",
+  "stage": "source_sync",
+  "priority": 10,
+  "status": "production"
+}

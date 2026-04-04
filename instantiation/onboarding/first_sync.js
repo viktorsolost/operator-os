@@ -30,11 +30,17 @@ function runFirstSync({ pipelineConfig, targetWorkspaceRoot, mockSyncResults }) 
     };
   }
 
-  // Mock path for dry testing
+  // Mock path for dry testing — must stay unchanged
   if (mockSyncResults) {
     return applyMockSyncResults(mockSyncResults, targetWorkspaceRoot);
   }
 
+  // Use planner-driven sync if connector state is available
+  if (pipelineConfig.connectors && Array.isArray(pipelineConfig.connectors.enabled) && pipelineConfig.connectors.enabled.length > 0) {
+    return runPlannerSync(pipelineConfig, targetWorkspaceRoot);
+  }
+
+  // Legacy fallback for configs without connector state
   return runLiveSync(pipelineConfig, targetWorkspaceRoot);
 }
 
@@ -109,6 +115,134 @@ function applyMockSyncResults(mockResults, targetWorkspaceRoot) {
   };
 }
 
+/**
+ * Planner-driven sync: uses the connector planner (buildExecutionPlan + executeStages)
+ * to drive source sync. Supplemental and derivation steps not yet modelled as connectors
+ * are run in the legacy way after the planner completes.
+ */
+function runPlannerSync(pipelineConfig, targetWorkspaceRoot) {
+  const { buildExecutionPlan, executeStages } = require('../connectors/planner');
+  const { loadRegistry } = require('../connectors/registry');
+  const { getEnabledConnectorManifests } = require('./pipeline_configurator');
+
+  const ADAPTERS_DIR = path.resolve(__dirname, '..', 'connectors', 'adapters');
+  const registry = loadRegistry(ADAPTERS_DIR);
+  const enabledManifests = getEnabledConnectorManifests(pipelineConfig, registry);
+
+  // If no connectors resolved, fall back to legacy
+  if (enabledManifests.length === 0) {
+    return runLiveSync(pipelineConfig, targetWorkspaceRoot);
+  }
+
+  const plan = buildExecutionPlan(enabledManifests);
+  if (!plan.valid) {
+    // Invalid plan — fall back to legacy with warning
+    console.log('Warning: execution plan invalid, falling back to legacy sync');
+    return runLiveSync(pipelineConfig, targetWorkspaceRoot);
+  }
+
+  const nodeBin = process.execPath;
+  const cliPath = path.join(targetWorkspaceRoot, 'pipeline', 'cli', 'run.js');
+
+  if (!fs.existsSync(cliPath)) {
+    return {
+      success: false,
+      skipped: false,
+      reason: `Missing pipeline CLI at ${cliPath}`,
+      summary: { sources: 0, captures: 0 },
+      plannerDriven: true,
+    };
+  }
+
+  const executorFn = (connector, stage) => {
+    let stepName;
+    if (stage === 'source_sync') {
+      stepName = `${connector.id}_sync`;
+    } else if (stage === 'derivation') {
+      stepName = connector.id;
+    } else {
+      // preflight, post_sync — no CLI step currently
+      return { success: true };
+    }
+
+    const run = spawnSync(nodeBin, [cliPath, stepName], {
+      cwd: targetWorkspaceRoot,
+      encoding: 'utf8',
+      env: process.env,
+    });
+
+    if (run.status !== 0) {
+      return { success: false, error: `Step ${stepName} failed (exit ${run.status})` };
+    }
+    return { success: true };
+  };
+
+  const plannerResult = executeStages(plan.plan, executorFn);
+
+  // After planner-driven source_sync, run supplemental steps not yet in connectors
+  // (calendar, drive, sheets are implied by gmail, not separate connectors yet)
+  const supplementalSteps = [];
+  if (pipelineConfig.sync_engines.calendar) supplementalSteps.push('calendar_sync');
+  if (pipelineConfig.sync_engines.drive) supplementalSteps.push('drive_sync');
+  if (pipelineConfig.sync_engines.sheets) supplementalSteps.push('sheets_sync');
+
+  const supplementalResults = [];
+  for (const step of supplementalSteps) {
+    const run = spawnSync(nodeBin, [cliPath, step], {
+      cwd: targetWorkspaceRoot,
+      encoding: 'utf8',
+      env: process.env,
+    });
+    supplementalResults.push({ step, status: run.status, success: run.status === 0 });
+  }
+
+  // Run derivation steps if at least one source succeeded.
+  // store_enrich and derive_all are not yet connector-modelled, so run them here.
+  const derivationSteps = ['store_enrich', 'derive_all'];
+  const derivationResults = [];
+
+  const sourceSyncStage = plannerResult.stages.find(s => s.stage === 'source_sync');
+  const anySourceSuccess =
+    (sourceSyncStage && sourceSyncStage.results.some(r => r.success)) ||
+    supplementalResults.some(r => r.success);
+
+  if (anySourceSuccess) {
+    for (const step of derivationSteps) {
+      const run = spawnSync(nodeBin, [cliPath, step], {
+        cwd: targetWorkspaceRoot,
+        encoding: 'utf8',
+        env: process.env,
+      });
+      derivationResults.push({ step, status: run.status, success: run.status === 0 });
+    }
+  }
+
+  const allSteps = [
+    ...plannerResult.stages.flatMap(s => s.results.map(r => `${r.connector_id}_sync`)),
+    ...supplementalSteps,
+    ...derivationSteps,
+  ];
+
+  return {
+    success: plannerResult.success,
+    skipped: false,
+    plannerDriven: true,
+    plannerResult,
+    supplemental: supplementalResults,
+    derivation: derivationResults,
+    summary: {
+      sources: (sourceSyncStage ? sourceSyncStage.results.filter(r => r.success).length : 0) +
+        supplementalResults.filter(r => r.success).length,
+      captures: 0,
+      steps: allSteps,
+    },
+  };
+}
+
+/**
+ * Legacy sync: hardcoded step list. Used as fallback when no connector state is present.
+ * @legacy
+ */
 function runLiveSync(pipelineConfig, targetWorkspaceRoot) {
   const nodeBin = process.execPath;
   const cliPath = path.join(targetWorkspaceRoot, 'pipeline', 'cli', 'run.js');

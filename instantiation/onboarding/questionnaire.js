@@ -20,7 +20,7 @@ const OPTIONAL_DEFAULTS = {
   gmail_emails: [],
   basecamp_account_id: '',
   basecamp_person_id: '',
-  workflow_tools: {},
+  workflow_tools: { selected_tools: [], desired_capabilities: [], resolved: {} },
   additional_tools: [],
   tool_integration_notes: '',
 };
