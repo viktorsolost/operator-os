@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { resolvePlaceholders } = require('../shared/template_utils');
 
 /**
  * Build the ordered replacement pairs from the onboarding packet.
@@ -55,7 +56,26 @@ function findViktorResidue(content) {
 }
 
 /**
+ * Build the {{placeholder}} map from the onboarding packet (for .tmpl-style sources).
+ */
+function buildPlaceholderMap(packet) {
+  return {
+    owner_name: packet.owner_name,
+    system_name: packet.system_name,
+    vault_location: packet.vault_location,
+    workspace_root: packet.workspace_root,
+    timezone: packet.timezone,
+    home_root: packet.home_root,
+  };
+}
+
+/**
  * Render all source-file rewrite-template surfaces.
+ *
+ * Applies two passes:
+ *  1. Literal string replacements (VIK OS → system_name, Viktor → owner_name, etc.)
+ *     for vault doctrine files that contain literal source-system references.
+ *  2. {{placeholder}} resolution for .tmpl-style sources that use template markers.
  *
  * @param {object} installerManifest - from buildInstallerManifest (has templateSources array)
  * @param {object} packet - validated onboarding input packet
@@ -69,6 +89,7 @@ function renderSourceFiles(installerManifest, packet) {
   }
 
   const replacementMap = buildReplacementMap(packet);
+  const placeholderMap = buildPlaceholderMap(packet);
 
   for (const item of installerManifest.templateSources) {
     try {
@@ -79,7 +100,12 @@ function renderSourceFiles(installerManifest, packet) {
       }
 
       const raw = fs.readFileSync(item.target, 'utf8');
-      const { result: rendered, totalReplacements } = applyReplacements(raw, replacementMap);
+
+      // Pass 1: literal string replacements (Viktor/VIK OS doctrine rewrites)
+      const { result: afterLiteral, totalReplacements } = applyReplacements(raw, replacementMap);
+
+      // Pass 2: {{placeholder}} resolution (for .tmpl-style sources)
+      const rendered = resolvePlaceholders(afterLiteral, placeholderMap);
 
       report.replacementCounts.push({ id: item.id, count: totalReplacements });
 
