@@ -1,0 +1,2538 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "derived_from": "initiatives/operator-system/installer-v1-manifest.json",
+    "canonical_total": 281,
+    "frozen": true
+  },
+  "treatment_modes": [
+    "copy-core",
+    "rewrite-template",
+    "generate-fresh",
+    "prompt-later",
+    "exclude"
+  ],
+  "surfaces": [
+    {
+      "id": "boot_md",
+      "path": "BOOT.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "routing_md",
+      "path": "ROUTING.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "claude_md",
+      "path": "CLAUDE.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "structure_md",
+      "path": "STRUCTURE.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "memory_md",
+      "path": "memory.md",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "recent_context_md",
+      "path": "recent-context.md",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_context_loading_rules_md",
+      "path": "operator/context-loading-rules.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_context_placement_rules_md",
+      "path": "operator/context-placement-rules.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_closeout_rules_md",
+      "path": "operator/closeout-rules.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_delegation_contract_md",
+      "path": "operator/delegation-contract.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_model_policy_md",
+      "path": "operator/model-policy.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_capabilities_md",
+      "path": "operator/capabilities.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "operator_clarification_protocol_md",
+      "path": "operator/clarification-protocol.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_claude_md",
+      "path": "operator/CLAUDE.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_agent_role_md",
+      "path": "operator/agent-role.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_working_style_md",
+      "path": "operator/working-style.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_decision_principles_md",
+      "path": "operator/decision-principles.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_anton_md",
+      "path": "operator/anton.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_claudia_md",
+      "path": "operator/claudia.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_jonah_md",
+      "path": "operator/jonah.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_vera_md",
+      "path": "operator/vera.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_lev_md",
+      "path": "operator/lev.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_identity_md",
+      "path": "operator/identity.md",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_reminders_md",
+      "path": "operator/reminders.md",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "operator_claudia_memory_md",
+      "path": "operator/claudia-memory.md",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "templates_readme_md",
+      "path": "templates/README.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_active_project_claude_md",
+      "path": "templates/active-project/CLAUDE.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "templates_active_project_summary_md",
+      "path": "templates/active-project/summary.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_active_project_decisions_md",
+      "path": "templates/active-project/decisions.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_active_project_open_questions_md",
+      "path": "templates/active-project/open-questions.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_active_project_references_md",
+      "path": "templates/active-project/references.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_active_project_session_log_md",
+      "path": "templates/active-project/session-log.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_intake_project_claude_md",
+      "path": "templates/intake-project/CLAUDE.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_intake_project_summary_md",
+      "path": "templates/intake-project/summary.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_intake_project_decisions_md",
+      "path": "templates/intake-project/decisions.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_intake_project_open_questions_md",
+      "path": "templates/intake-project/open-questions.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_intake_project_references_md",
+      "path": "templates/intake-project/references.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_intake_project_setup_status_md",
+      "path": "templates/intake-project/setup-status.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_operator_handoff_md",
+      "path": "templates/operator-handoff.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "templates_project_recipe_md",
+      "path": "templates/project-recipe.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_new_repo_technical_checklist_md",
+      "path": "templates/new-repo-technical-checklist.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "templates_new_repo_technical_onboarding_md",
+      "path": "templates/new-repo-technical-onboarding.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "domains_claude_md",
+      "path": "domains/CLAUDE.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "domains_exhibitions_claude_md",
+      "path": "domains/exhibitions/CLAUDE.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "domains_exhibitions_glossary_md",
+      "path": "domains/exhibitions/glossary.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "domains_exhibitions_rules_md",
+      "path": "domains/exhibitions/rules.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "project_types_claude_md",
+      "path": "project-types/CLAUDE.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "project_types_exhibition_claude_md",
+      "path": "project-types/exhibition/CLAUDE.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "project_types_exhibition_approval_rules_md",
+      "path": "project-types/exhibition/approval-rules.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "project_types_exhibition_lifecycle_md",
+      "path": "project-types/exhibition/lifecycle.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "project_types_intake_decision_tree_md",
+      "path": "project-types/intake-decision-tree.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "brands_session_wrapper_md",
+      "path": "brands/session-wrapper.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "brands_runtime_md",
+      "path": "brands/runtime.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "brands_operators_atlas_md",
+      "path": "brands/operators/atlas.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "brands_operators_helena_md",
+      "path": "brands/operators/helena.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "brands_registry_md",
+      "path": "brands/registry.md",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "brands_eterno_readme_md",
+      "path": "brands/eterno/README.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_registry_md",
+      "path": "brands/eterno/registry.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_approved_pack_md",
+      "path": "brands/eterno/doctrine/approved-pack.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_channels_instagram_md",
+      "path": "brands/eterno/doctrine/channels/instagram.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_channels_x_md",
+      "path": "brands/eterno/doctrine/channels/x.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_identity_md",
+      "path": "brands/eterno/doctrine/identity.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_metrics_md",
+      "path": "brands/eterno/doctrine/metrics.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_open_questions_md",
+      "path": "brands/eterno/doctrine/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_tensions_md",
+      "path": "brands/eterno/doctrine/tensions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_doctrine_voice_md",
+      "path": "brands/eterno/doctrine/voice.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_corpus_2026_04_03_eterno_x_metrics_snapshot_matched_window_md",
+      "path": "brands/eterno/corpus/2026-04-03-eterno-x-metrics-snapshot-matched-window.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_corpus_2026_04_03_eterno_x_metrics_snapshot_md",
+      "path": "brands/eterno/corpus/2026-04-03-eterno-x-metrics-snapshot.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_corpus_2026_04_03_x_vs_instagram_comparison_md",
+      "path": "brands/eterno/corpus/2026-04-03-x-vs-instagram-comparison.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_sources_instagram_2026_04_03_instagram_insights_screenshot_batch_001_md",
+      "path": "brands/eterno/sources/instagram/2026-04-03-instagram-insights-screenshot-batch-001.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_sources_internal_2026_04_03_eterno_strategy_source_map_md",
+      "path": "brands/eterno/sources/internal/2026-04-03-eterno-strategy-source-map.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_sources_x_2026_04_03_eterno_x_user_tweets_batch_001_md",
+      "path": "brands/eterno/sources/x/2026-04-03-eterno-x-user-tweets-batch-001.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_sources_x_2026_04_03_eterno_x_user_tweets_batch_002_md",
+      "path": "brands/eterno/sources/x/2026-04-03-eterno-x-user-tweets-batch-002.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "brands_eterno_sources_x_artifacts_2026_04_03_eterno_x_user_tweets_batch_002_raw_json",
+      "path": "brands/eterno/sources/x/artifacts/2026-04-03-eterno-x-user-tweets-batch-002.raw.json",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_claude_md",
+      "path": "projects/CLAUDE.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "projects_readme_md",
+      "path": "projects/README.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "projects_0009eth_2026_claude_md",
+      "path": "projects/0009eth-2026/CLAUDE.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_0009eth_2026_decisions_md",
+      "path": "projects/0009eth-2026/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_0009eth_2026_open_questions_md",
+      "path": "projects/0009eth-2026/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_0009eth_2026_references_md",
+      "path": "projects/0009eth-2026/references.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_0009eth_2026_session_log_md",
+      "path": "projects/0009eth-2026/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_0009eth_2026_summary_md",
+      "path": "projects/0009eth-2026/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_lucas_zanotto_2026_claude_md",
+      "path": "projects/lucas-zanotto-2026/CLAUDE.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_lucas_zanotto_2026_decisions_md",
+      "path": "projects/lucas-zanotto-2026/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_lucas_zanotto_2026_open_questions_md",
+      "path": "projects/lucas-zanotto-2026/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_lucas_zanotto_2026_references_md",
+      "path": "projects/lucas-zanotto-2026/references.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_lucas_zanotto_2026_session_log_md",
+      "path": "projects/lucas-zanotto-2026/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_lucas_zanotto_2026_summary_md",
+      "path": "projects/lucas-zanotto-2026/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_decisions_md",
+      "path": "projects/punks-2026/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_open_questions_md",
+      "path": "projects/punks-2026/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_references_md",
+      "path": "projects/punks-2026/references.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_session_log_md",
+      "path": "projects/punks-2026/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_summary_md",
+      "path": "projects/punks-2026/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_calls_coldie_2026_03_31_md",
+      "path": "projects/punks-2026/calls/coldie-2026-03-31.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_calls_darko_2026_03_31_md",
+      "path": "projects/punks-2026/calls/darko-2026-03-31.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_calls_pindar_2026_04_01_md",
+      "path": "projects/punks-2026/calls/pindar-2026-04-01.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_calls_piv_2026_03_31_md",
+      "path": "projects/punks-2026/calls/piv-2026-03-31.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_punks_2026_calls_zafgod_2026_03_31_md",
+      "path": "projects/punks-2026/calls/zafgod-2026-03-31.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_decisions_md",
+      "path": "projects/eterno-strategy-2026/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_open_questions_md",
+      "path": "projects/eterno-strategy-2026/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_session_log_md",
+      "path": "projects/eterno-strategy-2026/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_summary_md",
+      "path": "projects/eterno-strategy-2026/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_art_tech_platforms_research_md",
+      "path": "projects/eterno-strategy-2026/art-tech-platforms-research.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_partnerships_and_bookstore_gap_research_2026_04_02_md",
+      "path": "projects/eterno-strategy-2026/partnerships-and-bookstore-gap-research-2026-04-02.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_upstairs_identity_proposal_v1_md",
+      "path": "projects/eterno-strategy-2026/upstairs-identity-proposal-v1.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_eterno_strategy_2026_data_x_analytics_eterno_2025_2026_csv",
+      "path": "projects/eterno-strategy-2026/data/x_analytics_eterno_2025-2026.csv",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_exhibitiq_2026_decisions_md",
+      "path": "projects/exhibitiq-2026/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_exhibitiq_2026_open_questions_md",
+      "path": "projects/exhibitiq-2026/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_exhibitiq_2026_references_md",
+      "path": "projects/exhibitiq-2026/references.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_exhibitiq_2026_session_log_md",
+      "path": "projects/exhibitiq-2026/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_exhibitiq_2026_summary_md",
+      "path": "projects/exhibitiq-2026/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_vhils_x_ledger_decisions_md",
+      "path": "projects/vhils-x-ledger/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_vhils_x_ledger_open_questions_md",
+      "path": "projects/vhils-x-ledger/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_vhils_x_ledger_references_md",
+      "path": "projects/vhils-x-ledger/references.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_vhils_x_ledger_session_log_md",
+      "path": "projects/vhils-x-ledger/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_vhils_x_ledger_summary_md",
+      "path": "projects/vhils-x-ledger/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_nfc_boldtron_session_log_md",
+      "path": "projects/nfc-boldtron/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_exhibition_001_summary_md",
+      "path": "projects/test-exhibition-001/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_exhibition_002_summary_md",
+      "path": "projects/test-exhibition-002/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_proj_history_summary_md",
+      "path": "projects/test-proj-history/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_proj_idempotent_summary_md",
+      "path": "projects/test-proj-idempotent/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_proj_mark_summary_md",
+      "path": "projects/test-proj-mark/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_proj_no_template_summary_md",
+      "path": "projects/test-proj-no-template/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_proj_nodeletion_summary_md",
+      "path": "projects/test-proj-nodeletion/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_proj_overridden_summary_md",
+      "path": "projects/test-proj-overridden/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects_test_proj_registry_summary_md",
+      "path": "projects/test-proj-registry/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "intake_claude_md",
+      "path": "intake/CLAUDE.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    },
+    {
+      "id": "intake_atelier_sora_milan_2026_claude_md",
+      "path": "intake/atelier-sora-milan-2026/CLAUDE.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "intake_atelier_sora_milan_2026_decisions_md",
+      "path": "intake/atelier-sora-milan-2026/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "intake_atelier_sora_milan_2026_open_questions_md",
+      "path": "intake/atelier-sora-milan-2026/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "intake_atelier_sora_milan_2026_references_md",
+      "path": "intake/atelier-sora-milan-2026/references.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "intake_atelier_sora_milan_2026_setup_status_md",
+      "path": "intake/atelier-sora-milan-2026/setup-status.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "intake_atelier_sora_milan_2026_summary_md",
+      "path": "intake/atelier-sora-milan-2026/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "handoffs_readme_md",
+      "path": "handoffs/README.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "handoffs_anton_to_claudia_phase5_investigation_md",
+      "path": "handoffs/anton-to-claudia-phase5-investigation.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "handoffs_anton_to_jonah_project_identity_cleanup_md",
+      "path": "handoffs/anton-to-jonah-project-identity-cleanup.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "handoffs_claudia_to_jonah_linking_fixes_md",
+      "path": "handoffs/claudia-to-jonah-linking-fixes.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_readme_md",
+      "path": "apps/README.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "apps_memento_editorial_pass_md",
+      "path": "apps/memento/editorial-pass.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_anton_email_triage_decisions_md",
+      "path": "apps/memento/archive/plan-archive/anton-email-triage-decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_basecamp_sync_rewrite_anton_md",
+      "path": "apps/memento/archive/plan-archive/basecamp-sync-rewrite-anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_handoff_email_triage_to_anton_md",
+      "path": "apps/memento/archive/plan-archive/handoff-email-triage-to-anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_handoff_email_triage_to_claudia_md",
+      "path": "apps/memento/archive/plan-archive/handoff-email-triage-to-claudia.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_memento_technical_plan_md",
+      "path": "apps/memento/archive/plan-archive/memento-technical-plan.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_1_handoff_jonah_md",
+      "path": "apps/memento/archive/plan-archive/phase-1-handoff-jonah.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_2_corrections_and_phase_3_handoff_jonah_md",
+      "path": "apps/memento/archive/plan-archive/phase-2-corrections-and-phase-3-handoff-jonah.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_2_handoff_jonah_md",
+      "path": "apps/memento/archive/plan-archive/phase-2-handoff-jonah.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_3_handoff_jonah_md",
+      "path": "apps/memento/archive/plan-archive/phase-3-handoff-jonah.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_4_anton_data_inventory_md",
+      "path": "apps/memento/archive/plan-archive/phase-4-anton-data-inventory.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_4_claudia_editorial_step_md",
+      "path": "apps/memento/archive/plan-archive/phase-4-claudia-editorial-step.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_4_data_inventory_md",
+      "path": "apps/memento/archive/plan-archive/phase-4-data-inventory.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_4_today_snapshot_md",
+      "path": "apps/memento/archive/plan-archive/phase-4-today-snapshot.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_4_vera_design_brief_md",
+      "path": "apps/memento/archive/plan-archive/phase-4-vera-design-brief.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_5_handoff_jonah_md",
+      "path": "apps/memento/archive/plan-archive/phase-5-handoff-jonah.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_phase_5_restart_anton_md",
+      "path": "apps/memento/archive/plan-archive/phase-5-restart-anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_rapt_recommendation_md",
+      "path": "apps/memento/archive/plan-archive/rapt-recommendation.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_plan_archive_task_5_shared_sources_proposal_md",
+      "path": "apps/memento/archive/plan-archive/task-5-shared-sources-proposal.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_a_md",
+      "path": "apps/memento/archive/proposals/a.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_c_md",
+      "path": "apps/memento/archive/proposals/c.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_j_md",
+      "path": "apps/memento/archive/proposals/j.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_l_md",
+      "path": "apps/memento/archive/proposals/l.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_anton_brainstorm_md",
+      "path": "apps/memento/archive/proposals/brainstorm/anton_brainstorm.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_claudia_md",
+      "path": "apps/memento/archive/proposals/brainstorm/claudia.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_jonah_md",
+      "path": "apps/memento/archive/proposals/brainstorm/jonah.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_lev_md",
+      "path": "apps/memento/archive/proposals/brainstorm/lev.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_anton_brainstorm_html",
+      "path": "apps/memento/archive/proposals/brainstorm/anton_brainstorm.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_claudia_html",
+      "path": "apps/memento/archive/proposals/brainstorm/claudia.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_jonah_html",
+      "path": "apps/memento/archive/proposals/brainstorm/jonah.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_lev_html",
+      "path": "apps/memento/archive/proposals/brainstorm/lev.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_synthesis_anton_memento_synthesis_review_html",
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/anton_memento_synthesis_review.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_synthesis_jonah_convergence_html",
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/jonah-convergence.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_synthesis_lev_synthesis_html",
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/lev-synthesis.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_brainstorm_synthesis_memento_synthesis_claudia_html",
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/memento-synthesis-claudia.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_proposals_memento_brainstorm_html",
+      "path": "apps/memento/archive/proposals/memento_brainstorm.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_01_newspaper_cascade_html",
+      "path": "apps/memento/archive/dashboard-prototypes/01-newspaper-cascade.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_02_dark_signal_html",
+      "path": "apps/memento/archive/dashboard-prototypes/02-dark-signal.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_03_weight_inversion_html",
+      "path": "apps/memento/archive/dashboard-prototypes/03-weight-inversion.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_04_left_rail_html",
+      "path": "apps/memento/archive/dashboard-prototypes/04-left-rail.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_05_above_the_fold_html",
+      "path": "apps/memento/archive/dashboard-prototypes/05-above-the-fold.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_06_warm_mono_html",
+      "path": "apps/memento/archive/dashboard-prototypes/06-warm-mono.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_07_editorial_split_html",
+      "path": "apps/memento/archive/dashboard-prototypes/07-editorial-split.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_08_oversized_date_html",
+      "path": "apps/memento/archive/dashboard-prototypes/08-oversized-date.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_09_tension_grid_html",
+      "path": "apps/memento/archive/dashboard-prototypes/09-tension-grid.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_10_the_memo_html",
+      "path": "apps/memento/archive/dashboard-prototypes/10-the-memo.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_11_swiss_grid_html",
+      "path": "apps/memento/archive/dashboard-prototypes/11-swiss-grid.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_12_sound_room_html",
+      "path": "apps/memento/archive/dashboard-prototypes/12-sound-room.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_13_gallery_wall_html",
+      "path": "apps/memento/archive/dashboard-prototypes/13-gallery-wall.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_14_fenda_mono_html",
+      "path": "apps/memento/archive/dashboard-prototypes/14-fenda-mono.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_15_boarding_pass_html",
+      "path": "apps/memento/archive/dashboard-prototypes/15-boarding-pass.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_16_ink_letter_html",
+      "path": "apps/memento/archive/dashboard-prototypes/16-ink-letter.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_17_triptych_html",
+      "path": "apps/memento/archive/dashboard-prototypes/17-triptych.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_18_architect_html",
+      "path": "apps/memento/archive/dashboard-prototypes/18-architect.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_19_terminal_html",
+      "path": "apps/memento/archive/dashboard-prototypes/19-terminal.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_dashboard_prototypes_20_broadsheet_html",
+      "path": "apps/memento/archive/dashboard-prototypes/20-broadsheet.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708415809_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708415809.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708415892_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708415892.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708416059_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708416059.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420834_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420834.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420855_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420855.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420859_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420859.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420877_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420877.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420881_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420881.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420898_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420898.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420911_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420911.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420934_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420934.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420943_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420943.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420947_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420947.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420950_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420950.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420965_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420965.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420986_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420986.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708420996_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420996.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421000_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421000.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421008_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421008.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421022_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421022.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421027_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421027.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421107_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421107.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421110_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421110.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421175_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421175.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421737_png",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421737.png",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_memento_archive_refs_ux_designing_pinterest_1145955067708421746_jpg",
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421746.jpg",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_personal_operator_app_overview_md",
+      "path": "apps/sera/personal-operator-app-overview.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_product_framing_md",
+      "path": "apps/sera/product-framing.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_setup_model_md",
+      "path": "apps/sera/setup-model.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_summary_md",
+      "path": "apps/sera/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_decisions_md",
+      "path": "apps/sera/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_open_questions_md",
+      "path": "apps/sera/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_agents_anton_md",
+      "path": "apps/sera/agents/anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_agents_claudia_md",
+      "path": "apps/sera/agents/claudia.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_agents_joana_md",
+      "path": "apps/sera/agents/joana.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_pilot_users_alexandre_md",
+      "path": "apps/sera/pilot-users/alexandre.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "apps_sera_pilot_users_alexandre_interview_brief_md",
+      "path": "apps/sera/pilot-users/alexandre-interview-brief.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_readme_md",
+      "path": "audits/README.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "audits_2026_03_28_anton_routing_audit_md",
+      "path": "audits/2026-03-28/anton-routing-audit.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_2026_03_28_claudia_routing_audit_md",
+      "path": "audits/2026-03-28/claudia-routing-audit.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_2026_03_28_global_issues_md",
+      "path": "audits/2026-03-28/global-issues.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_2026_03_28_jonah_routing_audit_md",
+      "path": "audits/2026-03-28/jonah-routing-audit.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_2026_03_28_lev_routing_audit_md",
+      "path": "audits/2026-03-28/lev-routing-audit.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_2026_03_28_resolution_plan_md",
+      "path": "audits/2026-03-28/resolution-plan.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_2026_03_28_resolution_plan_html",
+      "path": "audits/2026-03-28/resolution-plan.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits_2026_03_28_vik_os_routing_reference_html",
+      "path": "audits/2026-03-28/vik-os-routing-reference.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_boot_manifest_json",
+      "path": "initiatives/operator-routing-and-handoffs/boot-manifest.json",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_contract_spec_anton_md",
+      "path": "initiatives/operator-routing-and-handoffs/contract-spec-anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_decisions_md",
+      "path": "initiatives/operator-routing-and-handoffs/decisions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_open_questions_md",
+      "path": "initiatives/operator-routing-and-handoffs/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_phase_3_architecture_anton_md",
+      "path": "initiatives/operator-routing-and-handoffs/phase-3-architecture-anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_review_anton_md",
+      "path": "initiatives/operator-routing-and-handoffs/review-anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_runtime_self_check_md",
+      "path": "initiatives/operator-routing-and-handoffs/runtime-self-check.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_runtime_smoke_tests_md",
+      "path": "initiatives/operator-routing-and-handoffs/runtime-smoke-tests.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_session_log_md",
+      "path": "initiatives/operator-routing-and-handoffs/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_routing_and_handoffs_summary_md",
+      "path": "initiatives/operator-routing-and-handoffs/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_runtime_bridges_md",
+      "path": "initiatives/operator-system/runtime-bridges.md",
+      "layer": "reusable-core",
+      "treatment": "copy-core",
+      "owner_phase": "installer",
+      "location": "vault"
+    },
+    {
+      "id": "initiatives_operator_system_system_instantiation_contract_md",
+      "path": "initiatives/operator-system/system-instantiation-contract.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_system_instantiation_generated_file_matrix_md",
+      "path": "initiatives/operator-system/system-instantiation-generated-file-matrix.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_system_instantiation_onboarding_schema_md",
+      "path": "initiatives/operator-system/system-instantiation-onboarding-schema.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_installer_target_replication_contract_md",
+      "path": "initiatives/operator-system/installer-target-replication-contract.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_installer_v1_manifest_spec_md",
+      "path": "initiatives/operator-system/installer-v1-manifest-spec.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_installer_v1_manifest_json",
+      "path": "initiatives/operator-system/installer-v1-manifest.json",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_installer_v1_full_comparison_md",
+      "path": "initiatives/operator-system/installer-v1-full-comparison.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_installer_v1_full_comparison_html",
+      "path": "initiatives/operator-system/installer-v1-full-comparison.html",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_installer_v1_onboarding_phase3_tools_md",
+      "path": "initiatives/operator-system/installer-v1-onboarding-phase3-tools.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_summary_md",
+      "path": "initiatives/operator-system/summary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_session_log_md",
+      "path": "initiatives/operator-system/session-log.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_open_questions_md",
+      "path": "initiatives/operator-system/open-questions.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_handoff_rules_md",
+      "path": "initiatives/operator-system/handoff-rules.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_routing_model_md",
+      "path": "initiatives/operator-system/routing-model.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_team_map_md",
+      "path": "initiatives/operator-system/team-map.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_validation_md",
+      "path": "initiatives/operator-system/validation.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_project_identity_rule_md",
+      "path": "initiatives/operator-system/project-identity-rule.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_system_instantiation_vocabulary_md",
+      "path": "initiatives/operator-system/system-instantiation-vocabulary.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_installer_v1_session_brief_md",
+      "path": "initiatives/operator-system/installer-v1-session-brief.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_operators_anton_md",
+      "path": "initiatives/operator-system/operators/anton.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_operators_atlas_md",
+      "path": "initiatives/operator-system/operators/atlas.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_operators_claudia_md",
+      "path": "initiatives/operator-system/operators/claudia.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_operators_helena_md",
+      "path": "initiatives/operator-system/operators/helena.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_operators_jonah_md",
+      "path": "initiatives/operator-system/operators/jonah.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_operators_lev_md",
+      "path": "initiatives/operator-system/operators/lev.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_operator_system_operators_vera_md",
+      "path": "initiatives/operator-system/operators/vera.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "initiatives_internal_drive_migration_plan_md",
+      "path": "initiatives/internal-drive-migration/plan.md",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "_ds_store",
+      "path": ".DS_Store",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "audits__ds_store",
+      "path": "audits/.DS_Store",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "projects__ds_store",
+      "path": "projects/.DS_Store",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never_copy",
+      "location": "source-only"
+    },
+    {
+      "id": "bridge_codex",
+      "path": "~/.codex/instructions.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Codex",
+      "runtime_gated": true,
+      "inputs": [
+        "owner_name",
+        "system_name",
+        "vault_location"
+      ]
+    },
+    {
+      "id": "bridge_claude",
+      "path": "~/.claude/CLAUDE.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Claude",
+      "runtime_gated": true,
+      "inputs": [
+        "owner_name",
+        "system_name",
+        "vault_location"
+      ]
+    },
+    {
+      "id": "bridge_gemini",
+      "path": "~/.gemini/GEMINI.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Gemini",
+      "runtime_gated": true,
+      "inputs": [
+        "owner_name",
+        "system_name",
+        "vault_location"
+      ]
+    },
+    {
+      "id": "bridge_openclaw_start",
+      "path": "~/.openclaw/workspace/START_HERE.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "OpenClaw",
+      "runtime_gated": true,
+      "inputs": [
+        "owner_name",
+        "system_name",
+        "vault_location"
+      ]
+    },
+    {
+      "id": "bridge_openclaw_agents",
+      "path": "~/.openclaw/workspace/AGENTS.md",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "OpenClaw",
+      "runtime_gated": true,
+      "inputs": [
+        "owner_name",
+        "system_name",
+        "vault_location",
+        "timezone"
+      ]
+    },
+    {
+      "id": "config_codex_toml",
+      "path": "~/.codex/config.toml",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Codex",
+      "runtime_gated": true,
+      "inputs": [
+        "home_root",
+        "workspace_root",
+        "vault_location",
+        "codex_projects"
+      ],
+      "scaffold_safe": true
+    },
+    {
+      "id": "config_gemini_settings",
+      "path": "~/.gemini/settings.json",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Gemini",
+      "runtime_gated": true,
+      "inputs": [
+        "selected_runtimes"
+      ],
+      "scaffold_safe": true
+    },
+    {
+      "id": "config_gemini_projects",
+      "path": "~/.gemini/projects.json",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Gemini",
+      "runtime_gated": true,
+      "inputs": [
+        "gemini_project_paths"
+      ],
+      "scaffold_safe": true
+    },
+    {
+      "id": "config_gemini_trusted",
+      "path": "~/.gemini/trustedFolders.json",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Gemini",
+      "runtime_gated": true,
+      "inputs": [
+        "gemini_trusted_folders"
+      ],
+      "scaffold_safe": true
+    },
+    {
+      "id": "config_openclaw_json",
+      "path": "~/.openclaw/openclaw.json",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "OpenClaw",
+      "runtime_gated": true,
+      "inputs": [
+        "openclaw_workspace",
+        "openclaw_channels",
+        "selected_runtimes"
+      ],
+      "scaffold_safe": true
+    },
+    {
+      "id": "auth_codex",
+      "path": "~/.codex/auth.json",
+      "layer": "prompt-later",
+      "treatment": "prompt-later",
+      "owner_phase": "post-install",
+      "location": "runtime-home",
+      "runtime": "Codex",
+      "runtime_gated": true
+    },
+    {
+      "id": "auth_claude",
+      "path": "~/.claude/auth",
+      "layer": "prompt-later",
+      "treatment": "prompt-later",
+      "owner_phase": "post-install",
+      "location": "runtime-home",
+      "runtime": "Claude",
+      "runtime_gated": true
+    },
+    {
+      "id": "auth_gemini_oauth",
+      "path": "~/.gemini/oauth_creds.json",
+      "layer": "prompt-later",
+      "treatment": "prompt-later",
+      "owner_phase": "post-install",
+      "location": "runtime-home",
+      "runtime": "Gemini",
+      "runtime_gated": true
+    },
+    {
+      "id": "auth_gemini_accounts",
+      "path": "~/.gemini/google_accounts.json",
+      "layer": "prompt-later",
+      "treatment": "prompt-later",
+      "owner_phase": "post-install",
+      "location": "runtime-home",
+      "runtime": "Gemini",
+      "runtime_gated": true
+    },
+    {
+      "id": "auth_openclaw_creds",
+      "path": "~/.openclaw/credentials/",
+      "layer": "prompt-later",
+      "treatment": "prompt-later",
+      "owner_phase": "post-install",
+      "location": "runtime-home",
+      "runtime": "OpenClaw",
+      "runtime_gated": true,
+      "is_directory": true
+    },
+    {
+      "id": "device_openclaw_identity",
+      "path": "~/.openclaw/identity/",
+      "layer": "prompt-later",
+      "treatment": "prompt-later",
+      "owner_phase": "post-install",
+      "location": "runtime-home",
+      "runtime": "OpenClaw",
+      "runtime_gated": true,
+      "is_directory": true
+    },
+    {
+      "id": "device_openclaw_devices",
+      "path": "~/.openclaw/devices/",
+      "layer": "prompt-later",
+      "treatment": "prompt-later",
+      "owner_phase": "post-install",
+      "location": "runtime-home",
+      "runtime": "OpenClaw",
+      "runtime_gated": true,
+      "is_directory": true
+    },
+    {
+      "id": "exclude_codex_runtime",
+      "path": "~/.codex/{history,*.sqlite,logs,cache}/",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "source-only"
+    },
+    {
+      "id": "exclude_claude_runtime",
+      "path": "~/.claude/{backups,debug,cache}/",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "source-only"
+    },
+    {
+      "id": "exclude_gemini_runtime",
+      "path": "~/.gemini/{antigravity-browser-profile,installation_id,state.json}/",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "source-only"
+    },
+    {
+      "id": "exclude_openclaw_runtime",
+      "path": "~/.openclaw/{logs,media,telegram,*.sqlite}/",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "source-only"
+    },
+    {
+      "id": "exclude_memento_state",
+      "path": "state/",
+      "layer": "exclude",
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "source-only",
+      "is_directory": true
+    },
+    {
+      "id": "operator_voice_md",
+      "path": "operator/voice.md",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "vault"
+    }
+  ]
+}
