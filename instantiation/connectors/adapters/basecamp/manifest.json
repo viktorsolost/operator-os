@@ -7,5 +7,6 @@
   "stage": "source_sync",
   "priority": 20,
   "after": ["gmail"],
-  "status": "production"
+  "status": "production",
+  "sync_adapter": "sync.js"
 }
