@@ -2,8 +2,9 @@
   "id": "gmail",
   "display_name": "Gmail (via gws CLI)",
   "category": "email",
-  "capabilities": ["email"],
+  "capabilities": ["email", "calendar", "drive", "sheets"],
   "auth_adapter": "auth.js",
+  "sync_adapter": "sync.js",
   "stage": "source_sync",
   "priority": 10,
   "status": "production"

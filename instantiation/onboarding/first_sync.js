@@ -117,12 +117,12 @@ function applyMockSyncResults(mockResults, targetWorkspaceRoot) {
 
 /**
  * Planner-driven sync: uses the connector planner (buildExecutionPlan + executeStages)
- * to drive source sync. Supplemental and derivation steps not yet modelled as connectors
- * are run in the legacy way after the planner completes.
+ * to drive source sync via each connector's sync adapter. Derivation steps
+ * (store_enrich, derive_all) are run after the planner as pipeline-internal steps.
  */
 function runPlannerSync(pipelineConfig, targetWorkspaceRoot) {
   const { buildExecutionPlan, executeStages } = require('../connectors/planner');
-  const { loadRegistry } = require('../connectors/registry');
+  const { loadRegistry, resolveAdapter } = require('../connectors/registry');
   const { getEnabledConnectorManifests } = require('./pipeline_configurator');
 
   const ADAPTERS_DIR = path.resolve(__dirname, '..', 'connectors', 'adapters');
@@ -155,56 +155,46 @@ function runPlannerSync(pipelineConfig, targetWorkspaceRoot) {
   }
 
   const executorFn = (connector, stage) => {
-    let stepName;
     if (stage === 'source_sync') {
-      stepName = `${connector.id}_sync`;
-    } else if (stage === 'derivation') {
-      stepName = connector.id;
-    } else {
-      // preflight, post_sync — no CLI step currently
+      // Try sync adapter first
+      const syncAdapter = resolveAdapter(registry, connector.id, 'sync');
+      if (syncAdapter) {
+        const result = syncAdapter.initial_sync({
+          workspaceRoot: targetWorkspaceRoot,
+          pipelineConfig,
+          homeRoot: process.env.HOME || '~',
+        });
+        return {
+          success: result.success,
+          error: result.errors && result.errors.length > 0 ? result.errors.join('; ') : undefined,
+          data: result.data,
+        };
+      }
+      // Fallback: shell out to CLI for connectors without a sync adapter
+      const stepName = `${connector.id}_sync`;
+      const run = spawnSync(nodeBin, [cliPath, stepName], {
+        cwd: targetWorkspaceRoot,
+        encoding: 'utf8',
+        env: process.env,
+      });
+      if (run.status !== 0) {
+        return { success: false, error: `Step ${stepName} failed (exit ${run.status})` };
+      }
       return { success: true };
     }
-
-    const run = spawnSync(nodeBin, [cliPath, stepName], {
-      cwd: targetWorkspaceRoot,
-      encoding: 'utf8',
-      env: process.env,
-    });
-
-    if (run.status !== 0) {
-      return { success: false, error: `Step ${stepName} failed (exit ${run.status})` };
-    }
+    // preflight, post_sync, derivation — no-op
     return { success: true };
   };
 
   const plannerResult = executeStages(plan.plan, executorFn);
 
-  // After planner-driven source_sync, run supplemental steps not yet in connectors
-  // (calendar, drive, sheets are implied by gmail, not separate connectors yet)
-  const supplementalSteps = [];
-  if (pipelineConfig.sync_engines.calendar) supplementalSteps.push('calendar_sync');
-  if (pipelineConfig.sync_engines.drive) supplementalSteps.push('drive_sync');
-  if (pipelineConfig.sync_engines.sheets) supplementalSteps.push('sheets_sync');
-
-  const supplementalResults = [];
-  for (const step of supplementalSteps) {
-    const run = spawnSync(nodeBin, [cliPath, step], {
-      cwd: targetWorkspaceRoot,
-      encoding: 'utf8',
-      env: process.env,
-    });
-    supplementalResults.push({ step, status: run.status, success: run.status === 0 });
-  }
-
-  // Run derivation steps if at least one source succeeded.
-  // store_enrich and derive_all are not yet connector-modelled, so run them here.
+  // Run derivation steps if at least one source_sync connector succeeded.
+  // store_enrich and derive_all are pipeline-internal — not modelled as connectors.
   const derivationSteps = ['store_enrich', 'derive_all'];
   const derivationResults = [];
 
   const sourceSyncStage = plannerResult.stages.find(s => s.stage === 'source_sync');
-  const anySourceSuccess =
-    (sourceSyncStage && sourceSyncStage.results.some(r => r.success)) ||
-    supplementalResults.some(r => r.success);
+  const anySourceSuccess = sourceSyncStage && sourceSyncStage.results.some(r => r.success);
 
   if (anySourceSuccess) {
     for (const step of derivationSteps) {
@@ -217,9 +207,12 @@ function runPlannerSync(pipelineConfig, targetWorkspaceRoot) {
     }
   }
 
+  const sourceSyncSuccessCount = sourceSyncStage
+    ? sourceSyncStage.results.filter(r => r.success).length
+    : 0;
+
   const allSteps = [
     ...plannerResult.stages.flatMap(s => s.results.map(r => `${r.connector_id}_sync`)),
-    ...supplementalSteps,
     ...derivationSteps,
   ];
 
@@ -228,11 +221,9 @@ function runPlannerSync(pipelineConfig, targetWorkspaceRoot) {
     skipped: false,
     plannerDriven: true,
     plannerResult,
-    supplemental: supplementalResults,
     derivation: derivationResults,
     summary: {
-      sources: (sourceSyncStage ? sourceSyncStage.results.filter(r => r.success).length : 0) +
-        supplementalResults.filter(r => r.success).length,
+      sources: sourceSyncSuccessCount,
       captures: 0,
       steps: allSteps,
     },

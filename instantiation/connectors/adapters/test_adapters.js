@@ -118,12 +118,14 @@ const resolvedBasecampAuth = resolveAdapter(registry, 'basecamp', 'auth');
 assert(resolvedBasecampAuth !== null, 'resolveAdapter returns basecamp auth module');
 assert(typeof resolvedBasecampAuth.start_auth === 'function', 'Resolved basecamp auth has start_auth');
 
-// Neither has a sync adapter configured
+// Both have sync adapters configured
 const gmailSync = resolveAdapter(registry, 'gmail', 'sync');
-assert(gmailSync === null, 'resolveAdapter returns null for gmail sync (not configured)');
+assert(gmailSync !== null, 'resolveAdapter returns gmail sync module');
+assert(typeof gmailSync.validate_config === 'function', 'Resolved gmail sync has validate_config');
 
 const basecampSync = resolveAdapter(registry, 'basecamp', 'sync');
-assert(basecampSync === null, 'resolveAdapter returns null for basecamp sync (not configured)');
+assert(basecampSync !== null, 'resolveAdapter returns basecamp sync module');
+assert(typeof basecampSync.validate_config === 'function', 'Resolved basecamp sync has validate_config');
 
 // ---------------------------------------------------------------------------
 // 4. Stage ordering — gmail first (priority 10 < 20)
