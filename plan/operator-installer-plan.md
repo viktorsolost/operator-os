@@ -12,7 +12,7 @@ The instantiation doctrine is frozen. The manifest is locked. The authority orde
 
 Implementation of the installer and onboarding flow has begun inside Memento at `~/VIK/Coding/Memento/instantiation/`. Slices 1-2 (core placement, template scaffolding, onboarding schema, question flow, template rendering) are built and tested. Slice 3 (account setup, pipeline config, first sync, voice profiler) is spec'd and ready for implementation.
 
-This repo is now the product home for the installer. It will absorb the implementation from Memento's instantiation directory once the code is stable enough to migrate. Until then, Memento holds the working code and this repo holds the product definition, README, and roadmap.
+This repo is the product home for the installer. All implementation code has been migrated from Memento's instantiation directory into this repo. The full installer, onboarding, shared modules, templates, manifests, and tests now live here.
 
 ## Product Boundary
 
@@ -170,6 +170,8 @@ Supported runtimes: Codex, Claude, Gemini, OpenClaw.
 
 Each runtime has its own bridge file location and format. The generator must handle the differences.
 
+Claude additionally receives a global settings.json scaffold at ~/.claude/settings.json containing a UserPromptSubmit hook that mechanically enforces the boot sequence before every response. This is generated from a template during onboarding alongside the bridge file.
+
 ### Step 6 — Auth and Connector Setup
 
 Build the guided authentication flow for connecting external accounts.
@@ -247,7 +249,7 @@ This is the last thing written because it must reflect the real flow, not an asp
 
 ## What Exists Already
 
-Implementation work lives in `~/VIK/Coding/Memento/instantiation/`:
+Implementation work lives in this repo under `instantiation/`:
 
 - `installer/` — core_copier.js, template_placer.js, scaffold_generator.js, validator.js, manifest.js
 - `onboarding/` — questionnaire.js, template_renderer.js, source_renderer.js, fresh_generator.js, account_connector.js, pipeline_configurator.js, registry_bootstrapper.js, first_sync.js, voice_profiler.js, orchestrator.js, slice3_validator.js, validator.js

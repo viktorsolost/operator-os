@@ -56,6 +56,7 @@ function buildClaudePaths(home_root) {
   const root = path.join(home_root, '.claude');
   return {
     bridge: path.join(root, 'CLAUDE.md'),
+    settings: path.join(root, 'settings.json'),
     root,
   };
 }

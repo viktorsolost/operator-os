@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0.0",
     "derived_from": "initiatives/operator-system/installer-v1-manifest.json",
-    "canonical_total": 281,
+    "canonical_total": 282,
     "frozen": true
   },
   "treatment_modes": [
@@ -2290,6 +2290,21 @@
         "system_name",
         "vault_location"
       ]
+    },
+    {
+      "id": "config_claude_settings",
+      "path": "~/.claude/settings.json",
+      "layer": "user-generated",
+      "treatment": "generate-fresh",
+      "owner_phase": "onboarding",
+      "location": "runtime-home",
+      "runtime": "Claude",
+      "runtime_gated": true,
+      "inputs": [
+        "system_name",
+        "vault_location"
+      ],
+      "scaffold_safe": true
     },
     {
       "id": "bridge_gemini",

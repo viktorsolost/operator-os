@@ -1,0 +1,16 @@
+{
+  "__template": true,
+  "__comment": "{{system_name}} — Claude Code global settings. No auth state.",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'BOOT REQUIRED: Run the full {{system_name}} boot sequence (BOOT.md -> ROUTING.md -> memory.md + recent-context.md -> operator lane -> model posture check) BEFORE any response. No exceptions. Read {{vault_location}}/CLAUDE.md first.'"
+          }
+        ]
+      }
+    ]
+  }
+}
