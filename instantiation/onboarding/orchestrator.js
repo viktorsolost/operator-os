@@ -6,7 +6,11 @@ const { renderSourceFiles } = require('./source_renderer');
 const { generateFreshSurfaces } = require('./fresh_generator');
 const { validateOnboardingOutput } = require('./validator');
 const { connectAccounts, reconnectAccounts, writeSourceIdentities } = require('./account_connector');
-const { generatePipelineConfig, generateEmptyPipelineConfig } = require('./pipeline_configurator');
+const { generatePipelineConfig, generateEmptyPipelineConfig, getEnabledConnectorManifests } = require('./pipeline_configurator');
+const { buildExecutionPlan } = require('../connectors/planner');
+const { loadRegistry } = require('../connectors/registry');
+
+const ADAPTERS_DIR = require('path').resolve(__dirname, '..', 'connectors', 'adapters');
 const { bootstrapRegistry } = require('./registry_bootstrapper');
 const { runFirstSync } = require('./first_sync');
 const { runVoiceProfiler } = require('./voice_profiler');
@@ -107,6 +111,11 @@ function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorksp
     ? generateEmptyPipelineConfig({ packet, targetWorkspaceRoot, mementoSourceRoot })
     : generatePipelineConfig({ packet, accountConnections: connections, targetWorkspaceRoot, mementoSourceRoot });
 
+  // 3a. Validate execution plan against enabled connectors
+  const connectorRegistry = loadRegistry(ADAPTERS_DIR);
+  const enabledManifests = getEnabledConnectorManifests(pipelineResult.config, connectorRegistry);
+  const executionPlan = buildExecutionPlan(enabledManifests);
+
   // 4. Bootstrap registry
   const registryResult = bootstrapRegistry({ packet, targetWorkspaceRoot });
 
@@ -147,6 +156,7 @@ function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorksp
     phase: 'slice3_complete',
     connections,
     pipelineConfig: pipelineResult,
+    executionPlan,
     registry: registryResult,
     sync: syncResult,
     voice: voiceResult,

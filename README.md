@@ -46,6 +46,39 @@ It runs eight sync steps covering Basecamp, Gmail, Google Calendar, Google Drive
 
 It pulls source data from connected systems, then turns that material into usable context for Memento and the operators.
 
+The product of the pipeline is not raw synced data.
+
+The product is situational awareness.
+
+Its job is to produce a source-agnostic operational context layer that gives the OS enough structured reality to brief, track, and assist the user without constant re-explanation.
+
+That means answering questions like:
+
+- what matters now
+- what threads are active
+- what people and projects are in motion
+- what changed recently
+- what needs attention
+- what the operator should know without asking the user again
+
+The connectors are just intake pipes.
+
+Gmail, Slack, Notion, Basecamp, Airtable, and other tools are not the product. They are sources.
+
+The product is the normalized operating picture those sources create.
+
+The architecture should therefore be designed backward from stable outputs:
+
+- captures
+- normalized entities
+- derived views
+- today and context surfaces
+- operator-readable state
+
+If two different source stacks can produce the same operating picture, the system is working correctly.
+
+That is why normalization matters. The system should not stop at "what did Gmail say exactly?" It should answer "what conversation happened, what project does it belong to, who is involved, what changed, and what matters now?"
+
 Its job is to reduce manual re-briefing and make sure the system can work from real current context instead of depending on the user to restate everything.
 
 The pipeline does not replace judgment.
@@ -285,6 +318,8 @@ The onboarding flow provisions the system across the key setup surfaces:
 - fresh starter context files that let the system begin operating as a real environment from day one
 
 The connector model is designed to support different user source stacks. Different people use different tools. The architecture supports that cleanly rather than assuming a fixed set of integrations.
+
+The installer should learn the new user's stack and workflow, then configure the pipeline so different source systems can still produce the same operational product.
 
 This is the moment where the operator architecture stays the same, but the live instance becomes the new owner's system.
 
