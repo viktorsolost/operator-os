@@ -83,8 +83,8 @@ try {
   console.log(`  templateSources: ${manifest.templateSources.length} items`);
   console.log(`  bridgeTemplates: ${manifest.bridgeTemplates.length} items`);
   console.log(`  safeScaffolds: ${manifest.safeScaffolds.length} items`);
-  assert(manifest.copyCore.length === 31, 'Expected 31 copy-core items');
-  assert(manifest.templateSources.length === 25, 'Expected 25 template items');
+  assert(manifest.copyCore.length === 25, 'Expected 25 copy-core items');
+  assert(manifest.templateSources.length === 31, 'Expected 31 template items');
   assert(manifest.bridgeTemplates.length === 5, 'Expected 5 bridge templates');
   assert(manifest.safeScaffolds.length === 6, 'Expected 6 safe scaffolds');
   assert(manifest.meta.vaultRoot === TARGET_VAULT, 'Expected vaultRoot in manifest.meta');
@@ -98,7 +98,7 @@ async function runPipeline() {
   try {
     const copyReport = await copyCore(manifest);
     console.log(`\n✓ Core copy: ${copyReport.written.length} written, ${copyReport.errors.length} errors`);
-    assert(copyReport.written.length === 31, 'Expected 31 files written by core copier');
+    assert(copyReport.written.length === 25, 'Expected 25 files written by core copier');
     assert(copyReport.errors.length === 0, 'Expected 0 errors from core copier');
   } catch (err) {
     console.error('✗ Core copy failed:', err.message);

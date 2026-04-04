@@ -361,7 +361,6 @@ async function main() {
   const connectedGmail = slice3Result.connections
     ? (slice3Result.connections.gmail || []).filter((a) => a.connected).length
     : 0;
-  const totalGmail = gmail_accounts.length;
   const basecampConnected =
     slice3Result.connections &&
     slice3Result.connections.basecamp &&
@@ -378,18 +377,30 @@ async function main() {
 
   const connectorSummaryLines = formatConnectorSummary(workflow_tools);
   const connectorSummaryBlock = connectorSummaryLines.length > 0
-    ? '\n' + connectorSummaryLines.join('\n')
+    ? connectorSummaryLines.join('\n')
+    : '  Connectors: none selected';
+
+  const coreCount = installerManifest.copyCore.length;
+  const templateCount = installerManifest.templateSources.length;
+  const bridgeCount = installerManifest.bridgeTemplates.length;
+  const scaffoldCount = installerManifest.safeScaffolds.length;
+
+  const reconnectLine = connect_accounts_now !== 'now'
+    ? `\nTo connect accounts later:\n  node instantiation/onboarding/reconnect.js ${workspace_root}/state/runtime/pipeline_config.json\n`
     : '';
 
   console.log(`
 Installation complete.
+
+What was installed:
+  ${coreCount} core doctrine files, ${templateCount} rendered templates, ${bridgeCount} runtime bridges, ${scaffoldCount} config scaffolds
 
 Vault:      ${vault_location}
 Workspace:  ${workspace_root}
 Runtimes:   ${selected_runtimes.join(', ')}
 Accounts:   ${accountsSummary}
 ${connectorSummaryBlock}
-Your system is ready. Start a conversation with any operator:
+${reconnectLine}Start a conversation with any operator:
   "Hi Claudia, what should I focus on today?"
   "Hi Anton, review this architecture."
 `);

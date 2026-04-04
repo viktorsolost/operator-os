@@ -32,17 +32,17 @@
     {
       "id": "claude_md",
       "path": "CLAUDE.md",
-      "layer": "reusable-core",
-      "treatment": "copy-core",
-      "owner_phase": "installer",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
       "location": "vault"
     },
     {
       "id": "structure_md",
       "path": "STRUCTURE.md",
-      "layer": "reusable-core",
-      "treatment": "copy-core",
-      "owner_phase": "installer",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
       "location": "vault"
     },
     {
@@ -440,17 +440,17 @@
     {
       "id": "brands_operators_atlas_md",
       "path": "brands/operators/atlas.md",
-      "layer": "reusable-core",
-      "treatment": "copy-core",
-      "owner_phase": "installer",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
       "location": "vault"
     },
     {
       "id": "brands_operators_helena_md",
       "path": "brands/operators/helena.md",
-      "layer": "reusable-core",
-      "treatment": "copy-core",
-      "owner_phase": "installer",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
       "location": "vault"
     },
     {
@@ -1112,9 +1112,9 @@
     {
       "id": "apps_readme_md",
       "path": "apps/README.md",
-      "layer": "reusable-core",
-      "treatment": "copy-core",
-      "owner_phase": "installer",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
       "location": "vault"
     },
     {
@@ -2016,9 +2016,9 @@
     {
       "id": "initiatives_operator_system_runtime_bridges_md",
       "path": "initiatives/operator-system/runtime-bridges.md",
-      "layer": "reusable-core",
-      "treatment": "copy-core",
-      "owner_phase": "installer",
+      "layer": "template-and-rewrite",
+      "treatment": "rewrite-template",
+      "owner_phase": "onboarding",
       "location": "vault"
     },
     {

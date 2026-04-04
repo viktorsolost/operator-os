@@ -232,6 +232,10 @@ function checkTemplateCleanliness(targetInstallRoot, homeRoot) {
   ];
 
   for (const filePath of allFiles) {
+    // Skip project template files — their {{placeholders}} are intentional and resolved at project-create time
+    const relToVault = path.relative(targetInstallRoot, filePath);
+    if (relToVault.startsWith('templates' + path.sep) || relToVault.startsWith('templates/')) continue;
+
     const content = readFile(filePath);
     if (!content) continue;
     const markers = content.match(/\{\{[^}]+\}\}/g);
