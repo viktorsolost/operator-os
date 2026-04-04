@@ -86,7 +86,7 @@ try {
   assert(manifest.copyCore.length === 31, 'Expected 31 copy-core items');
   assert(manifest.templateSources.length === 25, 'Expected 25 template items');
   assert(manifest.bridgeTemplates.length === 5, 'Expected 5 bridge templates');
-  assert(manifest.safeScaffolds.length === 5, 'Expected 5 safe scaffolds');
+  assert(manifest.safeScaffolds.length === 6, 'Expected 6 safe scaffolds');
   assert(manifest.meta.vaultRoot === TARGET_VAULT, 'Expected vaultRoot in manifest.meta');
 } catch (err) {
   console.error('✗ Manifest build failed:', err.message);
@@ -119,7 +119,7 @@ async function runPipeline() {
   try {
     const scaffoldReport = await generateScaffolds(manifest);
     console.log(`\n✓ Scaffold generation: ${scaffoldReport.written.length} written`);
-    assert(scaffoldReport.written.length === 5, 'Expected 5 scaffolds written');
+    assert(scaffoldReport.written.length === 6, 'Expected 6 scaffolds written');
   } catch (err) {
     console.error('✗ Scaffold generation failed:', err.message);
     process.exit(1);
@@ -291,7 +291,7 @@ async function runNegativeTests() {
     const gatedManifest = buildInstallerManifest(inputsGated);
     assert(gatedManifest.bridgeTemplates.length === 1, 'Only Claude bridge should be present');
     assert(gatedManifest.bridgeTemplates[0].runtime === 'Claude', 'Bridge should be Claude');
-    assert(gatedManifest.safeScaffolds.length === 0, 'No scaffolds for Claude-only');
+    assert(gatedManifest.safeScaffolds.length === 1, 'Claude-only produces 1 scaffold (config_claude_settings)');
     console.log('  ✓ Disabled runtimes produce no output');
     fs.rmSync(tempDir2, { recursive: true, force: true });
   }
