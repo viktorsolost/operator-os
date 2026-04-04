@@ -4,15 +4,15 @@
 
 - Node.js 18+
 - Git
-- The `gws` CLI installed and on your PATH (for Google Workspace accounts)
-- A Basecamp account (optional, for Basecamp integration)
-- At least one AI runtime installed: Claude Code, Codex CLI, Gemini CLI, or OpenClaw
+- At least one AI runtime installed: Claude Code (`claude`), Codex CLI (`codex`), Gemini CLI, or OpenClaw
+- The `gws` CLI installed and on your PATH — only required if you plan to connect Gmail accounts
+- A Basecamp integration (Client ID + Secret from https://launchpad.37signals.com/integrations) — only required if you plan to connect Basecamp
 
 ## What you need before starting
 
 1. This repo cloned locally
-2. A reference vault — the source doctrine files that define the system (operator files, boot chain, routing rules)
-3. A Memento workspace — the pipeline and state substrate
+2. A reference vault — the source doctrine files that define the system (operator files, boot chain, routing rules). The installer exits immediately if this path does not exist.
+3. A Memento workspace (optional) — the pipeline and state substrate. If not present, pipeline files are not copied and first sync will not run. This is fine for a deferred-accounts install.
 
 The installer takes the reference vault and Memento as source inputs and provisions a new owner-specific instance from them.
 
@@ -21,33 +21,50 @@ The installer takes the reference vault and Memento as source inputs and provisi
 Run the interactive installer:
 
 ```
-node install.js /path/to/reference-vault /path/to/memento
+node install.js [/path/to/reference-vault] [/path/to/memento]
 ```
 
-The first argument is the path to the reference vault (source doctrine files). The second is the path to Memento (the pipeline substrate). Both default to standard locations if omitted.
+The first argument is the path to the reference vault. The second is the path to Memento. Defaults: `~/VIK/ObsidianVault/VIK_OS` and `~/Code/Memento`.
 
-The installer asks for your identity, location, runtimes, and accounts interactively, then provisions the full system. It runs in four phases:
+The installer asks for your identity, location, runtimes, workflow tools, and accounts interactively, then provisions the full system. It runs in five phases:
 
 ### Phase 1: Identity and Location
 
-Validates owner name, system name, role, timezone, and the three path fields (home root, vault location, workspace root).
+- `owner_name` — your name (required)
+- `system_name` — defaults to `{name} OS`
+- `primary_role` — one sentence describing your work (required)
+- `timezone` — e.g. `America/New_York (UTC-5)` (required)
+- `home_root` — defaults to `$HOME`
+- `vault_location` — where your OS vault will live; defaults to `{home}/Vault/{system_name}`
+- `workspace_root` — Memento workspace location; defaults to `{home}/Code/Memento`
 
 ### Phase 2: Runtimes and Style
 
-You declare which AI runtimes to enable. Allowed values (case-sensitive): `Claude`, `Codex`, `Gemini`, `OpenClaw`.
+You declare which AI runtimes to enable. Enter as a comma-separated list. Allowed values (case-sensitive): `Codex`, `Claude`, `Gemini`, `OpenClaw`. Defaults to `Claude`.
 
-You can enable multiple runtimes. Each one gets a bridge file written to the runtime-local config directory (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md`). All bridges point into the same boot entrypoint in your vault. The boot sequence, routing policy, and model posture checks are identical regardless of which runtime you start from.
+Each enabled runtime gets a bridge file written to the runtime-local config directory (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md`). All bridges point into the same boot entrypoint in your vault. The boot sequence, routing policy, and model posture checks are identical regardless of which runtime you start from.
 
-You also set tone and reporting style preferences (`tone_profile`, `preferred_reporting_style`).
+You also set:
+- `tone_profile` — defaults to `direct`
+- `preferred_reporting_style` — defaults to `concise`
+- `business_context` — optional one sentence about your work
 
-### Phase 3: Account Connection
+### Phase 3: Workflow Tools
 
-You can connect accounts now or defer to later (`connect_accounts_now: 'now' | 'later'`).
+Enter the tools you use as a comma-separated list, or `none` to skip. Examples: `Gmail`, `Basecamp`, `Slack`, `Notion`, `Linear`.
+
+The installer resolves each tool against the connector registry. Supported tools (Gmail, Basecamp) are enabled. Unsupported tools are surfaced explicitly in the config rather than silently dropped.
+
+If you enter tools, you are also asked which capabilities you want synced: `email`, `tasks`, `messages`, `comments`, `calendar`, `docs`. Enter `all` to sync everything.
+
+### Phase 4: Accounts
+
+You can connect accounts now or defer to later (default: `later`).
 
 If you connect now:
 
-- **Gmail**: For each account, the installer runs `gws auth login` with `GOOGLE_WORKSPACE_CLI_CONFIG_DIR` set to the account's config directory. This opens your browser for Google OAuth. You can connect up to 4 accounts. Calendar, Drive, and Sheets access is enabled automatically once at least one Gmail account is connected.
-- **Basecamp**: The installer prompts for your Client ID and Client Secret, opens the Basecamp authorization URL, waits for you to paste the authorization code, exchanges it for tokens, and writes credentials to `~/.env.basecamp` and `~/.env.basecamp.tokens`. It then calls the Basecamp authorization endpoint to resolve your person ID.
+- **Gmail**: For each account, the installer runs `gws auth login` with `GOOGLE_WORKSPACE_CLI_CONFIG_DIR` set to the account's config directory. This opens your browser for Google OAuth. You provide an account name (e.g. `gws-work`) and a label, then your email address. You can connect up to 4 accounts. Calendar, Drive, and Sheets access is enabled automatically once at least one Gmail account is connected.
+- **Basecamp**: The installer prompts for your Client ID and Client Secret, opens the Basecamp authorization URL, waits for you to paste the authorization code, exchanges it for tokens, and writes credentials to `~/.env.basecamp` and `~/.env.basecamp.tokens`. It then calls the Basecamp authorization endpoint to resolve your Basecamp account ID and person ID.
 
 If you defer, the system installs without pipeline data. To connect accounts later:
 
@@ -63,11 +80,15 @@ node instantiation/onboarding/reconnect.js
 
 The reconnect script reads the existing pipeline config, shows current connection status, and re-runs auth only for disconnected accounts.
 
-### Phase 4: First Run
+### Phase 5: Run Installation
 
-If accounts are connected, the installer runs a first pipeline sync to populate your workspace with real data. After sync completes, it runs the voice profiler against your sent messages to generate a voice profile for your operators.
+The installer runs three internal slices:
 
-If accounts were deferred, these steps are skipped. Run a manual sync later from your Memento workspace: `node pipeline/cli/run.js sync`.
+- **Slice 1**: Copies core doctrine files to your vault, places rendered template stubs, generates runtime config scaffolds
+- **Slice 2**: Renders all templates with your identity values, rewrites source doctrine references to your paths, generates fresh surfaces (memory, recent-context, etc.), validates output
+- **Slice 3**: Connects accounts via the auth dispatcher, generates pipeline config with connector state, bootstraps the registry, runs a planner-driven first sync, builds your voice profile from sent messages, validates the full install
+
+If accounts were deferred, Slice 3 skips the auth, sync, and voice profiler steps.
 
 ## What gets created
 
@@ -113,7 +134,7 @@ After installation your file tree looks like:
 | Google Drive | gws CLI (shared with Gmail) | Project folder contents |
 | Google Sheets | gws CLI (shared with Gmail) | Production calendar data |
 
-If you use a tool not listed here, the system will note it as unsupported during onboarding rather than silently ignoring it.
+Note: Gmail, Calendar, Drive, and Sheets are all handled through a single Gmail adapter — connecting one Gmail account enables all four capabilities. The connector architecture supports adding new sources by installing adapter directories. Slack, Notion, Linear, and similar tools are not yet supported but are explicitly surfaced during onboarding rather than silently ignored.
 
 ## Using the system
 
@@ -142,3 +163,5 @@ The system reads your vault on boot, loads the active operator, and works from t
 **Boot chain broken**: If an operator cannot find required vault files, verify the path in your runtime bridge file (`~/.claude/CLAUDE.md` or equivalent) matches your actual vault location.
 
 **Unknown runtime error during install**: The runtime selector rejects unknown names. Use the exact casing: `Claude`, `Codex`, `Gemini`, `OpenClaw`.
+
+**Installer validation fails with residue errors**: This means source doctrine files contain owner-specific references that were not rewritten. Check that the reference vault argument points to the clean source template, not a previous user's live instance.
