@@ -1,292 +1,285 @@
-# Canonical System First, Operator Installer Later
+# Operator OS — Product Plan
 
 Status: active
-Date: 2026-04-03
+Date: 2026-04-04
 Owner: Anton
 
-## Core Decision
+## Where We Are
 
-We are not improving the current installer.
+The live VIK OS system has been audited, tightened, and stabilized.
 
-We are discarding it as the active path.
+The instantiation doctrine is frozen. The manifest is locked. The authority order is explicit.
 
-We are also removing installer work from Memento.
+Implementation of the installer and onboarding flow has begun inside Memento at `~/VIK/Coding/Memento/instantiation/`. Slices 1-2 (core placement, template scaffolding, onboarding schema, question flow, template rendering) are built and tested. Slice 3 (account setup, pipeline config, first sync, voice profiler) is spec'd and ready for implementation.
 
-The installer is not a Memento feature.
-
-The installer is a top-level system product and should live in its own repo, parallel to Memento inside `~/VIK/Coding`.
-
-Right now, the priority is to make Viktor's live system the true canonical version.
-
-Only after the local system is structurally correct, fully explicit, and cleanly compartmentalized should we package it for anyone else.
-
-## Why
-
-The current installer is not a trustworthy source for replication.
-
-It does not fully match the live vault.
-
-It still carries Viktor-specific assumptions.
-
-It is too checklist-driven and not enough guided provisioning.
-
-It copies a partial system instead of installing a clean one.
-
-It also lives in the wrong place.
-
-If we keep building on top of it now, we risk mass-producing the wrong shape and tying the whole system too tightly to Memento.
+This repo is now the product home for the installer. It will absorb the implementation from Memento's instantiation directory once the code is stable enough to migrate. Until then, Memento holds the working code and this repo holds the product definition, README, and roadmap.
 
 ## Product Boundary
 
-Memento is not the product.
-
 Memento is the pipeline and local state engine.
 
-The real product is the full agent operating system.
+The product is the full agent operating system.
 
-That larger system includes:
-- the vault structure
-- the operator system
-- the runtime bridges
-- the templates
-- the loading and writing rules
-- the onboarding flow
-- the connector model
-- the pipeline substrate
+That includes the vault structure, the operator system, the runtime bridges, the templates, the loading and writing rules, the onboarding flow, the connector model, and the pipeline substrate.
 
-Memento belongs inside the substrate layer.
+Memento belongs inside the substrate layer. It does not define the whole system.
 
-It does not define the whole system.
+The installer is a top-level product and lives in its own repo, parallel to Memento inside `~/VIK/Coding`.
 
-## New Goal
+## Authority Order
 
-Make Viktor's local VIK OS + Memento system top-notch first.
+All doctrinal decisions are frozen in the VIK OS vault at `~/VIK/ObsidianVault/VIK_OS/initiatives/operator-system/`.
 
-That means:
-- the vault structure is deliberate, not accidental
-- the layer boundaries are explicit
-- the project lifecycle is clear
-- the agent rules are clear
-- the templates are complete
-- the context-loading rules are clean
-- the connectors and onboarding model are designed correctly
+The authority order for file-level treatment and implementation decisions is:
 
-Then, and only then, rebuild the installer from zero in its own repo.
+1. `installer-v1-manifest.json` — source of truth for per-file treatment classification
+2. `installer-v1-manifest-spec.md` — manifest schema definition
+3. `system-instantiation-contract.md` — top-level product goal and three-layer model (defer to manifest for file-level treatment)
+4. `installer-target-replication-contract.md` — infrastructure sublayer (narrow scope, not top-level product framing)
+5. `system-instantiation-generated-file-matrix.md` — input-to-output dependency mapping only (STALE for file-level treatment, superseded by manifest)
+6. `system-instantiation-onboarding-schema.md` — onboarding question definitions, required vs optional fields, phase sequence
+7. `installer-v1-onboarding-phase3-tools.md` — workflow tools layer addendum to onboarding schema
+8. `system-instantiation-vocabulary.md` — naming decisions (instantiation is the product goal, replication is the narrow infrastructure layer)
 
-## Truth Model
+None of these authority files ship to the new user. The installer reads them during generation. They are build-time design docs.
 
-There are three system layers and each has a different truth boundary.
+## Three-Layer Model
 
-### Layer 1 — External source truth
+The instantiation contract defines three layers:
 
-These are the real operational systems.
+### Layer A — Reusable Core
 
-- Gmail is truth for email
-- Calendar is truth for events
-- Google Sheets is truth for sheet data
-- Airtable is truth for CRM data
-- any other live system is truth for its own raw records
+Boot, routing, owner-neutral operator doctrine, templates, Memento substrate.
 
-### Layer 2 — Local captured truth
+These are copied near-identical. Treatment: `copy-core`.
 
-The pipeline pulls the outside systems into local machine-readable state.
+### Layer B — Template and Rewrite
 
-This layer is not the original truth.
+Identity, operator role files, bridge files, path references.
 
-It is the local captured snapshot used for computation, derivation, and fast reasoning.
+These are generated from templates plus onboarding answers. Treatment: `rewrite-template`.
 
-Examples:
-- `state/captures/`
-- `state/store/`
-- `state/derived/`
-- `state/runtime/`
+### Layer C — User-Generated
 
-### Layer 3 — Reasoning truth
+Memory, recent context, auth, projects, brands, runtime state.
 
-The vault holds meaning, structure, interpretation, and long-horizon memory.
+These are generated fresh or left empty for the new owner to populate. Treatment: `generate-fresh`.
 
-This is where the agents keep:
-- durable memory
-- recent context
-- project context
-- decisions
-- summaries
-- references
-- handoffs
-- doctrine
+### Excluded
 
-If a raw fact in the vault conflicts with the source system, the source system wins.
+Build-time authority docs, Viktor-specific residue, audit artifacts, session logs.
 
-The vault is truth for reasoning, not for overriding live source data.
+These never ship. Treatment: `exclude`.
 
-## Immediate Direction
+## Product Split
 
-We will audit and refine the live system first.
+The installer and onboarding are separate concerns with a non-overlap rule.
 
-We will not treat the current starter package as the product.
+### Installer (Phase A)
 
-We will treat it as disposable scaffolding.
+Place reusable core, templates, bridge templates, safe scaffolds. Verify readiness.
 
-We will remove installer artifacts from Memento so Memento stays clean.
+The installer places blank templates. It does not generate owner-specific output.
 
-We will not package around current rough edges.
+### Onboarding (Phase B)
 
-We will remove rough edges first.
+Collect answers, render Layer B, generate Layer C, verify instance.
 
-## What Must Be Fixed In The Live System First
+Onboarding fills the templates. It owns all owner-specific generation.
 
-### 1. Canonical vault skeleton
+## Implementation Roadmap
 
-We need one deliberate top-level structure for the vault.
+### Step 1 — Repo Structure
 
-Every major folder must have a clear reason to exist.
+Set up the Operator-Installer repo with the product directory layout.
 
-No folder should exist only because it appeared during growth.
+```
+README.md
+plan/
+templates/
+onboarding/
+validator/
+runtime-bridges/
+sample-config/
+src/
+```
 
-### 2. Project compartmentalization
+`templates/` holds the source templates that onboarding renders. `onboarding/` holds the question flow and rendering logic. `validator/` holds the post-install validation suite. `runtime-bridges/` holds bridge file generators. `sample-config/` holds example configurations for reference. `src/` holds shared modules and the installer entry point.
 
-Projects must hold their own depth.
+This step also decides what migrates from `Memento/instantiation/` and what stays there.
 
-Global memory must stay small.
+### Step 2 — Onboarding Packet Definition
 
-Recent context must stay small.
+Define the onboarding flow in product terms, not implementation terms.
 
-Project history must stay inside project folders.
+What the installer asks. What each answer generates. What is required vs optional. What can be deferred until later.
 
-Closed projects must stop polluting active reasoning by default.
+This is a product document, not a schema file. It describes the user experience of going through setup.
 
-### 3. Project lifecycle
+Source authority: `system-instantiation-onboarding-schema.md` and `installer-v1-onboarding-phase3-tools.md`.
 
-The states must be clearer:
-- intake
-- active
-- paused
-- closed
-- archived
+The onboarding packet must cover:
 
-The folder and template model should reflect this cleanly.
+- Owner identity (name, system name, timezone, primary role)
+- System paths (home root, vault location, workspace root)
+- Workflow tools (project management, comms, calendar, docs, production data, team comms)
+- Runtime selection (which runtimes to enable, which to skip)
+- Account connections (which accounts to connect now vs defer)
+- Required vs optional fields
+- Deferred setup (what can be skipped and revisited later without breaking the install)
 
-### 4. Agent operating doctrine
+### Step 3 — Template Inventory
 
-Agents need one explicit rule set for:
-- what to load
-- what not to load
-- where to write
-- where not to write
-- how to treat truth boundaries
-- how to treat project boundaries
-- how to use the vault as a brain
+Classify every file the installer handles using installer-facing language.
 
-### 5. Templates
+Which files are copy-core (placed unchanged). Which are rewrite-template (rendered with onboarding answers). Which are generate-fresh (created empty or with starter content). Which are excluded (never shipped).
 
-Templates must be complete enough that agents create consistent structures automatically.
+This is the installer's view of the manifest. It points back to `installer-v1-manifest.json` as authority but presents the classification in terms the installer code can consume directly.
 
-Templates should cover:
-- active projects
-- intake projects
-- optional sub-context
-- handoffs
-- recurring context patterns
+This step must happen before building the onboarding flow because the flow needs to know which files it writes, which it renders, and which it skips.
 
-### 6. Connector model
+### Step 4 — Build the Onboarding Flow
 
-The system must explicitly support different user source stacks.
+Build the runnable onboarding sequence that provisions a new instance.
 
-Different people use different tools.
+1. Collect owner identity
+2. Collect system paths
+3. Collect workflow tools and map to sync engines
+4. Select runtimes
+5. Select connectors and accounts (now vs deferred)
+6. Write generated files (Layer B rendered from templates, Layer C generated fresh)
+7. Run post-generation validation
 
-The architecture must support that cleanly before any installer exists.
+Source authority: onboarding schema, generated-file-matrix (for input-to-output dependencies), manifest (for treatment classification).
 
-### 7. Onboarding model
+Unsupported sync engines (Notion, Linear, Slack, Outlook, Airtable) must be flagged as development tasks during onboarding, not treated as install failures.
 
-The future installer should be based on guided provisioning.
+### Step 5 — Runtime Bridge Generation
 
-It should ask:
-- who the person is
-- what tools they use
-- which connectors they need
-- which accounts to authenticate
-- what IDs or source definitions are required
+Build the logic that takes selected runtimes and produces correct bridge files pointing at the new owner's vault.
 
-But this onboarding model should be designed after the system shape is stable, not before.
+Each bridge must:
 
-## What We Keep
+- Point to the new owner's VIK OS vault entrypoint
+- Follow the canonical boot sequence
+- Preserve explicit operator invocation rules
+- Activate Atlas/Helena only on explicit invocation
+- Keep repo context downstream of identity resolution
 
-We keep:
-- the boot spine
-- routing
-- operator architecture
-- the truth-layer model
-- the goal of reusable setup
-- the idea of profile-based installs later
+Supported runtimes: Codex, Claude, Gemini, OpenClaw.
 
-We do not keep the current installer implementation as the foundation.
+Each runtime has its own bridge file location and format. The generator must handle the differences.
 
-We do not keep installer work inside Memento.
+### Step 6 — Auth and Connector Setup
 
-## Working Rule
+Build the guided authentication flow for connecting external accounts.
 
-Do not replicate until the source system is clean.
+This is the hardest UX moment in the whole install. It must handle:
 
-Do not automate around ambiguity.
+- gws CLI profile creation and auth for each Gmail/Calendar/Drive account
+- Basecamp OAuth and person_id fetch
+- Partial auth (some accounts connected, others deferred)
+- Deferred auth (skip now, connect later without re-running the full installer)
+- RAPT re-auth friction (workspace accounts expire roughly every 24h)
 
-Do not ship a starter package that is weaker than the live system it is supposed to represent.
+The auth flow must never copy Viktor's tokens, profiles, or account state. Every credential is generated fresh for the new owner.
 
-Do not let Memento become the accidental home of the whole system.
+Source authority: Slice 3 coding packet for pipeline-specific auth requirements.
 
-## Active Plan
+### Step 7 — Memento Substrate Scaffolding
 
-### Phase 1 — Audit Viktor's live system
+Set up Memento as the pipeline and state substrate for the new instance.
 
-Review the vault, templates, doctrine, folder structure, and context boundaries.
+This includes:
 
-Mark what is:
-- correct
-- messy
-- duplicated
-- missing
-- accidental
+- Cloning or placing the Memento repo
+- Scaffolding the state directories (`state/captures/`, `state/store/`, `state/derived/`, `state/runtime/`, `state/sync_log/`, `state/logs/`)
+- Generating `state/runtime/pipeline_config.json` from onboarding answers
+- Patching pipeline source files to read from config instead of hardcoded values
+- Generating a fresh `state/store/registry.json` (no Viktor projects or source refs)
+- Wiring Memento to the new owner's vault path
 
-### Phase 2 — Define the canonical brain
+The pipeline must maintain backward compatibility: if `pipeline_config.json` is missing, fall back to hardcoded behavior so Viktor's existing instance keeps working.
 
-Lock:
-- top-level vault structure
-- folder purposes
-- truth boundaries
-- project lifecycle
-- loading rules
-- write rules
-- template set
+Source authority: Slice 3 coding packet.
 
-### Phase 3 — Clean the live system
+### Step 8 — Validation Story
 
-Refactor the live vault so it matches the canonical model.
+Define and build what a healthy fresh install must prove.
 
-Do this before any packaging work.
+Universal checks:
 
-### Phase 4 — Define top-level installer architecture
+- Doctrine tree exists and is complete
+- Boot files exist and are reachable
+- No Viktor paths in any template or generated file
+- No Viktor auth, tokens, or account state imported
+- No owner residue from the source installation
 
-Design the installer as its own repo beside Memento.
+Runtime-specific checks:
 
-Define:
-- repo boundary
-- relationship to Memento
-- relationship to the vault
-- runtime bridge packaging
-- connector provisioning model
-- profile model
+- Selected runtime bridges exist and point to the correct vault
+- Unselected runtimes have no bridge files or scaffold
+- Codex bridge can resolve
+- Claude caches are absent
+- Gemini paths are target-local
+- OpenClaw tokens are not copied
 
-### Phase 5 — Rebuild installer from zero
+Post-onboarding checks:
 
-Only after the above is done, build a new installer that:
-- installs the canonical system
-- asks setup questions
-- configures the right connectors
-- guides auth
-- validates the setup
-- provisions a clean local brain
+- Required onboarding answers are present
+- Generated files contain the new owner's identity, not Viktor's
+- Layer B files are rendered (not blank templates)
+- Layer C files exist (fresh or empty, not copied)
 
-## Current Instruction To Ourselves
+Source authority: replication contract section 4 (fresh-install validation pack).
 
-Stop thinking about improving the current installer.
+### Step 9 — Quickstart
 
-Think about making the real system clean enough that rebuilding the installer becomes obvious.
+Write the real user-facing quickstart that covers the full path from zero to working system.
+
+1. Install (clone repo, run installer)
+2. Run onboarding (answer questions, configure system)
+3. Connect accounts (auth with external services)
+4. Run first sync (pull data from connected sources)
+5. Start using the system (`Hi Claudia, what needs my attention today?`)
+
+This is the last thing written because it must reflect the real flow, not an aspirational one.
+
+## What Exists Already
+
+Implementation work lives in `~/VIK/Coding/Memento/instantiation/`:
+
+- `installer/` — core_copier.js, template_placer.js, scaffold_generator.js, validator.js, manifest.js
+- `onboarding/` — questionnaire.js, template_renderer.js, source_renderer.js, fresh_generator.js, account_connector.js, pipeline_configurator.js, registry_bootstrapper.js, first_sync.js, voice_profiler.js, orchestrator.js, slice3_validator.js, validator.js
+- `shared/` — template_utils.js, path_resolver.js, file_matrix.js, runtime_selector.js
+- `templates/` — source templates for user-context, runtime-configs, runtime-bridges, system, operator
+- `manifests/` — file-treatment-manifest.json (derived from vault canonical manifest)
+- `dry_test.js`, `test_installer.js`, `slice3_test.js`
+
+This code was built against the frozen doctrine. Migration into this repo is a future step once the implementation stabilizes.
+
+## Vocabulary
+
+- **Instantiation** is the top-level product goal: create a new working instance for a new owner
+- **Replication** is the narrow infrastructure copy layer underneath instantiation
+- **Onboarding** is the user-facing question flow
+- **Personalization** is the adaptation layer where the system is customized to the new owner
+- **Substrate** is the reusable execution layer (VIK OS + Memento)
+
+Source: `system-instantiation-vocabulary.md`.
+
+## Working Rules
+
+Do not replicate until the source system is clean. (Done.)
+
+Do not automate around ambiguity. (Doctrine frozen.)
+
+Do not ship a starter package that is weaker than the live system it represents.
+
+Do not let Memento become the accidental home of the whole system. (This repo exists to prevent that.)
+
+Do not generate owner-specific output from the installer. That is onboarding's job.
+
+Do not treat authority docs as shipped product. They are build-time inputs.
+
+If the manifest says one thing and another doc says something different about file-level treatment, the manifest wins.
