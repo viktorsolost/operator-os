@@ -11,6 +11,8 @@ const { placeTemplates } = require('./instantiation/installer/template_placer');
 const { generateScaffolds } = require('./instantiation/installer/scaffold_generator');
 const { runOnboarding, runSlice3Onboarding } = require('./instantiation/onboarding/orchestrator');
 const { ALLOWED_RUNTIMES } = require('./instantiation/shared/runtime_selector');
+const { loadRegistry } = require('./instantiation/connectors/registry');
+const { resolveWorkflowTools, formatConnectorSummary } = require('./instantiation/connectors/tool_resolver');
 
 const MANIFEST_PATH = path.resolve(__dirname, 'instantiation', 'manifests', 'file-treatment-manifest.json');
 const TEMPLATE_SOURCE = path.resolve(__dirname, 'instantiation', 'templates');
@@ -157,9 +159,42 @@ async function main() {
   const business_context = promptWithDefault('Business context (one sentence about your work)', '');
 
   // -------------------------------------------------------------------------
-  // Phase 3: Accounts
+  // Phase 3: Workflow Tools
   // -------------------------------------------------------------------------
-  console.log('\n--- Phase 3: Accounts ---\n');
+  console.log('\n--- Phase 3: Workflow Tools ---\n');
+
+  const adaptersDir = path.resolve(__dirname, 'instantiation', 'connectors', 'adapters');
+  const registry = loadRegistry(adaptersDir);
+
+  console.log('Which tools do you use? (comma-separated, or "none" to skip)');
+  console.log('Available categories: email, project management, chat, docs, calendar');
+  console.log('Example tools: Gmail, Basecamp, Slack, Notion, Linear');
+  const toolsRaw = promptSync('> ');
+
+  let workflow_tools;
+  if (!toolsRaw || toolsRaw.toLowerCase() === 'none' || toolsRaw.trim() === '') {
+    workflow_tools = resolveWorkflowTools({ selectedTools: [], desiredCapabilities: [], registry });
+  } else {
+    const selectedTools = toolsRaw.split(',').map((t) => t.trim()).filter(Boolean);
+
+    console.log('\nWhat would you like synced? (comma-separated, or "all" for everything)');
+    console.log('Options: email, tasks, messages, comments, calendar, docs');
+    const capsRaw = promptSync('> ');
+
+    let desiredCapabilities;
+    if (!capsRaw || capsRaw.toLowerCase() === 'all') {
+      desiredCapabilities = ['email', 'tasks', 'messages', 'comments', 'calendar', 'docs'];
+    } else {
+      desiredCapabilities = capsRaw.split(',').map((c) => c.trim()).filter(Boolean);
+    }
+
+    workflow_tools = resolveWorkflowTools({ selectedTools, desiredCapabilities, registry });
+  }
+
+  // -------------------------------------------------------------------------
+  // Phase 4: Accounts
+  // -------------------------------------------------------------------------
+  console.log('\n--- Phase 4: Accounts ---\n');
 
   const connect_accounts_now = promptWithDefault('Connect accounts now or later? (now/later)', 'later');
 
@@ -193,9 +228,9 @@ async function main() {
   }
 
   // -------------------------------------------------------------------------
-  // Phase 4: Run Installation
+  // Phase 5: Run Installation
   // -------------------------------------------------------------------------
-  console.log('\n--- Phase 4: Running Installation ---\n');
+  console.log('\n--- Phase 5: Running Installation ---\n');
 
   // Build the onboarding answers packet
   const onboardingAnswers = {
@@ -210,6 +245,7 @@ async function main() {
     tone_profile,
     preferred_reporting_style,
     business_context,
+    workflow_tools,
     connect_accounts_now,
     gmail_accounts,
     gmail_emails,
@@ -340,6 +376,11 @@ async function main() {
     accountsSummary = 'Skipped (connect later)';
   }
 
+  const connectorSummaryLines = formatConnectorSummary(workflow_tools);
+  const connectorSummaryBlock = connectorSummaryLines.length > 0
+    ? '\n' + connectorSummaryLines.join('\n')
+    : '';
+
   console.log(`
 Installation complete.
 
@@ -347,7 +388,7 @@ Vault:      ${vault_location}
 Workspace:  ${workspace_root}
 Runtimes:   ${selected_runtimes.join(', ')}
 Accounts:   ${accountsSummary}
-
+${connectorSummaryBlock}
 Your system is ready. Start a conversation with any operator:
   "Hi Claudia, what should I focus on today?"
   "Hi Anton, review this architecture."
