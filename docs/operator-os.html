@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>operator-os — System Map</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: #141414;
+    --border: #222;
+    --border-light: #333;
+    --accent: #d4ff00;
+    --text: #e8e4df;
+    --dim: #7a7570;
+    --tertiary: #5a5550;
+    --green: #3BC071;
+    --yellow: #FFB800;
+    --red: #C33013;
+    --violet: #777AD1;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.55;
+  }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--accent); margin-bottom: 4px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 16px; color: var(--text); margin: 24px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  h3 { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: 0.5px; margin: 16px 0 6px; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 10px; background: var(--card); padding: 1px 4px; border-radius: 0px; }
+  pre { background: var(--card); border: 1px solid var(--border); padding: 10px; overflow-x: auto; font-size: 10px; border-radius: 0px; margin: 8px 0; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .header { padding: 20px 24px 0; }
+  .subtitle { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--dim); }
+
+  .tabs { display: flex; gap: 0; padding: 16px 24px 0; border-bottom: 1px solid var(--border); }
+  .tab {
+    padding: 8px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--dim);
+    cursor: pointer;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    background: transparent;
+    margin-bottom: -1px;
+    border-radius: 0px;
+    transition: all 0.15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { background: var(--card); color: var(--accent); border-color: var(--border-light); }
+
+  .panel { display: none; padding: 20px 24px 40px; max-width: 1100px; overflow-y: auto; }
+  .panel.active { display: block; }
+
+  .badge {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 0px;
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .badge-wired { background: var(--green); color: #0a0a0a; }
+  .badge-half { background: var(--yellow); color: #0a0a0a; }
+  .badge-planned { background: var(--border-light); color: var(--dim); }
+  .badge-ghost { background: var(--red); color: #fff; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    margin: 8px 0;
+    border-radius: 0px;
+  }
+  .card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .card-body { color: var(--dim); font-size: 10px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; }
+  th { font-family: 'DM Sans', sans-serif; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--dim); text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  td { padding: 5px 8px; border-bottom: 1px solid var(--border); font-size: 10px; color: var(--text); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  .tree { font-size: 10px; color: var(--dim); }
+  .tree .dir { color: var(--accent); }
+  .tree .comment { color: var(--tertiary); }
+
+  #mindmap-container { width: 100%; height: 620px; background: var(--bg); border: 1px solid var(--border); border-radius: 0px; position: relative; }
+  .mindmap-legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 8px 0; font-size: 9px; color: var(--dim); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 0px; display: inline-block; margin-right: 4px; vertical-align: middle; }
+
+  .highlight-bar { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+  .hl-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--dim);
+    cursor: pointer;
+    border-radius: 0px;
+    transition: all 0.15s;
+  }
+  .hl-btn:hover, .hl-btn.active { background: var(--card); color: var(--accent); border-color: var(--accent); }
+
+  .current-state-panel { display: flex; justify-content: center; padding: 20px 0; overflow-y: auto; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>operator-os</h1>
+  <div class="subtitle">System Map &mdash; Multi-operator OS instantiation engine &mdash; generated 2026-04-04</div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('doc')">System Doc</div>
+  <div class="tab" onclick="switchTab('mindmap')">Mind Map</div>
+  <div class="tab" onclick="switchTab('state')">Current State</div>
+</div>
+
+<!-- ═══════════════════════ TAB 1: SYSTEM DOC ═══════════════════════ -->
+<div id="tab-doc" class="panel active">
+
+<h2>Architecture</h2>
+<p>operator-os is the product home for the Operator OS instantiation engine. It provisions new owner-specific instances of a multi-operator AI system through a three-slice pipeline:</p>
+<pre>
+Source Vault (VIK OS)           File Treatment Manifest (305 surfaces)
+        │                                  │
+        ▼                                  ▼
+┌─────────────────────────────────────────────────────┐
+│  SLICE 1 — Installer (Phase A)                      │
+│  manifest.js → core_copier → template_placer        │
+│             → scaffold_generator → validator         │
+│  Places reusable core + unrendered templates         │
+│  5-checkpoint validation                             │
+└─────────────┬───────────────────────────────────────┘
+              │ installerManifest
+              ▼
+┌─────────────────────────────────────────────────────┐
+│  SLICE 2 — Onboarding (Phase B)                     │
+│  questionnaire → template_renderer → source_renderer│
+│              → fresh_generator → validator            │
+│  Renders templates + generates fresh surfaces        │
+│  7-checkpoint validation                             │
+└─────────────┬───────────────────────────────────────┘
+              │ packet + validated vault
+              ▼
+┌─────────────────────────────────────────────────────┐
+│  SLICE 3 — Account Setup & First Sync               │
+│  account_connector → pipeline_configurator           │
+│  → registry_bootstrapper → first_sync               │
+│  → voice_profiler → slice3_validator                 │
+│  Connects accounts, configures pipeline, first sync  │
+│  7-checkpoint validation                             │
+└─────────────────────────────────────────────────────┘
+</pre>
+
+<h2>Three-Layer Model</h2>
+<table>
+  <tr><th>Layer</th><th>Treatment</th><th>Contents</th></tr>
+  <tr><td>A &mdash; Reusable Core</td><td><code>copy-core</code></td><td>Boot, routing, operator doctrine, templates, Memento substrate &mdash; copied as-is (31 surfaces)</td></tr>
+  <tr><td>B &mdash; Template &amp; Rewrite</td><td><code>rewrite-template</code></td><td>Identity, operator role files, bridge files, path references &mdash; rendered with onboarding answers (25 sources + 5 bridges = 30 total)</td></tr>
+  <tr><td>C &mdash; User-Generated</td><td><code>generate-fresh</code></td><td>Memory, recent context, auth, projects &mdash; generated empty or from starter templates (13 surfaces)</td></tr>
+  <tr><td>&mdash; Deferred</td><td><code>prompt-later</code></td><td>Manual setup steps deferred to post-install (7 surfaces)</td></tr>
+  <tr><td>&mdash; Excluded</td><td><code>exclude</code></td><td>Build-time authority docs, Viktor-specific residue &mdash; never shipped (224 surfaces)</td></tr>
+</table>
+
+<h2>Modules</h2>
+
+<h3>Installer <span class="badge badge-wired">wired</span></h3>
+<div class="card">
+  <div class="card-title">manifest.js</div>
+  <div class="card-body">Builds the installer execution manifest from user inputs + file matrix. Normalizes runtimes, resolves all target paths, classifies 305 surfaces into copyCore (31), templateSources (25), bridgeTemplates (5), safeScaffolds (6). Returns frozen manifest object.<br>Deps: runtime_selector, path_resolver, file_matrix</div>
+</div>
+<div class="card">
+  <div class="card-title">core_copier.js</div>
+  <div class="card-body">Recursively copies Layer A (reusable-core) files from source vault to target. Pre-flight validation ensures all sources exist. Supports directory and file-level copy.<br>Deps: fs, path</div>
+</div>
+<div class="card">
+  <div class="card-title">template_placer.js</div>
+  <div class="card-body">Places unrendered template source files and bridge templates to target locations with {{placeholders}} intact. Creates parent directories as needed.<br>Deps: fs, path</div>
+</div>
+<div class="card">
+  <div class="card-title">scaffold_generator.js</div>
+  <div class="card-body">Generates safe starter config files from scaffold-safe templates. Verifies no forbidden source-machine paths leak into content.<br>Deps: fs, path</div>
+</div>
+<div class="card">
+  <div class="card-title">validator.js</div>
+  <div class="card-body">5-checkpoint validation of Slice 1 output: structural presence, forbidden residue, forbidden artifacts, no owner generation, runtime gating.<br>Deps: runtime_selector</div>
+</div>
+
+<h3>Onboarding <span class="badge badge-wired">wired</span></h3>
+<div class="card">
+  <div class="card-title">questionnaire.js</div>
+  <div class="card-body">Validates raw onboarding input packet. 8 required fields, 16 optional fields with defaults. Normalizes runtime selection. Returns frozen packet.<br>Deps: runtime_selector</div>
+</div>
+<div class="card">
+  <div class="card-title">template_renderer.js</div>
+  <div class="card-body">Renders runtime bridge templates (Claude, Codex, Gemini, OpenClaw) by resolving {{placeholders}} from onboarding answers. Verifies no unresolved markers remain.<br>Deps: template_utils</div>
+</div>
+<div class="card">
+  <div class="card-title">source_renderer.js</div>
+  <div class="card-body">Rewrites vault source files (BOOT.md, ROUTING.md, etc.) replacing Viktor references with new owner identity. Ordered longest-first replacement to prevent partial matches.<br>Deps: fs, path</div>
+</div>
+<div class="card">
+  <div class="card-title">fresh_generator.js</div>
+  <div class="card-body">Generates Layer C fresh surfaces: vault files (memory.md, identity.md, etc.) and runtime configs. Loads templates, resolves placeholders, validates cleanliness.<br>Deps: runtime_selector, template_utils, file_matrix</div>
+</div>
+<div class="card">
+  <div class="card-title">orchestrator.js</div>
+  <div class="card-body">Coordinates the entire Slice 2 and Slice 3 pipelines. Slice 2: validate &rarr; render bridges &rarr; render sources &rarr; generate fresh &rarr; validate. Slice 3: connect accounts &rarr; pipeline config &rarr; bootstrap registry &rarr; first sync &rarr; voice profiler &rarr; validate.<br>Deps: all onboarding modules</div>
+</div>
+<div class="card">
+  <div class="card-title">validator.js</div>
+  <div class="card-body">7-checkpoint validation of Slice 2: completeness, no Viktor residue, path integrity, boot chain, functional content, template cleanliness, runtime gating.<br>Deps: runtime_selector</div>
+</div>
+
+<h3>Slice 3 &mdash; Account Setup &amp; Sync <span class="badge badge-wired">wired</span></h3>
+<div class="card">
+  <div class="card-title">account_connector.js</div>
+  <div class="card-body">Routes account auth through the connector registry and auth dispatcher instead of hardcoded branches. Handles now/later/mock/declared paths. Maps adapter results back to legacy return shapes for backward compatibility.<br>Deps: fs, path, registry, auth_dispatcher</div>
+</div>
+<div class="card">
+  <div class="card-title">pipeline_configurator.js</div>
+  <div class="card-body">Generates pipeline_config.json from account connections and connector state. Populates owner, accounts, sync_engines, gmail_filters, workflow_tools, and connectors section (enabled, unsupported, deferred). Loads connector registry to resolve workflow tool selections. Verifies pipeline patches in 4 source files.<br>Deps: fs, path, registry</div>
+</div>
+<div class="card">
+  <div class="card-title">registry_bootstrapper.js</div>
+  <div class="card-body">Creates fresh registry.json with project skeleton entries from user-supplied project categories. No Viktor project IDs.<br>Deps: fs, path</div>
+</div>
+<div class="card">
+  <div class="card-title">first_sync.js</div>
+  <div class="card-body">Runs first pipeline sync after account connection. Planner-driven path uses connector sync adapters dispatched by the execution planner. Legacy fallback uses hardcoded CLI step list. Mock path for testing. Derivation (store_enrich, derive_all) runs after source sync succeeds.<br>Deps: fs, path, child_process, planner, registry, pipeline_configurator</div>
+</div>
+<div class="card">
+  <div class="card-title">voice_profiler.js</div>
+  <div class="card-body">Analyzes captured sent emails and Basecamp comments to extract communication voice patterns. Outputs operator/voice.md with greeting/sign-off patterns, sentence structure, emoji frequency.<br>Deps: fs, path</div>
+</div>
+<div class="card">
+  <div class="card-title">slice3_validator.js</div>
+  <div class="card-body">7-checkpoint validation of Slice 3: pipeline config, pipeline patches, no Viktor identity, fresh registry, first sync, today page, voice profile.<br>Deps: fs, path</div>
+</div>
+
+<h3>Shared Utilities <span class="badge badge-wired">wired</span></h3>
+<div class="card">
+  <div class="card-title">runtime_selector.js</div>
+  <div class="card-body">Normalizes runtime selection across 4 runtimes (Codex, Claude, Gemini, OpenClaw). Pure utility &mdash; no state, no deps.</div>
+</div>
+<div class="card">
+  <div class="card-title">path_resolver.js</div>
+  <div class="card-body">Resolves all target paths for vault (boot, routing, operators, etc.) and runtime (bridge, config) locations. Validates no forbidden roots leak.<br>Deps: runtime_selector</div>
+</div>
+<div class="card">
+  <div class="card-title">template_utils.js</div>
+  <div class="card-body">Placeholder resolution ({{key}} &rarr; value) and unresolved marker detection. Pure utility.</div>
+</div>
+<div class="card">
+  <div class="card-title">file_matrix.js</div>
+  <div class="card-body">Loads file-treatment-manifest.json and provides filtered views by treatment, owner phase, runtime, and scaffold safety. Central manifest accessor for all phases.</div>
+</div>
+
+<h3>Pipeline Config <span class="badge badge-wired">wired</span></h3>
+<div class="card">
+  <div class="card-title">pipeline_config.js (project root)</div>
+  <div class="card-body">Runtime accessor for pipeline_config.json. Provides getGmailAccounts(), getBasecampApiBase(), getCalendarConfig(), getDriveConfigDir(), getGmailFilters(). Returns null/empty when no config exists. No owner-specific fallback values.<br>Deps: fs, path</div>
+</div>
+
+<h3>Connector Architecture <span class="badge badge-wired">wired</span></h3>
+<div class="card">
+  <div class="card-title">manifest_schema.js</div>
+  <div class="card-body">Defines connector manifest schema and validates instances. Fields: id, display_name, category, capabilities, auth_adapter, sync_adapter, stage, priority, after, status. Exports VALID_STAGES, VALID_STATUSES, VALID_CATEGORIES.</div>
+</div>
+<div class="card">
+  <div class="card-title">registry.js</div>
+  <div class="card-body">Discovers and loads connector manifests from adapters directory. Validates each manifest on load. Provides loadRegistry(), resolveAdapter(), getConnectorsByStage(), getConnectorsByCapability(). No connector is hardcoded into the registry.</div>
+</div>
+<div class="card">
+  <div class="card-title">auth_adapter.js</div>
+  <div class="card-body">Defines the auth adapter contract: start_auth, finish_auth, refresh, revoke, status, required_secrets. Provides validateAuthAdapter() and createAuthResult() factory for standardized frozen result objects.</div>
+</div>
+<div class="card">
+  <div class="card-title">sync_adapter.js</div>
+  <div class="card-body">Defines the sync adapter contract: validate_config, initial_sync, incremental_sync, healthcheck, normalize (required), discover (optional). Provides validateSyncAdapter() and createSyncResult() factory.</div>
+</div>
+<div class="card">
+  <div class="card-title">auth_dispatcher.js</div>
+  <div class="card-body">Routes auth calls through the registry. dispatchAuth() resolves adapter and calls action. dispatchAllAuth() handles batch auth. buildGuidance() generates human-readable auth instructions. No hardcoded connector knowledge.</div>
+</div>
+<div class="card">
+  <div class="card-title">planner.js</div>
+  <div class="card-body">Fixed four-stage execution planner: preflight, source_sync, derivation, post_sync. Deterministic ordering by priority, topological sort on after constraints, alphabetical tiebreak. Validates dependency graphs, rejects cycles and cross-stage deps. executeStages() drives live sync execution.</div>
+</div>
+<div class="card">
+  <div class="card-title">tool_resolver.js</div>
+  <div class="card-body">Maps user workflow tool selections to connector state. resolveWorkflowTools() produces supported/unsupported/deferred status per tool. formatConnectorSummary() generates human-readable output lines. Pure logic, no stdin.</div>
+</div>
+<div class="card">
+  <div class="card-title">gmail adapter (auth.js + sync.js + manifest.json)</div>
+  <div class="card-body">Production connector. Auth wraps gws CLI login and verification. Sync handles email, calendar, drive, sheets as internal sub-steps of a single connector. Category: email. Capabilities: email, calendar, drive, sheets. Stage: source_sync, priority 10.</div>
+</div>
+<div class="card">
+  <div class="card-title">basecamp adapter (auth.js + sync.js + manifest.json)</div>
+  <div class="card-body">Production connector. Auth wraps Basecamp OAuth 2.0 flow with token refresh. Sync handles basecamp_sync. Category: project_management. Capabilities: tasks, messages, comments. Stage: source_sync, priority 20, after: gmail.</div>
+</div>
+
+<h2>Manifest</h2>
+<div class="card">
+  <div class="card-title">file-treatment-manifest.json</div>
+  <div class="card-body">
+    <strong>305 surfaces</strong> (frozen, version 1.0.0)<br>
+    Treatment distribution: copy-core (31), rewrite-template (25 source + 5 bridges), generate-fresh (13), prompt-later (7), exclude (224).<br>
+    Each surface has: id, path, layer, treatment, owner_phase (installer|onboarding), location (vault|runtime), optional runtime gating and scaffold_safe flags.
+  </div>
+</div>
+
+<h2>Tests</h2>
+<table>
+  <tr><th>Test File</th><th>Scope</th><th>Assertions</th><th>Status</th></tr>
+  <tr><td><code>test_installer.js</code></td><td>Slice 1 — manifest, core copy, template placement, scaffold gen, 5-checkpoint validation, runtime gating, edge cases</td><td>35</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>dry_test.js</code></td><td>Slice 2 — full dry run (Pauline), surfaces, residue, paths, boot chain, memory, identity, runtime gating, templates, functional operator</td><td>41</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>slice3_test.js</code></td><td>Slice 3 — account connector, pipeline config, registry, first sync (mock), voice profiler, 7-checkpoint validation</td><td>43</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>e2e_test.js</code></td><td>End-to-end — Marcus full + Pauline partial, boot chain cross-ref, partial auth, reconnect readiness, manifest completeness</td><td>55</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_foundation.js</code></td><td>Connector foundation — manifest validation, registry loading, adapter resolution, stage/capability queries, auth/sync contracts</td><td>99</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_adapters.js</code></td><td>Auth adapters — Gmail + Basecamp manifest validation, adapter contracts, registry integration, no-op paths</td><td>86</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_sync_adapters.js</code></td><td>Sync adapters — Gmail + Basecamp sync contracts, validate_config, initial_sync, healthcheck, registry resolution</td><td>44</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_planner.js</code></td><td>Planner — valid plans, after constraints, cycle detection, cross-stage rejection, executeStages happy/partial/total failure, determinism</td><td>38</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_auth_dispatcher.js</code></td><td>Auth dispatcher — dispatch routing, unknown connector handling, batch auth, guidance generation, account_connector refactor verification</td><td>67</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_onboarding_wiring.js</code></td><td>Onboarding wiring — connectors section in pipeline_config, enabled/unsupported resolution, execution plan validation, full Slice 3 integration</td><td>50</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_extensibility.js</code></td><td>Acceptance criteria — no-core-edit extensibility, invalid graph rejection, deterministic ordering, derive-after-sync, unsupported visibility</td><td>61</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_planner_sync.js</code></td><td>Planner sync — planner-driven path selection, legacy fallback, mock path unchanged, skip path, empty connectors</td><td>23</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_pipeline_config.js</code></td><td>Pipeline config — no-config defaults, valid config reads, no owner-specific fallbacks, banned string check</td><td>37</td><td style="color:var(--green)">PASS</td></tr>
+  <tr><td><code>test_install_prompts.js</code></td><td>Install prompts — tool resolution, supported/unsupported mapping, summary formatting, case insensitivity</td><td>37</td><td style="color:var(--green)">PASS</td></tr>
+</table>
+<p style="margin-top:6px;color:var(--dim);">Total verified: <strong>716 assertions</strong> across 14 test suites. All passing.</p>
+
+<h2>Directory Structure</h2>
+<pre class="tree">
+<span class="dir">operator-os/</span>
+├── <span class="dir">docs/</span>                          <span class="comment"># System map, architecture docs</span>
+│   └── connector-architecture-packet.md
+├── <span class="dir">instantiation/</span>                 <span class="comment"># Core instantiation engine</span>
+│   ├── <span class="dir">installer/</span>                 <span class="comment"># Slice 1: manifest, copy, place, scaffold, validate</span>
+│   │   ├── manifest.js
+│   │   ├── core_copier.js
+│   │   ├── template_placer.js
+│   │   ├── scaffold_generator.js
+│   │   └── validator.js
+│   ├── <span class="dir">onboarding/</span>                <span class="comment"># Slice 2 + 3: questionnaire, render, generate, connect, sync</span>
+│   │   ├── orchestrator.js
+│   │   ├── questionnaire.js
+│   │   ├── template_renderer.js
+│   │   ├── source_renderer.js
+│   │   ├── fresh_generator.js
+│   │   ├── validator.js
+│   │   ├── account_connector.js
+│   │   ├── pipeline_configurator.js
+│   │   ├── registry_bootstrapper.js
+│   │   ├── first_sync.js
+│   │   ├── voice_profiler.js
+│   │   ├── slice3_validator.js
+│   │   └── reconnect.js
+│   ├── <span class="dir">connectors/</span>                <span class="comment"># Connector extensibility architecture</span>
+│   │   ├── manifest_schema.js     <span class="comment"># Manifest schema + validation</span>
+│   │   ├── registry.js            <span class="comment"># Registry loader + adapter resolution</span>
+│   │   ├── auth_adapter.js        <span class="comment"># Auth adapter contract</span>
+│   │   ├── sync_adapter.js        <span class="comment"># Sync adapter contract</span>
+│   │   ├── auth_dispatcher.js     <span class="comment"># Registry-driven auth routing</span>
+│   │   ├── planner.js             <span class="comment"># Fixed-stage execution planner</span>
+│   │   ├── tool_resolver.js       <span class="comment"># Workflow tool resolution</span>
+│   │   └── <span class="dir">adapters/</span>              <span class="comment"># Connector adapter directories</span>
+│   │       ├── <span class="dir">gmail/</span>             <span class="comment"># Gmail adapter (auth + sync + manifest)</span>
+│   │       └── <span class="dir">basecamp/</span>          <span class="comment"># Basecamp adapter (auth + sync + manifest)</span>
+│   ├── <span class="dir">shared/</span>                    <span class="comment"># Utility layer</span>
+│   │   ├── runtime_selector.js
+│   │   ├── path_resolver.js
+│   │   ├── template_utils.js
+│   │   └── file_matrix.js
+│   ├── <span class="dir">manifests/</span>                 <span class="comment"># 305-surface file-treatment manifest</span>
+│   │   └── file-treatment-manifest.json
+│   └── <span class="dir">templates/</span>                 <span class="comment"># Bridge and scaffold templates</span>
+├── install.js                     <span class="comment"># Interactive CLI installer</span>
+├── pipeline_config.js             <span class="comment"># Runtime pipeline config accessor</span>
+├── QUICKSTART.md                  <span class="comment"># User-facing quickstart guide</span>
+└── README.md                      <span class="comment"># Product README</span>
+</pre>
+
+<h2>Infrastructure</h2>
+<table>
+  <tr><th>Component</th><th>Detail</th></tr>
+  <tr><td>Runtime</td><td>Node.js (CommonJS modules)</td></tr>
+  <tr><td>Dependencies</td><td>Zero external &mdash; Node built-ins only (fs, path, child_process)</td></tr>
+  <tr><td>Manifest</td><td>305 surfaces, frozen v1.0.0</td></tr>
+  <tr><td>Supported Runtimes</td><td>Codex, Claude, Gemini, OpenClaw</td></tr>
+  <tr><td>Test Framework</td><td>Custom assertion runner (no test library dependency)</td></tr>
+  <tr><td>Source of Truth</td><td>VIK OS vault at ~/VIK/ObsidianVault/VIK_OS/</td></tr>
+  <tr><td>Authority Docs</td><td>~/VIK/ObsidianVault/VIK_OS/initiatives/operator-system/ (8 docs)</td></tr>
+  <tr><td>Connectors</td><td>Manifest-driven registry with auth + sync adapters. 2 production connectors (Gmail, Basecamp).</td></tr>
+</table>
+
+<h2>Design Rules</h2>
+<ul style="margin:6px 0 0 16px; color:var(--dim);">
+  <li>Installer places &mdash; onboarding renders. Non-overlap rule.</li>
+  <li>Manifest wins over other docs for file-level treatment decisions.</li>
+  <li>Zero Viktor residue in output. Validated by every slice.</li>
+  <li>Authority docs are build-time inputs, never shipped.</li>
+  <li>Pipeline config returns null/empty for unconfigured values. No owner-specific fallbacks.</li>
+  <li>Every credential is generated fresh &mdash; never copied from source.</li>
+  <li>Unsupported sync engines flagged as dev tasks, not install failures.</li>
+  <li>Adding a new connector requires only manifest + adapter files. No core edits.</li>
+</ul>
+
+<h2>Next Steps (from Product Plan)</h2>
+<table>
+  <tr><th>Step</th><th>Description</th><th>Status</th></tr>
+  <tr><td>1</td><td>Repo structure</td><td><span class="badge badge-wired">done</span></td></tr>
+  <tr><td>2</td><td>Onboarding packet definition</td><td><span class="badge badge-wired">done</span></td></tr>
+  <tr><td>3</td><td>Template inventory</td><td><span class="badge badge-wired">done</span></td></tr>
+  <tr><td>4</td><td>Build the onboarding flow</td><td><span class="badge badge-wired">done</span></td></tr>
+  <tr><td>5</td><td>Runtime bridge generation</td><td><span class="badge badge-wired">done</span></td></tr>
+  <tr><td>6</td><td>Auth &amp; connector setup</td><td><span class="badge badge-wired">done</span> &mdash; live OAuth (Gmail gws CLI + Basecamp OAuth), auth dispatcher, adapter registry</td></tr>
+  <tr><td>7</td><td>Memento substrate scaffolding</td><td><span class="badge badge-wired">done</span> &mdash; pipeline config, registry bootstrap, pipeline source copy, connector-driven first sync</td></tr>
+  <tr><td>8</td><td>Validation story</td><td><span class="badge badge-wired">done</span> &mdash; 19 checkpoints across 3 slices + 716 assertions across 14 test suites</td></tr>
+  <tr><td>9</td><td>Quickstart &amp; interactive CLI</td><td><span class="badge badge-wired">done</span> &mdash; install.js interactive CLI + QUICKSTART.md</td></tr>
+  <tr><td>10</td><td>Connector extensibility</td><td><span class="badge badge-wired">done</span> &mdash; manifest-driven registry, auth/sync adapters, planner, auth dispatcher, tool resolver</td></tr>
+</table>
+
+</div>
+
+<!-- ═══════════════════════ TAB 2: MIND MAP ═══════════════════════ -->
+<div id="tab-mindmap" class="panel">
+
+<h3>Highlight Filter</h3>
+<div class="highlight-bar">
+  <button class="hl-btn active" onclick="highlightGroup('all')">All</button>
+  <button class="hl-btn" onclick="highlightGroup('installer')">Installer</button>
+  <button class="hl-btn" onclick="highlightGroup('onboarding')">Onboarding</button>
+  <button class="hl-btn" onclick="highlightGroup('slice3')">Slice 3</button>
+  <button class="hl-btn" onclick="highlightGroup('shared')">Shared</button>
+  <button class="hl-btn" onclick="highlightGroup('connectors')">Connectors</button>
+  <button class="hl-btn" onclick="highlightGroup('external')">External</button>
+  <button class="hl-btn" onclick="highlightGroup('data')">Data Files</button>
+</div>
+
+<div id="mindmap-container"></div>
+
+<div class="mindmap-legend">
+  <span><span class="legend-dot" style="background:var(--green)"></span> Installer</span>
+  <span><span class="legend-dot" style="background:var(--accent)"></span> Onboarding</span>
+  <span><span class="legend-dot" style="background:var(--yellow)"></span> Slice 3</span>
+  <span><span class="legend-dot" style="background:var(--violet)"></span> Shared / Source</span>
+  <span><span class="legend-dot" style="background:var(--dim)"></span> Data / Config</span>
+  <span><span class="legend-dot" style="background:#C33013"></span> External</span>
+</div>
+
+</div>
+
+<!-- ═══════════════════════ TAB 3: CURRENT STATE ═══════════════════════ -->
+<div id="tab-state" class="panel">
+<div class="current-state-panel">
+<svg xmlns="http://www.w3.org/2000/svg" width="680" viewBox="0 0 680 1720" style="font-family:'DM Sans',Arial,sans-serif;">
+
+  <!-- TRIGGER — LIVE -->
+  <g opacity="1.0">
+    <rect x="40" y="20" width="600" height="60" rx="0" fill="rgba(119,122,209,0.1)" stroke="#777AD1" stroke-width="1.5"/>
+    <rect x="52" y="30" width="40" height="16" rx="0" fill="#3BC071"/><text x="72" y="41" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="46" text-anchor="middle" fill="#777AD1" font-size="13" font-weight="700">New Owner Wants to Instantiate</text>
+    <text x="340" y="62" text-anchor="middle" fill="#7a7570" font-size="9">Trigger &mdash; user clones operator-os repo and runs installer</text>
+  </g>
+  <line x1="340" y1="80" x2="340" y2="110" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- SLICE 1 INSTALLER — LIVE -->
+  <g opacity="1.0">
+    <rect x="40" y="110" width="600" height="100" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="52" y="120" width="40" height="16" rx="0" fill="#3BC071"/><text x="72" y="131" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="136" text-anchor="middle" fill="#3BC071" font-size="13" font-weight="700">Slice 1 &mdash; Installer</text>
+    <text x="340" y="152" text-anchor="middle" fill="#7a7570" font-size="9">Build manifest &rarr; copy core (31) &rarr; place templates (30) &rarr; generate scaffolds (6)</text>
+    <!-- inner boxes -->
+    <rect x="60" y="162" width="120" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="120" y="180" text-anchor="middle" fill="#e8e4df" font-size="8">manifest.js</text>
+    <rect x="190" y="162" width="100" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="240" y="180" text-anchor="middle" fill="#e8e4df" font-size="8">core_copier</text>
+    <rect x="300" y="162" width="110" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="355" y="180" text-anchor="middle" fill="#e8e4df" font-size="8">template_placer</text>
+    <rect x="420" y="162" width="110" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="475" y="180" text-anchor="middle" fill="#e8e4df" font-size="8">scaffold_gen</text>
+    <rect x="540" y="162" width="88" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="584" y="180" text-anchor="middle" fill="#e8e4df" font-size="8">validator (5)</text>
+  </g>
+  <line x1="340" y1="210" x2="340" y2="240" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- SLICE 1 VALIDATION GATE — LIVE -->
+  <g opacity="1.0">
+    <rect x="180" y="240" width="320" height="44" rx="0" fill="rgba(255,184,0,0.08)" stroke="rgba(255,184,0,0.3)" stroke-width="1.5"/>
+    <rect x="192" y="248" width="40" height="16" rx="0" fill="#3BC071"/><text x="212" y="259" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="260" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">Validation Gate &mdash; 5 Checkpoints</text>
+    <text x="340" y="274" text-anchor="middle" fill="#7a7570" font-size="9">Structural presence, forbidden residue, artifacts, owner gen, runtime gating</text>
+  </g>
+  <line x1="340" y1="284" x2="340" y2="314" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- SLICE 2 ONBOARDING — LIVE -->
+  <g opacity="1.0">
+    <rect x="40" y="314" width="600" height="100" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="52" y="324" width="40" height="16" rx="0" fill="#3BC071"/><text x="72" y="335" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="340" text-anchor="middle" fill="#3BC071" font-size="13" font-weight="700">Slice 2 &mdash; Onboarding</text>
+    <text x="340" y="356" text-anchor="middle" fill="#7a7570" font-size="9">Collect answers &rarr; render bridges &rarr; rewrite sources &rarr; generate fresh surfaces</text>
+    <rect x="60" y="366" width="105" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="112" y="384" text-anchor="middle" fill="#e8e4df" font-size="8">questionnaire</text>
+    <rect x="175" y="366" width="105" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="227" y="384" text-anchor="middle" fill="#e8e4df" font-size="8">template_renderer</text>
+    <rect x="290" y="366" width="105" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="342" y="384" text-anchor="middle" fill="#e8e4df" font-size="8">source_renderer</text>
+    <rect x="405" y="366" width="105" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="457" y="384" text-anchor="middle" fill="#e8e4df" font-size="8">fresh_generator</text>
+    <rect x="520" y="366" width="108" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="574" y="384" text-anchor="middle" fill="#e8e4df" font-size="8">validator (7)</text>
+  </g>
+  <line x1="340" y1="414" x2="340" y2="444" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- SLICE 2 VALIDATION GATE — LIVE -->
+  <g opacity="1.0">
+    <rect x="180" y="444" width="320" height="44" rx="0" fill="rgba(255,184,0,0.08)" stroke="rgba(255,184,0,0.3)" stroke-width="1.5"/>
+    <rect x="192" y="452" width="40" height="16" rx="0" fill="#3BC071"/><text x="212" y="463" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="464" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">Validation Gate &mdash; 7 Checkpoints</text>
+    <text x="340" y="478" text-anchor="middle" fill="#7a7570" font-size="9">Completeness, residue, paths, boot chain, content, templates, runtime gating</text>
+  </g>
+  <line x1="340" y1="488" x2="340" y2="518" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- SLICE 3 ACCOUNT SETUP — LIVE -->
+  <g opacity="1.0">
+    <rect x="40" y="518" width="600" height="100" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="52" y="528" width="40" height="16" rx="0" fill="#3BC071"/><text x="72" y="539" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="544" text-anchor="middle" fill="#3BC071" font-size="13" font-weight="700">Slice 3 &mdash; Account Setup &amp; First Sync</text>
+    <text x="340" y="560" text-anchor="middle" fill="#7a7570" font-size="9">Connect accounts &rarr; pipeline config &rarr; bootstrap registry &rarr; first sync &rarr; voice profile</text>
+    <rect x="60" y="570" width="95" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="107" y="588" text-anchor="middle" fill="#e8e4df" font-size="8">account_conn</text>
+    <rect x="165" y="570" width="95" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="212" y="588" text-anchor="middle" fill="#e8e4df" font-size="8">pipeline_config</text>
+    <rect x="270" y="570" width="95" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="317" y="588" text-anchor="middle" fill="#e8e4df" font-size="8">registry_boot</text>
+    <rect x="375" y="570" width="80" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="415" y="588" text-anchor="middle" fill="#e8e4df" font-size="8">first_sync</text>
+    <rect x="465" y="570" width="80" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="505" y="588" text-anchor="middle" fill="#e8e4df" font-size="8">voice_profiler</text>
+    <rect x="555" y="570" width="73" height="28" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="591" y="588" text-anchor="middle" fill="#e8e4df" font-size="8">validator (7)</text>
+  </g>
+  <line x1="340" y1="618" x2="340" y2="648" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- SLICE 3 VALIDATION GATE — LIVE -->
+  <g opacity="1.0">
+    <rect x="180" y="648" width="320" height="44" rx="0" fill="rgba(255,184,0,0.08)" stroke="rgba(255,184,0,0.3)" stroke-width="1.5"/>
+    <rect x="192" y="656" width="40" height="16" rx="0" fill="#3BC071"/><text x="212" y="667" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="668" text-anchor="middle" fill="#FFB800" font-size="11" font-weight="700">Validation Gate &mdash; 7 Checkpoints</text>
+    <text x="340" y="682" text-anchor="middle" fill="#7a7570" font-size="9">Pipeline config, patches, identity, registry, sync, today page, voice profile</text>
+  </g>
+  <line x1="340" y1="692" x2="340" y2="722" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- ═══ ACTION DIVIDER ═══ -->
+  <line x1="40" y1="720" x2="640" y2="720" stroke="#333" stroke-width="1" stroke-dasharray="6,4"/>
+  <text x="340" y="735" text-anchor="middle" fill="#5a5550" font-size="8" font-weight="700" letter-spacing="2">INSTANTIATION COMPLETE &mdash; OPERATIONAL PHASE</text>
+  <line x1="40" y1="742" x2="640" y2="742" stroke="#333" stroke-width="1" stroke-dasharray="6,4"/>
+  <line x1="340" y1="742" x2="340" y2="772" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- OUTPUT: PROVISIONED VAULT — LIVE -->
+  <g opacity="1.0">
+    <rect x="40" y="772" width="600" height="80" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333" stroke-width="1.5"/>
+    <rect x="52" y="782" width="40" height="16" rx="0" fill="#3BC071"/><text x="72" y="793" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="798" text-anchor="middle" fill="#e8e4df" font-size="13" font-weight="700">Provisioned Owner Vault</text>
+    <text x="340" y="814" text-anchor="middle" fill="#7a7570" font-size="9">Clean vault with boot chain, operators, bridges, memory, identity, pipeline config, registry</text>
+    <rect x="60" y="822" width="85" height="20" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="102" y="836" text-anchor="middle" fill="#7a7570" font-size="7">Boot Chain</text>
+    <rect x="155" y="822" width="85" height="20" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="197" y="836" text-anchor="middle" fill="#7a7570" font-size="7">Operators</text>
+    <rect x="250" y="822" width="85" height="20" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="292" y="836" text-anchor="middle" fill="#7a7570" font-size="7">Bridges</text>
+    <rect x="345" y="822" width="85" height="20" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="387" y="836" text-anchor="middle" fill="#7a7570" font-size="7">Memory</text>
+    <rect x="440" y="822" width="85" height="20" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="482" y="836" text-anchor="middle" fill="#7a7570" font-size="7">Pipeline</text>
+    <rect x="535" y="822" width="85" height="20" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333"/><text x="577" y="836" text-anchor="middle" fill="#7a7570" font-size="7">Registry</text>
+  </g>
+  <line x1="340" y1="852" x2="340" y2="882" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- RUNTIME BRIDGES — LIVE -->
+  <g opacity="1.0">
+    <rect x="100" y="882" width="480" height="54" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333" stroke-width="1.5"/>
+    <rect x="112" y="892" width="40" height="16" rx="0" fill="#3BC071"/><text x="132" y="903" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="908" text-anchor="middle" fill="#e8e4df" font-size="11" font-weight="700">Runtime Bridges</text>
+    <text x="340" y="924" text-anchor="middle" fill="#7a7570" font-size="9">Codex &bull; Claude &bull; Gemini &bull; OpenClaw &mdash; all point to canonical boot</text>
+  </g>
+  <line x1="340" y1="936" x2="340" y2="966" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- LIVE OAUTH — LIVE -->
+  <g opacity="1.0">
+    <rect x="100" y="966" width="480" height="54" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="112" y="976" width="40" height="16" rx="0" fill="#3BC071"/><text x="132" y="987" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="992" text-anchor="middle" fill="#3BC071" font-size="11" font-weight="700">Live OAuth Authentication</text>
+    <text x="340" y="1008" text-anchor="middle" fill="#7a7570" font-size="9">Gmail gws CLI auth + Basecamp OAuth 2.0 &mdash; routed through auth dispatcher and adapter registry</text>
+  </g>
+  <line x1="340" y1="1020" x2="340" y2="1050" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- MEMENTO SUBSTRATE — LIVE -->
+  <g opacity="1.0">
+    <rect x="100" y="1050" width="480" height="54" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="112" y="1060" width="40" height="16" rx="0" fill="#3BC071"/><text x="132" y="1071" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="1076" text-anchor="middle" fill="#3BC071" font-size="11" font-weight="700">Memento Substrate Scaffolding</text>
+    <text x="340" y="1092" text-anchor="middle" fill="#7a7570" font-size="9">Pipeline config, registry bootstrap, pipeline source copy, connector state resolution</text>
+  </g>
+  <line x1="340" y1="1104" x2="340" y2="1134" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- FIRST SYNC — LIVE -->
+  <g opacity="1.0">
+    <rect x="100" y="1134" width="480" height="54" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="112" y="1144" width="40" height="16" rx="0" fill="#3BC071"/><text x="132" y="1155" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="1160" text-anchor="middle" fill="#3BC071" font-size="11" font-weight="700">First Sync Pipeline</text>
+    <text x="340" y="1176" text-anchor="middle" fill="#7a7570" font-size="9">Planner-driven execution through sync adapters &mdash; Gmail (email, calendar, drive, sheets) + Basecamp + derivation</text>
+  </g>
+  <line x1="340" y1="1188" x2="340" y2="1218" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- VOICE PROFILER — LIVE -->
+  <g opacity="1.0">
+    <rect x="100" y="1218" width="480" height="54" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="112" y="1228" width="40" height="16" rx="0" fill="#3BC071"/><text x="132" y="1239" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="1244" text-anchor="middle" fill="#3BC071" font-size="11" font-weight="700">Voice Profiler</text>
+    <text x="340" y="1260" text-anchor="middle" fill="#7a7570" font-size="9">Extracts greeting/sign-off patterns, sentence structure, emoji frequency from captured comms</text>
+  </g>
+  <line x1="340" y1="1272" x2="340" y2="1302" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- QUICKSTART / DOCS — LIVE -->
+  <g opacity="1.0">
+    <rect x="100" y="1302" width="480" height="54" rx="0" fill="rgba(59,192,113,0.08)" stroke="rgba(59,192,113,0.3)" stroke-width="1.5"/>
+    <rect x="112" y="1312" width="40" height="16" rx="0" fill="#3BC071"/><text x="132" y="1323" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
+    <text x="340" y="1328" text-anchor="middle" fill="#3BC071" font-size="11" font-weight="700">Quickstart Guide</text>
+    <text x="340" y="1344" text-anchor="middle" fill="#7a7570" font-size="9">QUICKSTART.md + install.js interactive CLI with workflow tool collection</text>
+  </g>
+  <line x1="340" y1="1356" x2="340" y2="1386" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
+
+  <!-- TERMINAL: OWNER OPERATING — NONE -->
+  <g opacity="0.35">
+    <rect x="140" y="1386" width="400" height="54" rx="0" fill="rgba(119,122,209,0.1)" stroke="#777AD1" stroke-width="1.5"/>
+    <rect x="152" y="1396" width="40" height="16" rx="0" fill="#C33013"/><text x="172" y="1407" text-anchor="middle" fill="#fff" font-size="8" font-weight="700">NONE</text>
+    <text x="340" y="1412" text-anchor="middle" fill="#777AD1" font-size="11" font-weight="700">New Owner Operating</text>
+    <text x="340" y="1428" text-anchor="middle" fill="#7a7570" font-size="9">"Hi Claudia, what needs my attention today?" &mdash; end-to-end not yet tested with real user</text>
+  </g>
+
+  <!-- ═══ COVERAGE SCOREBOARD ═══ -->
+  <g transform="translate(40, 1480)">
+    <text x="0" y="0" fill="#e8e4df" font-size="12" font-weight="700">Coverage Summary</text>
+    <!-- LIVE bar -->
+    <rect x="0" y="14" width="360" height="14" rx="0" fill="#141414" stroke="#222"/>
+    <rect x="0" y="14" width="330" height="14" rx="0" fill="#3BC071" opacity="0.7"/>
+    <text x="340" y="25" fill="#e8e4df" font-size="9">11 of 12 LIVE (92%)</text>
+    <!-- PARTIAL bar -->
+    <rect x="0" y="34" width="360" height="14" rx="0" fill="#141414" stroke="#222"/>
+    <rect x="0" y="34" width="0" height="14" rx="0" fill="#FFB800" opacity="0.7"/>
+    <text x="10" y="45" fill="#e8e4df" font-size="9">0 PARTIAL</text>
+    <!-- NONE bar -->
+    <rect x="0" y="54" width="360" height="14" rx="0" fill="#141414" stroke="#222"/>
+    <rect x="0" y="54" width="30" height="14" rx="0" fill="#C33013" opacity="0.7"/>
+    <text x="40" y="65" fill="#e8e4df" font-size="9">1 of 12 NONE (8%)</text>
+
+    <text x="0" y="88" fill="#7a7570" font-size="9">92% fully operational &bull; 0% partial &bull; 8% not started (real user test)</text>
+  </g>
+
+  <!-- ═══ LEGEND ═══ -->
+  <g transform="translate(40, 1600)">
+    <text x="0" y="0" fill="#5a5550" font-size="9" font-weight="700">STATUS</text>
+    <rect x="0" y="8" width="12" height="12" rx="0" fill="#3BC071"/><text x="18" y="18" fill="#7a7570" font-size="9">Live</text>
+    <rect x="60" y="8" width="12" height="12" rx="0" fill="#FFB800"/><text x="78" y="18" fill="#7a7570" font-size="9">Partial</text>
+    <rect x="140" y="8" width="12" height="12" rx="0" fill="#C33013"/><text x="158" y="18" fill="#7a7570" font-size="9">None</text>
+
+    <text x="260" y="0" fill="#5a5550" font-size="9" font-weight="700">NODE TYPES</text>
+    <rect x="260" y="8" width="12" height="12" rx="0" fill="rgba(59,192,113,0.15)" stroke="rgba(59,192,113,0.3)"/><text x="278" y="18" fill="#7a7570" font-size="9">Pipeline / LLM</text>
+    <rect x="380" y="8" width="12" height="12" rx="0" fill="rgba(255,184,0,0.15)" stroke="rgba(255,184,0,0.3)"/><text x="398" y="18" fill="#7a7570" font-size="9">Validation Gate</text>
+    <rect x="510" y="8" width="12" height="12" rx="0" fill="rgba(119,122,209,0.15)" stroke="#777AD1"/><text x="528" y="18" fill="#7a7570" font-size="9">Trigger / Terminal</text>
+  </g>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polyline points="0,0 8,3 0,6" fill="none" stroke="#555" stroke-width="1"/>
+    </marker>
+    <marker id="arrow-dim" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polyline points="0,0 8,3 0,6" fill="none" stroke="#444" stroke-width="1"/>
+    </marker>
+  </defs>
+</svg>
+</div>
+</div>
+
+<!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
+<script>
+// Tab switching
+function switchTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(id.substring(0,3))) t.classList.add('active'); });
+  if (id === 'mindmap' && !window._mindmapRendered) { renderMindmap(); window._mindmapRendered = true; }
+}
+
+// Mind Map Data
+const nodes = [
+  // External sources
+  { id: 'vault', label: 'VIK OS Vault', group: 'external', detail: 'Source vault with 305 surfaces \u2500 operator doctrine, boot chain, templates, brands' },
+  { id: 'manifest_json', label: 'file-treatment-manifest.json', group: 'data', detail: '305 surfaces with treatment, owner_phase, location, runtime gating \u2500 frozen v1.0.0' },
+
+  // Shared
+  { id: 'runtime_selector', label: 'runtime_selector', group: 'shared', detail: 'Normalizes runtime selection across Codex, Claude, Gemini, OpenClaw \u2500 pure utility' },
+  { id: 'path_resolver', label: 'path_resolver', group: 'shared', detail: 'Resolves vault + runtime target paths \u2500 validates no forbidden roots' },
+  { id: 'template_utils', label: 'template_utils', group: 'shared', detail: 'Placeholder resolution {{key}} and unresolved marker detection \u2500 pure utility' },
+  { id: 'file_matrix', label: 'file_matrix', group: 'shared', detail: 'Loads manifest, provides filtered views by treatment, phase, runtime \u2500 central accessor' },
+
+  // Installer
+  { id: 'manifest_js', label: 'manifest.js', group: 'installer', detail: 'Builds installer execution manifest \u2500 classifies 305 surfaces into copyCore (31), templateSources (25), bridgeTemplates (5), safeScaffolds (6)' },
+  { id: 'core_copier', label: 'core_copier', group: 'installer', detail: 'Copies 31 Layer A core files \u2500 recursive directory support, pre-flight validation' },
+  { id: 'template_placer', label: 'template_placer', group: 'installer', detail: 'Places 30 unrendered templates with {{placeholders}} intact \u2500 creates parent dirs' },
+  { id: 'scaffold_gen', label: 'scaffold_generator', group: 'installer', detail: 'Generates 5 safe starter configs \u2500 verifies no forbidden paths leak' },
+  { id: 'installer_validator', label: 'installer validator', group: 'installer', detail: '5-checkpoint validation \u2500 structure, residue, artifacts, owner gen, runtime gating' },
+
+  // Onboarding
+  { id: 'questionnaire', label: 'questionnaire', group: 'onboarding', detail: 'Validates 8 required + 16 optional fields \u2500 normalizes runtimes, freezes packet' },
+  { id: 'template_renderer', label: 'template_renderer', group: 'onboarding', detail: 'Renders runtime bridge templates \u2500 resolves placeholders, verifies clean output' },
+  { id: 'source_renderer', label: 'source_renderer', group: 'onboarding', detail: 'Rewrites vault sources replacing Viktor refs \u2500 longest-first ordered replacement' },
+  { id: 'fresh_generator', label: 'fresh_generator', group: 'onboarding', detail: 'Generates Layer C fresh surfaces \u2500 vault files + runtime configs from templates' },
+  { id: 'onboarding_validator', label: 'onboarding validator', group: 'onboarding', detail: '7-checkpoint validation \u2500 completeness, residue, paths, boot chain, content, templates, runtime' },
+  { id: 'orchestrator', label: 'orchestrator', group: 'onboarding', detail: 'Coordinates Slice 2 + Slice 3 \u2500 stops on first error with phase reporting' },
+
+  // Slice 3
+  { id: 'account_connector', label: 'account_connector', group: 'slice3', detail: 'Routes auth through dispatcher \u2500 handles now/later/mock/declared paths \u2500 no hardcoded branches' },
+  { id: 'pipeline_config', label: 'pipeline_configurator', group: 'slice3', detail: 'Generates pipeline_config.json \u2500 owner, accounts, sync engines, filters, workflow_tools, connectors section' },
+  { id: 'registry_boot', label: 'registry_bootstrapper', group: 'slice3', detail: 'Creates fresh registry.json \u2500 project skeletons from user categories' },
+  { id: 'first_sync', label: 'first_sync', group: 'slice3', detail: 'Planner-driven sync through adapters \u2500 Gmail (email/calendar/drive/sheets) + Basecamp + derivation' },
+  { id: 'voice_profiler', label: 'voice_profiler', group: 'slice3', detail: 'Extracts communication voice patterns \u2500 greetings, sign-offs, sentence structure, emoji' },
+  { id: 's3_validator', label: 'slice3 validator', group: 'slice3', detail: '7-checkpoint validation \u2500 config, patches, identity, registry, sync, today, voice' },
+
+  // Data outputs
+  { id: 'target_vault', label: 'Target Vault', group: 'data', detail: 'Provisioned owner vault \u2500 boot chain, operators, bridges, memory, identity' },
+  { id: 'pipeline_config_json', label: 'pipeline_config.json', group: 'data', detail: 'Runtime pipeline config \u2500 owner, accounts, sync engines, gmail filters' },
+  { id: 'registry_json', label: 'registry.json', group: 'data', detail: 'Fresh project registry \u2500 skeleton entries, no Viktor data' },
+
+  // External targets
+  { id: 'gmail', label: 'Gmail', group: 'external', detail: 'External sync target \u2500 4 account support via gws CLI' },
+  { id: 'basecamp', label: 'Basecamp', group: 'external', detail: 'External sync target \u2500 OAuth + person_id fetch' },
+  { id: 'calendar', label: 'Google Calendar', group: 'external', detail: 'External sync target \u2500 multi-calendar support' },
+
+  // Tests
+  { id: 'test_installer', label: 'test_installer.js', group: 'data', detail: '35 assertions \u2500 manifest building, core copy, template placement, edge cases' },
+  { id: 'dry_test', label: 'dry_test.js', group: 'data', detail: '41 assertions \u2500 full Slice 2 dry run with fake user Pauline' },
+  { id: 'slice3_test', label: 'slice3_test.js', group: 'data', detail: '43 assertions \u2500 Slice 3 with mock connections, pipeline config, sync, voice profiler' },
+  { id: 'e2e_test', label: 'e2e_test.js', group: 'data', detail: '55 assertions \u2500 full end-to-end Marcus + Pauline, boot chain, partial auth, manifest completeness' },
+  { id: 'test_foundation', label: 'test_foundation.js', group: 'data', detail: '99 assertions \u2500 connector manifest, registry, adapter contracts, result factories' },
+  { id: 'test_extensibility', label: 'test_extensibility.js', group: 'data', detail: '61 assertions \u2500 no-core-edit extensibility, graph validation, deterministic ordering' },
+
+  // Connector architecture
+  { id: 'manifest_schema', label: 'manifest_schema', group: 'shared', detail: 'Connector manifest schema + validation \u2500 VALID_STAGES, VALID_STATUSES, VALID_CATEGORIES' },
+  { id: 'conn_registry', label: 'registry', group: 'shared', detail: 'Discovers connector manifests from adapters dir \u2500 loadRegistry, resolveAdapter, getConnectorsByStage' },
+  { id: 'auth_adapter', label: 'auth_adapter', group: 'shared', detail: 'Auth adapter contract \u2500 start_auth, finish_auth, refresh, revoke, status, required_secrets' },
+  { id: 'sync_adapter', label: 'sync_adapter', group: 'shared', detail: 'Sync adapter contract \u2500 validate_config, initial_sync, incremental_sync, healthcheck, normalize' },
+  { id: 'auth_dispatcher', label: 'auth_dispatcher', group: 'slice3', detail: 'Routes auth through registry \u2500 dispatchAuth, dispatchAllAuth, buildGuidance' },
+  { id: 'planner', label: 'planner', group: 'slice3', detail: 'Fixed 4-stage execution \u2500 preflight, source_sync, derivation, post_sync \u2500 deterministic ordering' },
+  { id: 'tool_resolver', label: 'tool_resolver', group: 'onboarding', detail: 'Maps workflow tool selections to connector state \u2500 supported, unsupported, deferred' },
+  { id: 'gmail_adapter', label: 'gmail adapter', group: 'external', detail: 'Production connector \u2500 auth (gws CLI) + sync (email, calendar, drive, sheets) \u2500 priority 10' },
+  { id: 'basecamp_adapter', label: 'basecamp adapter', group: 'external', detail: 'Production connector \u2500 auth (OAuth 2.0) + sync (tasks, messages, comments) \u2500 priority 20' },
+];
+
+const links = [
+  // Shared dependencies
+  { source: 'manifest_json', target: 'file_matrix', label: 'loads' },
+  { source: 'runtime_selector', target: 'path_resolver', label: 'used by' },
+  { source: 'runtime_selector', target: 'manifest_js', label: 'used by' },
+  { source: 'path_resolver', target: 'manifest_js', label: 'used by' },
+  { source: 'file_matrix', target: 'manifest_js', label: 'used by' },
+
+  // Installer flow
+  { source: 'vault', target: 'core_copier', label: 'reads' },
+  { source: 'manifest_js', target: 'core_copier', label: 'drives' },
+  { source: 'manifest_js', target: 'template_placer', label: 'drives' },
+  { source: 'manifest_js', target: 'scaffold_gen', label: 'drives' },
+  { source: 'core_copier', target: 'target_vault', label: 'writes' },
+  { source: 'template_placer', target: 'target_vault', label: 'writes' },
+  { source: 'scaffold_gen', target: 'target_vault', label: 'writes' },
+  { source: 'installer_validator', target: 'target_vault', label: 'validates' },
+
+  // Onboarding flow
+  { source: 'questionnaire', target: 'orchestrator', label: 'feeds' },
+  { source: 'template_renderer', target: 'orchestrator', label: 'step' },
+  { source: 'source_renderer', target: 'orchestrator', label: 'step' },
+  { source: 'fresh_generator', target: 'orchestrator', label: 'step' },
+  { source: 'onboarding_validator', target: 'orchestrator', label: 'validates' },
+  { source: 'template_utils', target: 'template_renderer', label: 'used by' },
+  { source: 'template_utils', target: 'fresh_generator', label: 'used by' },
+  { source: 'orchestrator', target: 'target_vault', label: 'writes' },
+
+  // Slice 3 flow
+  { source: 'account_connector', target: 'orchestrator', label: 'step' },
+  { source: 'pipeline_config', target: 'pipeline_config_json', label: 'writes' },
+  { source: 'registry_boot', target: 'registry_json', label: 'writes' },
+  { source: 'first_sync', target: 'gmail', label: 'syncs' },
+  { source: 'first_sync', target: 'basecamp', label: 'syncs' },
+  { source: 'first_sync', target: 'calendar', label: 'syncs' },
+  { source: 'voice_profiler', target: 'target_vault', label: 'writes' },
+  { source: 's3_validator', target: 'orchestrator', label: 'validates' },
+
+  // Tests
+  { source: 'test_installer', target: 'manifest_js', label: 'tests' },
+  { source: 'test_installer', target: 'core_copier', label: 'tests' },
+  { source: 'dry_test', target: 'orchestrator', label: 'tests' },
+  { source: 'slice3_test', target: 'account_connector', label: 'tests' },
+  { source: 'slice3_test', target: 'voice_profiler', label: 'tests' },
+  { source: 'e2e_test', target: 'orchestrator', label: 'tests' },
+  { source: 'test_foundation', target: 'conn_registry', label: 'tests' },
+  { source: 'test_extensibility', target: 'planner', label: 'tests' },
+
+  // Connector architecture links
+  { source: 'manifest_schema', target: 'conn_registry', label: 'validates' },
+  { source: 'conn_registry', target: 'auth_dispatcher', label: 'used by' },
+  { source: 'conn_registry', target: 'planner', label: 'used by' },
+  { source: 'auth_adapter', target: 'gmail_adapter', label: 'contract' },
+  { source: 'auth_adapter', target: 'basecamp_adapter', label: 'contract' },
+  { source: 'sync_adapter', target: 'gmail_adapter', label: 'contract' },
+  { source: 'sync_adapter', target: 'basecamp_adapter', label: 'contract' },
+  { source: 'auth_dispatcher', target: 'account_connector', label: 'used by' },
+  { source: 'planner', target: 'first_sync', label: 'drives' },
+  { source: 'tool_resolver', target: 'pipeline_config', label: 'used by' },
+  { source: 'conn_registry', target: 'pipeline_config', label: 'used by' },
+  { source: 'gmail_adapter', target: 'gmail', label: 'wraps' },
+  { source: 'basecamp_adapter', target: 'basecamp', label: 'wraps' },
+];
+
+const groupColors = {
+  installer: '#3BC071',
+  onboarding: '#d4ff00',
+  slice3: '#FFB800',
+  shared: '#777AD1',
+  data: '#7a7570',
+  external: '#C33013',
+};
+
+let activeGroup = 'all';
+
+function highlightGroup(group) {
+  activeGroup = group;
+  document.querySelectorAll('.hl-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  d3.selectAll('.node-group').transition().duration(200).attr('opacity', d => group === 'all' || d.group === group ? 1 : 0.15);
+  d3.selectAll('.link-line').transition().duration(200).attr('opacity', d => {
+    if (group === 'all') return 0.4;
+    const sn = nodes.find(n => n.id === (typeof d.source === 'object' ? d.source.id : d.source));
+    const tn = nodes.find(n => n.id === (typeof d.target === 'object' ? d.target.id : d.target));
+    return (sn && sn.group === group) || (tn && tn.group === group) ? 0.6 : 0.05;
+  });
+}
+
+function renderMindmap() {
+  const container = document.getElementById('mindmap-container');
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+
+  const svg = d3.select('#mindmap-container').append('svg')
+    .attr('width', width).attr('height', height)
+    .style('background', '#0a0a0a');
+
+  const g = svg.append('g');
+
+  // Zoom
+  svg.call(d3.zoom().scaleExtent([0.3, 3]).on('zoom', e => g.attr('transform', e.transform)));
+
+  // Simulation
+  const sim = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(100).strength(0.4))
+    .force('charge', d3.forceManyBody().strength(-300))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('collision', d3.forceCollide(40));
+
+  // Links
+  const link = g.selectAll('.link-line')
+    .data(links).enter().append('line')
+    .attr('class', 'link-line')
+    .attr('stroke', '#333').attr('stroke-width', 1).attr('opacity', 0.4);
+
+  // Node groups
+  const node = g.selectAll('.node-group')
+    .data(nodes).enter().append('g')
+    .attr('class', 'node-group')
+    .call(d3.drag().on('start', dragStart).on('drag', dragging).on('end', dragEnd));
+
+  // Node circles
+  node.append('circle')
+    .attr('r', d => d.group === 'external' ? 10 : 8)
+    .attr('fill', d => groupColors[d.group] || '#555')
+    .attr('stroke', d => groupColors[d.group] || '#555')
+    .attr('stroke-width', 1.5)
+    .attr('fill-opacity', 0.2);
+
+  // Status dots
+  node.append('circle')
+    .attr('r', 3).attr('cx', 0).attr('cy', 0)
+    .attr('fill', d => d.group === 'external' ? '#C33013' : groupColors[d.group]);
+
+  // Labels
+  node.append('text')
+    .attr('dy', -14).attr('text-anchor', 'middle')
+    .attr('fill', '#e8e4df').attr('font-size', '9px').attr('font-family', 'DM Sans, sans-serif')
+    .text(d => d.label);
+
+  // Tooltip
+  const tooltip = d3.select('body').append('div')
+    .style('position', 'absolute').style('display', 'none')
+    .style('background', '#141414').style('border', '1px solid #333')
+    .style('padding', '8px 10px').style('font-size', '10px')
+    .style('font-family', 'JetBrains Mono, monospace').style('color', '#e8e4df')
+    .style('max-width', '300px').style('pointer-events', 'none').style('z-index', '10');
+
+  node.on('mouseover', (e, d) => {
+    tooltip.style('display', 'block').html('<strong>' + d.label + '</strong><br>' + d.detail);
+  }).on('mousemove', e => {
+    tooltip.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 10) + 'px');
+  }).on('mouseout', () => tooltip.style('display', 'none'));
+
+  sim.on('tick', () => {
+    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    node.attr('transform', d => 'translate(' + d.x + ',' + d.y + ')');
+  });
+
+  function dragStart(e, d) { if (!e.active) sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; }
+  function dragging(e, d) { d.fx = e.x; d.fy = e.y; }
+  function dragEnd(e, d) { if (!e.active) sim.alphaTarget(0); d.fx = null; d.fy = null; }
+}
+</script>
+
+</body>
+</html>
