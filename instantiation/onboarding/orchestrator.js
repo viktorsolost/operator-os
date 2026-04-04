@@ -5,7 +5,7 @@ const { renderBridgeTemplates } = require('./template_renderer');
 const { renderSourceFiles } = require('./source_renderer');
 const { generateFreshSurfaces } = require('./fresh_generator');
 const { validateOnboardingOutput } = require('./validator');
-const { connectAccounts, writeSourceIdentities } = require('./account_connector');
+const { connectAccounts, reconnectAccounts, writeSourceIdentities } = require('./account_connector');
 const { generatePipelineConfig, generateEmptyPipelineConfig } = require('./pipeline_configurator');
 const { bootstrapRegistry } = require('./registry_bootstrapper');
 const { runFirstSync } = require('./first_sync');
@@ -90,9 +90,9 @@ function runOnboarding({ installerManifest, onboardingAnswers, templateSourceRoo
  * @param {object} [options.mockCapturedData] - for dry testing (voice profiler)
  * @returns {object}
  */
-function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorkspaceRoot, mementoSourceRoot, mockConnections, mockSyncResults, mockCapturedData }) {
+function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorkspaceRoot, mementoSourceRoot, mockConnections, mockSyncResults, mockCapturedData, interactive }) {
   // 1. Connect accounts
-  const connections = connectAccounts({ packet, mockConnections });
+  const connections = connectAccounts({ packet, mockConnections, interactive });
 
   // 2. Write source identities
   if (connections.sourceIdentities && Object.keys(connections.sourceIdentities).length > 0) {
@@ -154,4 +154,4 @@ function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorksp
   };
 }
 
-module.exports = { runOnboarding, runSlice3Onboarding };
+module.exports = { runOnboarding, runSlice3Onboarding, reconnectAccounts };
