@@ -1,0 +1,11 @@
+{
+  "id": "basecamp",
+  "display_name": "Basecamp",
+  "category": "project_management",
+  "capabilities": ["tasks", "messages", "comments"],
+  "auth_adapter": "auth.js",
+  "stage": "source_sync",
+  "priority": 20,
+  "after": ["gmail"],
+  "status": "production"
+}
