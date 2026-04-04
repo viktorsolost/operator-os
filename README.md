@@ -42,9 +42,7 @@ Dashboards and read models exist to support visibility and verification, not to 
 
 The pipeline is the ingestion and sync layer.
 
-It runs eight sync steps covering Basecamp, Gmail, Google Calendar, Google Drive, Google Sheets, meeting extraction, store enrichment, and morning digest generation.
-
-It pulls source data from connected systems, then turns that material into usable context for Memento and the operators.
+It pulls source data from connected systems through manifest-driven connectors, then turns that material into usable context for Memento and the operators.
 
 The product of the pipeline is not raw synced data.
 
@@ -317,6 +315,8 @@ The onboarding flow provisions the system across the key setup surfaces:
 - timezone and owner-specific operating defaults
 - fresh starter context files that let the system begin operating as a real environment from day one
 
+The installer asks which workflow tools the new owner uses and what sync capabilities they want. It resolves each selection against the installed connector registry. Supported tools are enabled. Unsupported tools are surfaced explicitly in the generated config and setup output so nothing disappears silently.
+
 The connector model is designed to support different user source stacks. Different people use different tools. The architecture supports that cleanly rather than assuming a fixed set of integrations.
 
 The installer should learn the new user's stack and workflow, then configure the pipeline so different source systems can still produce the same operational product.
@@ -325,13 +325,53 @@ This is the moment where the operator architecture stays the same, but the live 
 
 The result is the same system behavior and structure, provisioned as a clean new working environment rather than a copied personal workspace.
 
+## Connector Architecture
+
+The pipeline runs through a manifest-driven connector system.
+
+Each connector is a self-contained directory under `instantiation/connectors/adapters/` containing a manifest file, an auth adapter, and a sync adapter. The manifest declares the connector's identity, category, capabilities, stage, priority, execution ordering constraints, and production status.
+
+The system has four layers:
+
+### Registry
+
+The registry loader scans the adapters directory at startup, validates each manifest, and builds a map of available connectors. No connector is hardcoded into the registry or any core module. The registry is the single discovery mechanism.
+
+### Auth and Sync Adapters
+
+Each connector implements two adapter contracts.
+
+The auth adapter handles authentication lifecycle: starting auth, finishing auth, refreshing tokens, revoking access, and checking status. Each method returns a standardized result object.
+
+The sync adapter handles data ingestion: validating config, running initial sync, running incremental sync, checking health, and normalizing output. Gmail's sync adapter handles email, calendar, drive, and sheets as internal sub-steps of a single connector. Basecamp's sync adapter handles project data.
+
+Both contracts are defined as interfaces with required and optional methods. A connector can implement auth only, sync only, or both. Adding a new connector means implementing these interfaces in a new subdirectory. No edits to core pipeline code, no edits to the auth dispatcher, no edits to the registry.
+
+### Auth Dispatcher
+
+The auth dispatcher routes authentication calls through the registry instead of hardcoded if/else branches. It resolves the correct adapter for each connector and dispatches the requested action. The onboarding flow, reconnection flow, and interactive installer all use the dispatcher. Adding a new auth flow requires adding an adapter, not editing the dispatcher.
+
+### Planner
+
+The planner enforces a fixed four-stage execution model: preflight, source sync, derivation, and post-sync.
+
+Within each stage, connectors execute in deterministic order governed by integer priority, topological sort on declared ordering constraints, and alphabetical tiebreaking. The planner validates the full dependency graph before execution and rejects cycles, cross-stage dependencies, missing references, and self-references.
+
+The planner drives live execution during first sync. Each connector's sync adapter is called through the planner's executor. If a connector fails during source sync, the planner continues to the next connector. Derivation runs only after source sync completes with at least one success.
+
+### Current Connectors
+
+Gmail and Basecamp are the two production connectors shipped in v1. Gmail covers email, calendar, drive, and sheets through a single Google Workspace authentication. Basecamp covers project management data through OAuth.
+
+The architecture is designed so that adding Slack, Notion, Linear, Airtable, or any other source requires only a new adapter directory with a manifest and the relevant auth and sync implementations. The core pipeline, dispatcher, planner, and registry remain untouched.
+
 ## What This Means in Practice
 
 You are getting a structured operator system, not a generic chatbot setup.
 
 You are getting specialist operators with defined titles, responsibility boundaries, delegation contracts, verification mandates, and formalized operating procedures.
 
-You are getting a shared routing spine, a persistent context substrate with formal data contracts, a live ingestion pipeline with eight sync steps, and a runtime-agnostic boot model that works identically across Codex, Claude, Gemini, and OpenClaw.
+You are getting a shared routing spine, a persistent context substrate with formal data contracts, a connector-driven ingestion pipeline with manifest-based extensibility, and a runtime-agnostic boot model that works identically across Codex, Claude, Gemini, and OpenClaw.
 
 You are getting a truth model that keeps source data, captured context, and reasoning artifacts in separate layers with explicit boundaries.
 
