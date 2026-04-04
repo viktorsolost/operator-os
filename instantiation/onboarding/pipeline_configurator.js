@@ -57,12 +57,12 @@ function generatePipelineConfig({ packet, accountConnections, targetWorkspaceRoo
         name: a.name,
         config_dir: a.config_dir || `~/.config/${a.name}`,
         label: a.label || a.name,
-        connected: true,
+        connected: a.connected !== false,
       })),
       basecamp: basecampConfig ? {
         account_id: basecampConfig.account_id,
         api_base: `https://3.basecampapi.com/${basecampConfig.account_id}`,
-        connected: true,
+        connected: !!basecampConfig.connected,
       } : {
         account_id: null,
         api_base: null,
