@@ -10,21 +10,18 @@
 
 ## What you need before starting
 
-1. This repo cloned locally
-2. A reference vault — the source doctrine files that define the system (operator files, boot chain, routing rules). The installer exits immediately if this path does not exist.
-3. A Memento workspace (required) — the pipeline and state substrate. The installer exits immediately if this path does not exist. Memento is core to the system, not an optional add-on.
-
-The installer takes the reference vault and Memento as source inputs and provisions a new owner-specific instance from them.
+1. This repo cloned locally — it includes the reference vault and Memento substrate under `substrates/`
+2. The installer uses the bundled substrates by default. You can override with explicit paths if needed.
 
 ## Installation
 
 Run the interactive installer:
 
 ```
-node install.js /path/to/reference-vault /path/to/memento
+node install.js
 ```
 
-Both arguments are required. The first is the path to the reference vault. The second is the path to Memento. Defaults: `~/VIK/ObsidianVault/VIK_OS` and `~/Code/Memento`.
+Both arguments are optional when using the bundled substrates. Override with explicit paths if your vault or Memento source is elsewhere: `node install.js /path/to/vault /path/to/memento`
 
 The installer asks for your identity, location, runtimes, workflow tools, and accounts interactively, then provisions the full system. It runs in five phases:
 
