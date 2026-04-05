@@ -1,0 +1,99 @@
+{
+  "version": "2026-04-03",
+  "root": "/Users/viktorsl/VIK/ObsidianVault/VIK_OS",
+  "budgets": {
+    "boot_required_max_bytes": 35000,
+    "lane_required_max_bytes": 13000,
+    "session_boot_target_bytes": 48000,
+    "session_boot_max_bytes": 52000
+  },
+  "classes": {
+    "bridge_only": [
+      "CLAUDE.md",
+      "operator/CLAUDE.md",
+      "projects/CLAUDE.md",
+      "project-types/CLAUDE.md",
+      "domains/CLAUDE.md",
+      "intake/CLAUDE.md"
+    ],
+    "boot_required": [
+      "BOOT.md",
+      "ROUTING.md",
+      "memory.md",
+      "recent-context.md",
+      "operator/context-loading-rules.md",
+      "operator/model-policy.md",
+      "operator/closeout-rules.md",
+      "operator/context-placement-rules.md"
+    ],
+    "lane_required": {
+      "claudia": [
+        "operator/claudia.md",
+        "operator/claudia-memory.md"
+      ],
+      "anton": [
+        "operator/anton.md"
+      ],
+      "jonah": [
+        "operator/jonah.md"
+      ],
+      "vera": [
+        "operator/vera.md"
+      ],
+      "lev": [
+        "operator/lev.md"
+      ]
+    },
+    "task_conditional": {
+      "phrasing_or_presentation": [
+        "operator/working-style.md"
+      ],
+      "who_viktor_is": [
+        "operator/identity.md"
+      ],
+      "autonomy_or_action_boundary": [
+        "operator/agent-role.md"
+      ],
+      "tradeoffs_or_contradictions": [
+        "operator/decision-principles.md"
+      ],
+      "captures_context": [
+        "operator/captures.md"
+      ],
+      "operator_handoff": [
+        "templates/operator-handoff.md"
+      ],
+      "new_repo_technical": [
+        "templates/new-repo-technical-onboarding.md",
+        "templates/new-repo-technical-checklist.md"
+      ],
+      "project_disambiguation": [
+        "projects/README.md"
+      ],
+      "brand_wrapper_explicit_invocation": [
+        "brands/session-wrapper.md",
+        "brands/runtime.md",
+        "brands/operators/atlas.md",
+        "brands/operators/helena.md"
+      ],
+      "delegation_or_sub_agents": [
+        "operator/delegation-contract.md"
+      ]
+    },
+    "reference_only": [
+      "operator/capabilities.md",
+      "operator/clarification-protocol.md",
+      "templates/README.md",
+      "initiatives/operator-routing-and-handoffs/summary.md",
+      "initiatives/operator-routing-and-handoffs/decisions.md",
+      "initiatives/operator-routing-and-handoffs/open-questions.md",
+      "initiatives/operator-routing-and-handoffs/session-log.md",
+      "initiatives/operator-routing-and-handoffs/review-anton.md",
+      "initiatives/operator-routing-and-handoffs/contract-spec-anton.md"
+    ],
+    "runtime_validation": [
+      "initiatives/operator-routing-and-handoffs/runtime-self-check.md",
+      "initiatives/operator-routing-and-handoffs/runtime-smoke-tests.md"
+    ]
+  }
+}

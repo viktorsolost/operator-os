@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIK OS — Triptych</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Syne:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #F7F5F0;
+  --ink: #1A1A1A;
+  --rule: #D4D0C8;
+  --mute: #888880;
+  --faint: #E8E5DE;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html {
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── TRIPTYCH FRAME ───────────────────────────── */
+.triptych {
+  display: grid;
+  grid-template-columns: 45% 20% 35%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── VERTICAL RULES ───────────────────────────── */
+.panel {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 48px 40px 48px;
+  scrollbar-width: none;
+  position: relative;
+}
+
+.panel::-webkit-scrollbar {
+  display: none;
+}
+
+.panel-left {
+  border-right: 1px solid var(--rule);
+}
+
+.panel-center {
+  border-right: 1px solid var(--rule);
+  padding: 48px 28px;
+}
+
+/* ── PANEL LEFT — TODAY ───────────────────────── */
+.today-date {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.today-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 44px;
+}
+
+/* DOMINANT THREAD */
+.thread-dominant {
+  padding: 0 0 32px 0;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.thread-dominant-project {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 10px;
+}
+
+.thread-dominant-body {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.thread-dominant-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--mute);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.thread-age {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* SECONDARY THREADS */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+.thread-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--faint);
+}
+
+.thread-item:last-child {
+  border-bottom: none;
+}
+
+.thread-item-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+
+.thread-item-project {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.thread-item-body {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.3;
+  min-width: 0;
+}
+
+.thread-item-age {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mute);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* DIVIDER */
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 28px 0 24px;
+}
+
+/* OVERDUE — COLLAPSIBLE */
+.overdue-summary-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 2px;
+}
+
+details.overdue-group {
+  border-bottom: 1px solid var(--faint);
+}
+
+details.overdue-group:last-of-type {
+  border-bottom: none;
+}
+
+details.overdue-group summary {
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+details.overdue-group summary::-webkit-details-marker {
+  display: none;
+}
+
+details.overdue-group summary::marker {
+  display: none;
+}
+
+.overdue-summary-left {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.overdue-summary-project {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+  flex-shrink: 0;
+}
+
+.overdue-summary-label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.overdue-summary-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--mute);
+  flex-shrink: 0;
+}
+
+.overdue-toggle {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--rule);
+  flex-shrink: 0;
+}
+
+details.overdue-group[open] .overdue-toggle {
+  opacity: 0.5;
+}
+
+.overdue-items {
+  padding: 0 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.overdue-item-line {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mute);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0 3px 20px;
+  line-height: 1.4;
+}
+
+.overdue-item-name {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--mute);
+  flex: 1;
+  min-width: 0;
+}
+
+.overdue-item-age {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--rule);
+  white-space: nowrap;
+}
+
+/* CALENDAR BLOCK */
+.cal-empty {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--mute);
+  font-style: italic;
+  padding: 4px 0 20px;
+}
+
+/* REMINDERS BLOCK */
+.reminder-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.reminder-item {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.reminder-item::before {
+  content: '—';
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--mute);
+  flex-shrink: 0;
+}
+
+/* OVERNIGHT */
+.overnight-block {
+  margin-top: 4px;
+}
+
+.overnight-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--mute);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ── PANEL CENTER — TOMORROW ──────────────────── */
+.tomorrow-date {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.tomorrow-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 28px;
+}
+
+/* DEADLINE (compact banner) */
+.tomorrow-deadline {
+  padding: 10px 12px;
+  background: var(--faint);
+  margin-bottom: 6px;
+}
+
+.tomorrow-deadline-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 3px;
+}
+
+.tomorrow-deadline-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.tomorrow-deadline-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--mute);
+  margin-top: 2px;
+}
+
+/* EVENT ROWS (compact list) */
+.tomorrow-events-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin: 18px 0 8px;
+}
+
+.tomorrow-event-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 0;
+  border-top: 1px solid var(--faint);
+}
+
+.tomorrow-event-row:last-of-type {
+  border-bottom: 1px solid var(--faint);
+}
+
+.tomorrow-event-time {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  min-width: 36px;
+  flex-shrink: 0;
+}
+
+.tomorrow-event-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.25;
+  flex: 1;
+  min-width: 0;
+}
+
+.tomorrow-event-with {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--mute);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* CENTER PANEL — SYNC FOOTER */
+.center-footer {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+  padding: 20px 0 0;
+  margin-top: auto;
+}
+
+.center-panel-inner {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 96px);
+}
+
+.center-body {
+  flex: 1;
+}
+
+.sync-block {
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+
+.sync-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 8px;
+}
+
+.sync-item {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mute);
+  padding: 3px 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sync-item span:last-child {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ── PANEL RIGHT — THIS WEEK ──────────────────── */
+.week-header {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.week-range {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 36px;
+}
+
+/* DAY ROWS */
+.day-row {
+  padding: 14px 0;
+  border-top: 1px solid var(--faint);
+}
+
+.day-row:last-of-type {
+  border-bottom: 1px solid var(--faint);
+}
+
+/* MONDAY — HEAVY */
+.day-row.monday {
+  border-top: 1px solid var(--rule);
+  padding: 20px 0;
+}
+
+.day-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.day-name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+
+.day-row.monday .day-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.day-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mute);
+}
+
+.day-row.monday .day-date {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.day-count {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-left: auto;
+}
+
+.day-row.monday .day-count {
+  font-size: 10px;
+  color: var(--ink);
+}
+
+/* DEADLINE PILL ON DAY ROW */
+.day-deadline {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-left: 4px;
+}
+
+/* EVENTS LIST */
+.events-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 2px;
+}
+
+.event-line {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mute);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  line-height: 1.5;
+}
+
+.day-row.monday .event-line {
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.event-time {
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 38px;
+}
+
+.day-row.monday .event-time {
+  color: var(--ink);
+  min-width: 42px;
+}
+
+.day-empty {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--rule);
+  font-style: italic;
+  padding-left: 2px;
+}
+
+/* MILESTONES */
+.milestones-block {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+.milestones-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 14px;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--faint);
+}
+
+.milestone-item:first-of-type {
+  border-top: none;
+}
+
+.milestone-name {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.milestone-right {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.milestone-date {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--mute);
+}
+
+.milestone-days {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ── MOBILE STACK ─────────────────────────────── */
+@media (max-width: 768px) {
+  body {
+    overflow: auto;
+    height: auto;
+  }
+
+  .triptych {
+    grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
+  }
+
+  .panel {
+    height: auto;
+    overflow: visible;
+    border-right: none !important;
+    border-bottom: 1px solid var(--rule);
+    padding: 40px 24px;
+  }
+
+  .panel:last-child {
+    border-bottom: none;
+  }
+
+  .today-date {
+    font-size: 38px;
+  }
+
+  .thread-dominant-body {
+    font-size: 22px;
+  }
+
+  .center-panel-inner {
+    min-height: auto;
+  }
+
+  .center-footer {
+    position: static;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="triptych">
+
+  <!-- ═══════════════════════════════════════════
+       PANEL LEFT — TODAY
+  ════════════════════════════════════════════ -->
+  <div class="panel panel-left">
+
+    <div class="today-date">Sun 30 Mar</div>
+    <div class="today-label">Today</div>
+
+    <!-- DOMINANT THREAD -->
+    <div class="thread-dominant">
+      <div class="thread-dominant-project">LZ — Lucas Zanotto</div>
+      <div class="thread-dominant-body">Follow up with Jessica on sales plan</div>
+      <div class="thread-dominant-meta">
+        <span class="thread-age">5d</span>
+        <span>open thread</span>
+      </div>
+    </div>
+
+    <!-- THREADS -->
+    <div class="section-label">Threads</div>
+
+    <div class="thread-item">
+      <div class="thread-item-left">
+        <span class="thread-item-project">PUNKS</span>
+        <span class="thread-item-body">Waiting on Justin Aversano</span>
+      </div>
+      <span class="thread-item-age">2d</span>
+    </div>
+
+    <!-- OVERDUE DEADLINES -->
+    <hr class="section-divider">
+    <div class="section-label">Overdue — 22 items</div>
+
+    <details class="overdue-group">
+      <summary>
+        <div class="overdue-summary-left">
+          <span class="overdue-summary-project">LZ</span>
+          <span class="overdue-summary-label">19 overdue</span>
+        </div>
+        <span class="overdue-toggle">expand</span>
+      </summary>
+      <div class="overdue-items">
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Memória Descritiva</span>
+          <span class="overdue-item-age">23d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Mkt &amp; Comms plan w/ KPIs</span>
+          <span class="overdue-item-age">12d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">EXB_CARD</span>
+          <span class="overdue-item-age">6d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Sales plan w/ Jessica</span>
+          <span class="overdue-item-age">5d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Press release draft</span>
+          <span class="overdue-item-age">4d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Collector deck update</span>
+          <span class="overdue-item-age">3d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">+ 13 more</span>
+          <span class="overdue-item-age"></span>
+        </div>
+      </div>
+    </details>
+
+    <details class="overdue-group">
+      <summary>
+        <div class="overdue-summary-left">
+          <span class="overdue-summary-project">PUNKS</span>
+          <span class="overdue-summary-label">3 overdue</span>
+        </div>
+        <span class="overdue-toggle">expand</span>
+      </summary>
+      <div class="overdue-items">
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Justin follow-up brief</span>
+          <span class="overdue-item-age">7d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Contract review</span>
+          <span class="overdue-item-age">4d</span>
+        </div>
+        <div class="overdue-item-line">
+          <span class="overdue-item-name">Bid strategy memo</span>
+          <span class="overdue-item-age">2d</span>
+        </div>
+      </div>
+    </details>
+
+    <hr class="section-divider">
+
+    <!-- CALENDAR -->
+    <div class="section-label">Calendar</div>
+    <div class="cal-empty">No events today</div>
+
+    <!-- REMINDERS -->
+    <div class="section-label">Reminders</div>
+    <ul class="reminder-list">
+      <li class="reminder-item">Lev Phase 4</li>
+      <li class="reminder-item">Templates section</li>
+    </ul>
+
+    <!-- OVERNIGHT -->
+    <hr class="section-divider">
+    <div class="section-label">Overnight</div>
+    <div class="overnight-block">
+      <div class="overnight-text">Quiet night. Nothing new.</div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL CENTER — TOMORROW
+  ════════════════════════════════════════════ -->
+  <div class="panel panel-center">
+    <div class="center-panel-inner">
+
+      <div class="center-body">
+        <div class="tomorrow-date">Mon 31</div>
+        <div class="tomorrow-label">Tomorrow</div>
+
+        <!-- DEADLINES FIRST -->
+        <div class="tomorrow-deadline">
+          <div class="tomorrow-deadline-tag">Deadline</div>
+          <div class="tomorrow-deadline-title">LZ — Sales Plan w/ KPIs</div>
+          <div class="tomorrow-deadline-sub">Jessica Louro</div>
+        </div>
+
+        <div class="tomorrow-deadline">
+          <div class="tomorrow-deadline-tag">Deadline</div>
+          <div class="tomorrow-deadline-title">PUNKS — Bid Strategy Memo</div>
+          <div class="tomorrow-deadline-sub">Justin Aversano</div>
+        </div>
+
+        <!-- CALENDAR EVENTS -->
+        <div class="tomorrow-events-label">6 Events</div>
+
+        <div class="tomorrow-event-row">
+          <span class="tomorrow-event-time">14:00</span>
+          <span class="tomorrow-event-title">Strategy</span>
+        </div>
+        <div class="tomorrow-event-row">
+          <span class="tomorrow-event-time">15:20</span>
+          <span class="tomorrow-event-title">B2C</span>
+        </div>
+        <div class="tomorrow-event-row">
+          <span class="tomorrow-event-time">16:00</span>
+          <span class="tomorrow-event-title">Zaf</span>
+        </div>
+        <div class="tomorrow-event-row">
+          <span class="tomorrow-event-time">17:00</span>
+          <span class="tomorrow-event-title">Piv</span>
+        </div>
+        <div class="tomorrow-event-row">
+          <span class="tomorrow-event-time">18:00</span>
+          <span class="tomorrow-event-title">Darko</span>
+        </div>
+        <div class="tomorrow-event-row">
+          <span class="tomorrow-event-time">20:30</span>
+          <span class="tomorrow-event-title">Coldie</span>
+        </div>
+
+      </div>
+
+      <!-- SYNC FOOTER -->
+      <div class="sync-block">
+        <div class="sync-label">Sync</div>
+        <div class="sync-item"><span>Last run</span><span>14h ago</span></div>
+        <div class="sync-item"><span>Gmail</span><span>OK</span></div>
+        <div class="sync-item"><span>Calendar</span><span>OK</span></div>
+        <div class="sync-item"><span>Basecamp</span><span>OK</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL RIGHT — THIS WEEK
+  ════════════════════════════════════════════ -->
+  <div class="panel panel-right">
+
+    <div class="week-header">This Week</div>
+    <div class="week-range">31 Mar — 5 Apr</div>
+
+    <!-- MONDAY — DOMINANT -->
+    <div class="day-row monday">
+      <div class="day-head">
+        <span class="day-name">Monday</span>
+        <span class="day-date">31</span>
+        <span class="day-count">6 events</span>
+      </div>
+      <ul class="events-list">
+        <li class="event-line"><span class="event-time">14:00</span><span>Strategy</span></li>
+        <li class="event-line"><span class="event-time">15:20</span><span>B2C</span></li>
+        <li class="event-line"><span class="event-time">16:00</span><span>Zaf</span></li>
+        <li class="event-line"><span class="event-time">17:00</span><span>Piv</span></li>
+        <li class="event-line"><span class="event-time">18:00</span><span>Darko</span></li>
+        <li class="event-line"><span class="event-time">20:30</span><span>Coldie</span></li>
+      </ul>
+    </div>
+
+    <!-- TUESDAY -->
+    <div class="day-row">
+      <div class="day-head">
+        <span class="day-name">Tuesday</span>
+        <span class="day-date">1</span>
+        <span class="day-count">2</span>
+      </div>
+      <ul class="events-list">
+        <li class="event-line"><span class="event-time">14:30</span><span>Curatorial</span></li>
+        <li class="event-line"><span class="event-time">17:30</span><span>Pindar</span></li>
+      </ul>
+    </div>
+
+    <!-- WEDNESDAY -->
+    <div class="day-row">
+      <div class="day-head">
+        <span class="day-name">Wednesday</span>
+        <span class="day-date">2</span>
+      </div>
+      <div class="day-empty">clear</div>
+    </div>
+
+    <!-- THURSDAY -->
+    <div class="day-row">
+      <div class="day-head">
+        <span class="day-name">Thursday</span>
+        <span class="day-date">3</span>
+        <span class="day-count">1</span>
+        <span class="day-deadline">+ deadline</span>
+      </div>
+      <ul class="events-list">
+        <li class="event-line"><span class="event-time">17:00</span><span>Claire</span></li>
+      </ul>
+    </div>
+
+    <!-- FRIDAY -->
+    <div class="day-row">
+      <div class="day-head">
+        <span class="day-name">Friday</span>
+        <span class="day-date">4</span>
+        <span class="day-deadline" style="margin-left:auto;">deadline</span>
+      </div>
+      <div class="day-empty">no events</div>
+    </div>
+
+    <!-- SATURDAY -->
+    <div class="day-row">
+      <div class="day-head">
+        <span class="day-name">Saturday</span>
+        <span class="day-date">5</span>
+        <span class="day-deadline" style="margin-left:auto;">deadline</span>
+      </div>
+      <div class="day-empty">no events</div>
+    </div>
+
+    <!-- MILESTONES -->
+    <div class="milestones-block">
+      <div class="milestones-label">Milestones</div>
+      <div class="milestone-item">
+        <span class="milestone-name">LZ</span>
+        <div class="milestone-right">
+          <span class="milestone-date">Apr 24</span>
+          <span class="milestone-days">25d</span>
+        </div>
+      </div>
+      <div class="milestone-item">
+        <span class="milestone-name">PUNKS</span>
+        <div class="milestone-right">
+          <span class="milestone-date">Jun 5</span>
+          <span class="milestone-days">67d</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

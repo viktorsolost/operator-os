@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIK OS — Operator Routing System Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #efede8; --card: #fbfaf7; --card-el: #fff; --border: #d8d3ca;
+    --text: #292522; --t2: #7d766c; --t3: #a49c90;
+    --accent: #b02a1a; --green: #2d6a4f; --yellow: #b68a1a; --blue: #2563eb; --purple: #7c3aed;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.55; color: var(--text); background: var(--bg); padding: 28px; max-width: 980px; margin: 0 auto; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; margin-bottom: 2px; }
+  h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); margin: 28px 0 10px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 12px; font-weight: 700; margin: 14px 0 6px; }
+  .sub { color: var(--t2); margin-bottom: 20px; font-size: 11px; }
+  .intro { background: var(--card-el); border: 1px solid var(--border); padding: 16px 18px; margin-bottom: 20px; font-size: 13px; line-height: 1.6; }
+  .intro strong { color: var(--accent); }
+
+  /* Cards */
+  .card { background: var(--card); border: 1px solid var(--border); padding: 10px 14px; margin-bottom: 6px; }
+  .card-el { background: var(--card-el); border: 1px solid var(--border); padding: 10px 14px; margin-bottom: 6px; }
+
+  /* Tags */
+  .tag { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 2px 6px; vertical-align: middle; }
+  .t-claudia { background: var(--accent); color: #fff; }
+  .t-anton { background: var(--blue); color: #fff; }
+  .t-jonah { background: var(--green); color: #fff; }
+  .t-lev { background: var(--yellow); color: #fff; }
+  .t-shared { background: var(--t3); color: #fff; }
+  .t-boot { background: var(--text); color: #fff; }
+  .t-bridge { background: var(--purple); color: #fff; }
+  .t-ctx { background: var(--border); color: var(--text); }
+
+  /* Operators grid */
+  .ops { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+  .op { background: var(--card-el); border: 1px solid var(--border); padding: 12px 14px; }
+  .op-name { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+  .op-role { color: var(--t2); font-size: 11px; margin-bottom: 8px; }
+  .op-model { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; color: var(--t2); margin-bottom: 6px; }
+  .op-detail { font-size: 11.5px; line-height: 1.5; }
+  .op-detail li { margin-bottom: 2px; }
+  .op-triggers { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 11px; color: var(--t2); }
+
+  /* File tree */
+  .tree { font-size: 12px; line-height: 1.7; }
+  .tree-section { margin-bottom: 16px; }
+  .tree-row { display: flex; gap: 8px; align-items: baseline; padding: 2px 0; }
+  .tree-path { color: var(--text); font-weight: 500; min-width: 280px; white-space: nowrap; }
+  .tree-desc { color: var(--t2); font-size: 11px; flex: 1; }
+  .tree-indent { padding-left: 20px; }
+  .tree-indent2 { padding-left: 40px; }
+  .tree-folder { font-weight: 700; color: var(--text); margin-top: 6px; }
+
+  /* Boot sequence */
+  .step { display: flex; gap: 12px; margin-bottom: 8px; }
+  .step-num { min-width: 28px; height: 28px; background: var(--text); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step-body { flex: 1; padding-top: 4px; }
+  .step-title { font-weight: 700; margin-bottom: 2px; }
+  .step-desc { color: var(--t2); font-size: 11.5px; }
+  .step-file { font-size: 10px; color: var(--accent); margin-top: 2px; }
+
+  /* Flow diagram */
+  .flow { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin: 12px 0; }
+  .flow-box { background: var(--card-el); border: 1px solid var(--border); padding: 4px 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+  .flow-arrow { color: var(--t3); font-size: 14px; }
+
+  /* Handoff */
+  .handoff { background: var(--card); border: 1px solid var(--border); padding: 12px 14px; margin-bottom: 6px; }
+  .handoff-pair { font-weight: 700; margin-bottom: 4px; }
+  .handoff-desc { color: var(--t2); font-size: 11.5px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 11.5px; }
+  th { text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--t2); padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  td { padding: 5px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  .note { font-size: 11px; color: var(--t2); margin: 6px 0; }
+  .highlight { background: #fef3cd; padding: 2px 4px; }
+</style>
+</head>
+<body>
+
+<h1>VIK OS Operator Routing System</h1>
+<div class="sub">Reference document &middot; Last updated 2026-03-28</div>
+
+<div class="intro">
+  VIK OS is an <strong>operator routing system</strong> that sits inside an Obsidian vault. It governs how AI agents work for Viktor across three runtimes: <strong>Claude Code</strong>, <strong>OpenClaw</strong>, and <strong>Codex (ChatGPT)</strong>. The system has <strong>four operators</strong>, each with a defined lane, and a <strong>canonical boot sequence</strong> that every agent follows before doing any work. The operators do not all share a runtime — Viktor relays between them when handoffs cross tools.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>The Four Operators</h2>
+
+<div class="ops">
+  <div class="op">
+    <div class="op-name" style="color:var(--accent)">Claudia</div>
+    <div class="op-role">COO (Chief Operating Officer)</div>
+    <div class="op-model">Model: Claude Opus &middot; Runtime: Claude Code</div>
+    <div class="op-detail">
+      <ul>
+        <li>Owns task execution end-to-end</li>
+        <li>Manages sub-agents (Sonnet workers, Haiku fetchers)</li>
+        <li>Single point of contact for Viktor</li>
+        <li>Drafts emails, coordinates projects, runs pipeline</li>
+        <li>Can act autonomously within approved scope</li>
+        <li>Must ask before sending anything external</li>
+      </ul>
+    </div>
+    <div class="op-triggers"><strong>Triggers:</strong> execution, follow-up, coordination, operator workflow, cross-context management</div>
+  </div>
+
+  <div class="op">
+    <div class="op-name" style="color:var(--blue)">Anton</div>
+    <div class="op-role">Chief Technology Officer</div>
+    <div class="op-model">Model: GPT-5.4 &middot; Runtime: Codex (ChatGPT)</div>
+    <div class="op-detail">
+      <ul>
+        <li>Owns technical direction and architecture</li>
+        <li>Defines implementation shape before coding starts</li>
+        <li>Reviews code quality and source-of-truth boundaries</li>
+        <li>Polices documentation accuracy against real codebase</li>
+        <li>Does not implement — flags and routes to Jonah</li>
+        <li>Challenges weak abstractions and duplicate truths</li>
+      </ul>
+    </div>
+    <div class="op-triggers"><strong>Triggers:</strong> architecture, system design, implementation planning, source-of-truth boundaries, technical review</div>
+  </div>
+
+  <div class="op">
+    <div class="op-name" style="color:var(--green)">Jonah</div>
+    <div class="op-role">VP Engineering</div>
+    <div class="op-model">Model: Claude Opus &middot; Runtime: Claude Code</div>
+    <div class="op-detail">
+      <ul>
+        <li>Runs implementation delivery under Anton's direction</li>
+        <li>Breaks specs into concrete implementation tracks</li>
+        <li>Verifies specs against real codebase before coding</li>
+        <li>Manages sub-agents (Sonnet) for bounded tasks</li>
+        <li>Push-back mandate: rejects wrong specs, flags discrepancies</li>
+        <li>Work is not done until verified, tested, and integrated</li>
+      </ul>
+    </div>
+    <div class="op-triggers"><strong>Triggers:</strong> implementation delivery, sequencing, verification, engineering task ownership, executing Anton/Codex briefs</div>
+  </div>
+
+  <div class="op">
+    <div class="op-name" style="color:var(--yellow)">Lev</div>
+    <div class="op-role">CSO (Chief Strategy Officer)</div>
+    <div class="op-model">Model: Claude Opus &middot; Runtime: OpenClaw</div>
+    <div class="op-detail">
+      <ul>
+        <li>Owns deep thinking and strategic reasoning</li>
+        <li>Examines the question before answering it</li>
+        <li>Challenges premises, surfaces hidden assumptions</li>
+        <li>Holds competing frames without collapsing to false simplicity</li>
+        <li>Does not manage, build, or execute — only thinks</li>
+        <li>Pushes back harder than anyone when warranted</li>
+      </ul>
+    </div>
+    <div class="op-triggers"><strong>Triggers:</strong> strategic reasoning, problem reframing, ambiguity reduction, high-stakes decisions, cross-domain synthesis</div>
+  </div>
+</div>
+
+<div class="note">One operator owns the response lane at a time. Others may review or challenge, but do not silently co-own the lane. Handoffs are explicit.</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Boot Sequence</h2>
+
+<p class="note" style="margin-bottom:12px">Every agent, regardless of runtime, follows this sequence before doing any work. The canonical entrypoint is <strong>BOOT.md</strong>.</p>
+
+<div class="flow">
+  <div class="flow-box" style="background:var(--purple);color:#fff">Runtime Bridge</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box">VIK_OS/CLAUDE.md (shim)</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box" style="background:var(--text);color:#fff">BOOT.md</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box">ROUTING.md</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box">Base Context</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box">Operator File</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box">Task Context</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box">Model Check</div>
+  <div class="flow-arrow">&rarr;</div>
+  <div class="flow-box" style="background:var(--green);color:#fff">Locked &amp; Working</div>
+</div>
+
+<div style="margin-top:12px">
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <div class="step-title">Read ROUTING.md</div>
+      <div class="step-desc">Load the authoritative lane-selection policy. Defines which operator handles what type of work.</div>
+      <div class="step-file">ROUTING.md</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <div class="step-title">Load base routing context</div>
+      <div class="step-desc">Read memory.md (cross-operator truths) and recent-context.md (current project state, blockers, recent sessions).</div>
+      <div class="step-file">memory.md, recent-context.md</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <div class="step-title">Classify into operator lane</div>
+      <div class="step-desc">Determine which operator should handle the request. Lanes: Claudia, Anton, Jonah, Lev. If Viktor explicitly names an operator, that's the first signal.</div>
+      <div class="step-file">ROUTING.md (deterministic routing rules)</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <div class="step-title">Load operator role file</div>
+      <div class="step-desc">Read the selected operator's full definition: role, personality, autonomy, communication style, handoff rules, relationships to other operators.</div>
+      <div class="step-file">operator/claudia.md, operator/anton.md, operator/jonah.md, or operator/lev.md</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <div class="step-title">Load task-specific context</div>
+      <div class="step-desc">Read relevant domain rules, project-type guidance, or project-specific context depending on the request.</div>
+      <div class="step-file">domains/..., project-types/..., projects/..., intake/...</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">6</div>
+    <div class="step-body">
+      <div class="step-title">Apply model posture</div>
+      <div class="step-desc">Read the model policy to confirm which LLM model this operator should run on.</div>
+      <div class="step-file">operator/model-policy.md</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">7</div>
+    <div class="step-body">
+      <div class="step-title">Verify runtime model</div>
+      <div class="step-desc">If the runtime declares its model identity, compare it against the policy. Flag any mismatch to Viktor before proceeding. If the runtime doesn't declare it, state the check couldn't be performed.</div>
+      <div class="step-file">operator/model-policy.md (verification)</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">8</div>
+    <div class="step-body">
+      <div class="step-title">Lock response behavior</div>
+      <div class="step-desc">The active operator's responsibilities and non-responsibilities govern the full session. Do not answer in a generic voice. If the work drifts across lanes, stop and re-anchor.</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">9</div>
+    <div class="step-body">
+      <div class="step-title">Handoff if needed</div>
+      <div class="step-desc">If ownership changes, use the handoff template. The receiving operator treats it as a proposal until validated.</div>
+      <div class="step-file">templates/operator-handoff.md</div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">10</div>
+    <div class="step-body">
+      <div class="step-title">Fail safe</div>
+      <div class="step-desc">If context is missing or routing is unclear: do not guess, do not invent. Surface the failure.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>File Structure</h2>
+
+<p class="note" style="margin-bottom:12px">Everything lives in the Obsidian vault at <code>VIK_OS/</code>. Runtime bridges live outside the vault and point into it.</p>
+
+<div class="tree">
+
+  <!-- Bridges -->
+  <div class="tree-section">
+    <h3><span class="tag t-bridge">Bridge</span> Runtime Entry Points (outside vault)</h3>
+    <div class="tree-row">
+      <span class="tree-path">~/.claude/CLAUDE.md</span>
+      <span class="tree-desc">Global Claude Code bridge. Loaded automatically every session. Points into VIK_OS/CLAUDE.md. Lists all 4 operators.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">~/.openclaw/workspace/AGENTS.md</span>
+      <span class="tree-desc">OpenClaw bridge. Step 0 reads VIK_OS/BOOT.md. Used by Lev's runtime.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">~/.openclaw/workspace/START_HERE.md</span>
+      <span class="tree-desc">Passive breadcrumb pointing to BOOT.md. Thin, does not redefine routing.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">vault-pipeline-v3b/CLAUDE.md</span>
+      <span class="tree-desc">Repo-level bridge for the dashboard app. References operator routing and repo-specific rules.</span>
+    </div>
+  </div>
+
+  <!-- Core routing spine -->
+  <div class="tree-section">
+    <h3><span class="tag t-boot">Boot</span> VIK_OS/ — Core Routing Spine</h3>
+    <div class="tree-row">
+      <span class="tree-path">CLAUDE.md</span>
+      <span class="tree-desc">Compatibility shim. Redirects to BOOT.md + ROUTING.md. Not the authoritative routing policy.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">BOOT.md</span>
+      <span class="tree-desc"><strong>Canonical entrypoint.</strong> Defines the 10-step boot sequence. Every runtime enters here.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">ROUTING.md</span>
+      <span class="tree-desc"><strong>Authoritative routing policy.</strong> Lane selection rules, handoff rules, cross-runtime handoff guidance, failure behavior.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">memory.md</span>
+      <span class="tree-desc">Cross-operator truths. Communication style, data integrity rules, operator hierarchy, domain knowledge. ~3KB, lane-neutral.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">recent-context.md</span>
+      <span class="tree-desc">Current state. Last few sessions, active blockers, what happened recently. Updated at session end.</span>
+    </div>
+  </div>
+
+  <!-- Operator files -->
+  <div class="tree-section">
+    <h3><span class="tag t-shared">Shared</span> VIK_OS/operator/ — Operator Definitions</h3>
+    <div class="tree-row">
+      <span class="tree-path">CLAUDE.md</span>
+      <span class="tree-desc">Local routing index. Points each operator to their role file. Lists shared files and precedence rules.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path" style="color:var(--accent)">claudia.md</span>
+      <span class="tree-desc"><span class="tag t-claudia">Claudia</span> Full role definition. Autonomy, execution model, sub-agent management, captures system, handoff rules. 7.3KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path" style="color:var(--accent)">claudia-memory.md</span>
+      <span class="tree-desc"><span class="tag t-claudia">Claudia</span> Claudia-specific operational rules. Email voice, gws CLI, sub-agent delegation, execution hierarchy. 3.6KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path" style="color:var(--blue)">anton.md</span>
+      <span class="tree-desc"><span class="tag t-anton">Anton</span> Full role definition. Architecture mandate, documentation policing, relationship to Jonah, output style. 6.5KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path" style="color:var(--green)">jonah.md</span>
+      <span class="tree-desc"><span class="tag t-jonah">Jonah</span> Full role definition. Push-back mandate, verification-before-implementation, completion standard, escalation rules. 5.4KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path" style="color:var(--yellow)">lev.md</span>
+      <span class="tree-desc"><span class="tag t-lev">Lev</span> Full role definition. Thinking methodology, challenge function, counsel and thinking-partner modes, strategic scope. 14.7KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">model-policy.md</span>
+      <span class="tree-desc">Maps each operator to their required LLM model. Constraints on model selection. 2.9KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">working-style.md</span>
+      <span class="tree-desc">System-wide communication rules. Tone, pushback protocol, uncertainty handling, conflict flagging, voice preservation. 7.2KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">identity.md</span>
+      <span class="tree-desc">Who Viktor is. Role, responsibilities, constraints, success criteria. Loaded on demand. 5.6KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">agent-role.md</span>
+      <span class="tree-desc">Generic agent behavior. Autonomy boundaries, proactive behavior, when to defer. Loaded on demand. 5.5KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">decision-principles.md</span>
+      <span class="tree-desc">How to resolve tradeoffs, ambiguity, contradictions. Optimization order: trust, correctness, workload reduction, speed. 3.4KB.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">captures.md</span>
+      <span class="tree-desc">Supplementary context for Claudia's capture system (loose todos, reminders, ideas).</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">capabilities.md</span>
+      <span class="tree-desc">What the system can currently do (tools, integrations, APIs).</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">clarification-protocol.md</span>
+      <span class="tree-desc">How to handle ambiguous requests.</span>
+    </div>
+  </div>
+
+  <!-- Templates -->
+  <div class="tree-section">
+    <h3><span class="tag t-shared">Templates</span> VIK_OS/templates/</h3>
+    <div class="tree-row">
+      <span class="tree-path">operator-handoff.md</span>
+      <span class="tree-desc">Handoff artifact template. Used when ownership transfers between operators, especially cross-runtime.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">new-repo-technical-onboarding.md</span>
+      <span class="tree-desc">Template for Anton/Jonah when bootstrapping a new codebase.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">new-repo-technical-checklist.md</span>
+      <span class="tree-desc">Verification checklist for new repo onboarding.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">active-project/</span>
+      <span class="tree-desc">Templates for active project folders.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">intake-project/</span>
+      <span class="tree-desc">Templates for intake (pre-active) project folders.</span>
+    </div>
+  </div>
+
+  <!-- Domain context -->
+  <div class="tree-section">
+    <h3><span class="tag t-ctx">Context</span> VIK_OS/domains/ — Domain Knowledge</h3>
+    <div class="tree-row">
+      <span class="tree-path">CLAUDE.md</span>
+      <span class="tree-desc">Domain routing hub. Points to available domain folders.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">exhibitions/rules.md</span>
+      <span class="tree-desc">Exhibition-specific operating rules. Milestones, timelines, approval flows.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">exhibitions/glossary.md</span>
+      <span class="tree-desc">Exhibition terminology and definitions.</span>
+    </div>
+  </div>
+
+  <!-- Project types -->
+  <div class="tree-section">
+    <h3><span class="tag t-ctx">Context</span> VIK_OS/project-types/ — Project Type Guidance</h3>
+    <div class="tree-row">
+      <span class="tree-path">CLAUDE.md</span>
+      <span class="tree-desc">Project-type routing hub.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">exhibition/lifecycle.md</span>
+      <span class="tree-desc">Exhibition project lifecycle. 10 milestone phases from project_setup to project_closed.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">exhibition/approval-rules.md</span>
+      <span class="tree-desc">What requires Viktor's approval at each exhibition phase.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">intake-decision-tree.md</span>
+      <span class="tree-desc">How to classify and promote incoming project leads.</span>
+    </div>
+  </div>
+
+  <!-- Projects -->
+  <div class="tree-section">
+    <h3><span class="tag t-ctx">Context</span> VIK_OS/projects/ — Active Project Context</h3>
+    <div class="tree-row">
+      <span class="tree-path">CLAUDE.md</span>
+      <span class="tree-desc">Project routing hub.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">0009.eth-2026/</span>
+      <span class="tree-desc">Active project folder. Contains session logs, decisions, project-specific context.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">lucas-zanotto-2026/</span>
+      <span class="tree-desc">Active project folder.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">punks-2026/</span>
+      <span class="tree-desc">Active project folder.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">test-*/</span>
+      <span class="tree-desc">Pipeline test fixtures. Not real projects.</span>
+    </div>
+  </div>
+
+  <!-- Intake -->
+  <div class="tree-section">
+    <h3><span class="tag t-ctx">Context</span> VIK_OS/intake/ — Pre-Active Projects</h3>
+    <div class="tree-row">
+      <span class="tree-path">CLAUDE.md</span>
+      <span class="tree-desc">Intake routing hub.</span>
+    </div>
+    <div class="tree-row">
+      <span class="tree-path">{project-name}/</span>
+      <span class="tree-desc">Projects being evaluated before promotion to active status.</span>
+    </div>
+  </div>
+
+  <!-- Initiatives -->
+  <div class="tree-section">
+    <h3><span class="tag t-ctx">Context</span> VIK_OS/initiatives/ — Cross-Cutting Work</h3>
+    <div class="tree-row">
+      <span class="tree-path">operator-routing-and-handoffs/</span>
+      <span class="tree-desc">The initiative that produced this routing system. Contains specs, reviews, self-checks, smoke tests.</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Operator Relationships &amp; Handoffs</h2>
+
+<div class="handoff">
+  <div class="handoff-pair">Claudia &harr; Anton</div>
+  <div class="handoff-desc">Claudia defers technical architecture questions to Anton. Anton defines implementation structure, Claudia remains the operator-facing layer. Different runtimes — Viktor relays.</div>
+</div>
+<div class="handoff">
+  <div class="handoff-pair">Anton &rarr; Jonah</div>
+  <div class="handoff-desc">Anton defines what should be built and why. Jonah sequences, coordinates, and verifies the delivery. Different runtimes — Viktor relays. Jonah is expected to push back on specs that don't match the real codebase.</div>
+</div>
+<div class="handoff">
+  <div class="handoff-pair">Jonah &rarr; Anton (escalation)</div>
+  <div class="handoff-desc">Jonah escalates when: source-of-truth boundaries are unclear, data model changes affect multiple systems, documentation and code conflict, an implementation choice would materially change architecture, or an agent proposes a shortcut. Produces a handoff artifact. Viktor relays.</div>
+</div>
+<div class="handoff">
+  <div class="handoff-pair">Lev &harr; Everyone</div>
+  <div class="handoff-desc">Lev is lateral, not in anyone's chain of command. Viktor routes to Lev when the problem needs to be understood before it can be solved. Lev's output is clarity, not task lists. If strategic shift is needed, Viktor decides how it affects other operators.</div>
+</div>
+
+<div class="card-el" style="margin-top:12px">
+  <h3>Cross-Runtime Handoff Protocol</h3>
+  <div class="op-detail" style="margin-top:6px">
+    <ol>
+      <li>Sending operator produces a <strong>handoff artifact</strong> using <code>templates/operator-handoff.md</code></li>
+      <li><strong>Viktor is the relay.</strong> The system does not pretend operators can talk directly across runtimes.</li>
+      <li>Receiving operator treats the artifact as a <strong>proposal until validated</strong> against their lane</li>
+      <li>If the artifact is incomplete, the receiving operator <strong>rejects or bounces</strong> it back</li>
+    </ol>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Model Policy</h2>
+
+<table>
+  <tr><th>Operator</th><th>Primary Model</th><th>Sub-Agents</th><th>Runtime</th></tr>
+  <tr><td style="color:var(--accent);font-weight:700">Claudia</td><td>anthropic/claude-opus-4-6</td><td>Sonnet (research), Haiku (fetching)</td><td>Claude Code</td></tr>
+  <tr><td style="color:var(--blue);font-weight:700">Anton</td><td>openai-codex/gpt-5.4</td><td>—</td><td>Codex (ChatGPT)</td></tr>
+  <tr><td style="color:var(--green);font-weight:700">Jonah</td><td>anthropic/claude-opus-4-6</td><td>Sonnet (implementation)</td><td>Claude Code</td></tr>
+  <tr><td style="color:var(--yellow);font-weight:700">Lev</td><td>anthropic/claude-opus-4-6</td><td>Sonnet (research, per model-policy)</td><td>OpenClaw</td></tr>
+</table>
+
+<div class="note">If a runtime cannot provide the required model, it must surface the mismatch — not silently operate in the wrong posture.</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Key Principles</h2>
+
+<div class="card">
+  <strong>One lane at a time.</strong> One operator owns the response. Others review or challenge but don't silently co-own.
+</div>
+<div class="card">
+  <strong>Explicit handoffs.</strong> If the work changes lanes, say so. Use the handoff template. No drifting through tone.
+</div>
+<div class="card">
+  <strong>Data integrity.</strong> Nothing is replaced or removed without Viktor's approval. Changes are versioned chronologically. Manual content is never touched by automation.
+</div>
+<div class="card">
+  <strong>Research before asking.</strong> Before asking Viktor any question, do a thorough research pass across all available data sources.
+</div>
+<div class="card">
+  <strong>Fail visibly.</strong> If context is missing or routing is unclear, stop and surface the failure. Never guess. Never invent durable truths.
+</div>
+<div class="card">
+  <strong>Push back when warranted.</strong> Every operator is expected to flag when the direction is wrong, weak, or inconsistent. Silent agreement is a failure mode.
+</div>
+
+<hr>
+
+<div class="sub" style="margin-top:16px; margin-bottom:0;">
+  VIK OS Operator Routing System &middot; Built by Viktor with Claudia, Anton, Jonah, and Lev &middot; 2026
+</div>
+
+</body>
+</html>

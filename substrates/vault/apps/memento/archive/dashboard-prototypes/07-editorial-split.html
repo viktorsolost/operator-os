@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Brief — 29 Mar 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-left:    #F5F2EB;
+      --bg-right:   #FEFEFE;
+      --text:       #1A1A1A;
+      --secondary:  #6B6860;
+      --label:      #9A9690;
+      --ghost:      rgba(154,150,144,0.28);
+      --hairline:   rgba(26,26,26,0.09);
+      --orange:     #E05A2B;
+      --green:      #7AC47A;
+      --gutter:     80px;
+      --pad:        56px;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ─────────────────────────────────────────
+       SPREAD
+    ───────────────────────────────────────── */
+
+    .spread {
+      display: flex;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .col {
+      flex: 1 1 50%;
+      width: 50%;
+      min-height: 100vh;
+      padding: var(--pad);
+      position: relative;
+    }
+
+    .col--left {
+      background: var(--bg-left);
+      border-right: 1px solid var(--hairline);
+    }
+
+    .col--right {
+      background: var(--bg-right);
+    }
+
+    /* ─────────────────────────────────────────
+       GUTTER PATTERN — 80px meta + content
+    ───────────────────────────────────────── */
+
+    .row {
+      display: flex;
+      align-items: baseline;
+    }
+
+    .meta {
+      flex: 0 0 var(--gutter);
+      width: var(--gutter);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      color: var(--label);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding-top: 1px;
+      line-height: 1.5;
+    }
+
+    .content {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       DIVIDERS
+    ───────────────────────────────────────── */
+
+    .div {
+      border: none;
+      border-top: 1px solid var(--hairline);
+      margin: 32px 0;
+    }
+
+    .div--tight {
+      margin: 20px 0;
+    }
+
+    /* ─────────────────────────────────────────
+       SECTION LABEL
+    ───────────────────────────────────────── */
+
+    .s-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 600;
+      color: var(--label);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* ─────────────────────────────────────────
+       LEFT — DATE MASTHEAD
+    ───────────────────────────────────────── */
+
+    .masthead {
+      margin-bottom: 44px;
+    }
+
+    .masthead-today {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      color: var(--label);
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .masthead-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(44px, 5vw, 64px);
+      line-height: 0.92;
+      letter-spacing: -0.015em;
+      color: var(--text);
+    }
+
+    .masthead-day {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 20px;
+      color: var(--secondary);
+      margin-top: 10px;
+      letter-spacing: 0.01em;
+    }
+
+    /* ─────────────────────────────────────────
+       LEFT — PRIORITY THREAD (HERO)
+    ───────────────────────────────────────── */
+
+    .priority {
+      margin-bottom: 36px;
+    }
+
+    .priority-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 600;
+      color: var(--label);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .priority-eyebrow::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--hairline);
+    }
+
+    .priority-headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.4vw, 38px);
+      line-height: 1.1;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+
+    .priority-sub {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .priority-project {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--secondary);
+      letter-spacing: 0.08em;
+    }
+
+    .badge-stale {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--orange);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─────────────────────────────────────────
+       LEFT — THREAD LIST
+    ───────────────────────────────────────── */
+
+    .thread-list {
+      margin-bottom: 0;
+    }
+
+    .thread {
+      margin-bottom: 16px;
+    }
+
+    .thread:last-child {
+      margin-bottom: 0;
+    }
+
+    .thread-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .thread-body {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--secondary);
+      margin-top: 2px;
+      line-height: 1.55;
+    }
+
+    .age {
+      color: var(--orange);
+      font-weight: 400;
+    }
+
+    /* ─────────────────────────────────────────
+       LEFT — CALENDAR
+    ───────────────────────────────────────── */
+
+    .cal-empty {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--label);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─────────────────────────────────────────
+       LEFT — REMINDERS
+    ───────────────────────────────────────── */
+
+    .reminder {
+      margin-bottom: 12px;
+    }
+
+    .reminder:last-child {
+      margin-bottom: 0;
+    }
+
+    .reminder-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 500;
+      color: var(--label);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--ghost);
+      padding: 1px 5px 0;
+      margin-left: 8px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+    }
+
+    /* ─────────────────────────────────────────
+       LEFT — OVERNIGHT
+    ───────────────────────────────────────── */
+
+    .overnight-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--label);
+      line-height: 1.5;
+    }
+
+    /* ─────────────────────────────────────────
+       RIGHT — FORWARD HEADER
+    ───────────────────────────────────────── */
+
+    .fwd-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      font-weight: 500;
+      color: var(--label);
+      letter-spacing: 0.20em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .fwd-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(40px, 4.8vw, 60px);
+      line-height: 0.92;
+      letter-spacing: -0.015em;
+      color: var(--text);
+      margin-bottom: 44px;
+    }
+
+    /* ─────────────────────────────────────────
+       RIGHT — TOMORROW
+    ───────────────────────────────────────── */
+
+    .tomorrow-event {
+      margin-bottom: 0;
+    }
+
+    .t-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--secondary);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .t-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 1.15;
+      color: var(--text);
+    }
+
+    .t-detail {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 300;
+      color: var(--secondary);
+      margin-top: 4px;
+    }
+
+    /* ─────────────────────────────────────────
+       RIGHT — WEEK TIMELINE
+    ───────────────────────────────────────── */
+
+    .week {
+      list-style: none;
+    }
+
+    .wday {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 0;
+    }
+
+    .wday + .wday {
+      margin-top: 13px;
+    }
+
+    .wday-label {
+      flex: 0 0 var(--gutter);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+      font-weight: 500;
+      color: var(--label);
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      padding-top: 1px;
+    }
+
+    .wday-body {
+      flex: 1;
+    }
+
+    .wday-event {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 300;
+      color: var(--secondary);
+      line-height: 1.55;
+    }
+
+    .wday-event + .wday-event {
+      margin-top: 1px;
+    }
+
+    .wday-nothing {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 300;
+      color: var(--ghost);
+      letter-spacing: 0.04em;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 3px;
+      height: 3px;
+      background: var(--label);
+      border-radius: 50%;
+      margin-right: 7px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+      opacity: 0.5;
+    }
+
+    .wday--busy .wday-label {
+      color: var(--secondary);
+    }
+
+    /* ─────────────────────────────────────────
+       RIGHT — MILESTONES
+    ───────────────────────────────────────── */
+
+    .milestone {
+      margin-bottom: 18px;
+    }
+
+    .milestone:last-child {
+      margin-bottom: 0;
+    }
+
+    .ms-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 21px;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .ms-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 400;
+      color: var(--secondary);
+      margin-top: 3px;
+    }
+
+    .ms-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--label);
+      margin-left: 10px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ─────────────────────────────────────────
+       SYNC FOOTER
+    ───────────────────────────────────────── */
+
+    .sync-footer {
+      position: absolute;
+      bottom: var(--pad);
+      right: var(--pad);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 300;
+      color: var(--label);
+      letter-spacing: 0.10em;
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    .sync-dot {
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      background: var(--green);
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+    }
+
+    /* ─────────────────────────────────────────
+       MOBILE
+    ───────────────────────────────────────── */
+
+    @media (max-width: 720px) {
+      .spread {
+        flex-direction: column;
+      }
+
+      .col {
+        flex: none;
+        width: 100%;
+        min-height: auto;
+        padding: 40px 28px 48px;
+      }
+
+      .col--left {
+        border-right: none;
+        border-bottom: 1px solid var(--hairline);
+      }
+
+      .sync-footer {
+        position: static;
+        margin-top: 44px;
+        text-align: left;
+      }
+
+      .masthead-date {
+        font-size: 52px;
+      }
+
+      .priority-headline {
+        font-size: 30px;
+      }
+
+      .fwd-heading {
+        font-size: 46px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="spread">
+
+  <!-- ══════════════════════════════════════════════
+       LEFT — TODAY
+  ══════════════════════════════════════════════ -->
+  <div class="col col--left">
+
+    <!-- Masthead -->
+    <div class="masthead">
+      <div class="masthead-today">Today</div>
+      <div class="masthead-date">29 Mar<br>2026</div>
+      <div class="masthead-day">Saturday</div>
+    </div>
+
+    <!-- Priority thread — hero -->
+    <div class="priority">
+      <div class="priority-eyebrow">Priority</div>
+      <div class="priority-headline">Follow up with Jessica<br>on the sales plan</div>
+      <div class="priority-sub">
+        <span class="priority-project">Lucas Zanotto</span>
+        <span class="badge-stale">4d no reply</span>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Threads -->
+    <div class="s-label">Threads</div>
+    <div class="thread-list">
+
+      <div class="thread">
+        <div class="row">
+          <div class="meta">LZ</div>
+          <div class="content">
+            <div class="thread-title">Lucas Zanotto</div>
+            <div class="thread-body">Follow up with Jessica on sales plan — <span class="age">4d</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="thread">
+        <div class="row">
+          <div class="meta">PUNKS</div>
+          <div class="content">
+            <div class="thread-title">Punks 2026</div>
+            <div class="thread-body">Waiting on Justin Aversano — <span style="color:var(--secondary)">1d</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="div">
+
+    <!-- Overdue Deadlines -->
+    <div class="s-label">Overdue Deadlines</div>
+    <div class="thread-list">
+
+      <div class="thread">
+        <div class="row">
+          <div class="meta">LZ</div>
+          <div class="content">
+            <div class="thread-title">Memória Descritiva</div>
+            <div class="thread-body">Viktor — <span class="age">23d overdue</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="thread">
+        <div class="row">
+          <div class="meta">LZ</div>
+          <div class="content">
+            <div class="thread-title">Mkt & Comms plan w/ KPIs</div>
+            <div class="thread-body">David Cardoso — <span class="age">12d</span> overdue</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="thread">
+        <div class="row">
+          <div class="meta">LZ</div>
+          <div class="content">
+            <div class="thread-title">EXB_CARD</div>
+            <div class="thread-body">Pauline, Jessica, David, Carmen, Carolina, Viktor — <span class="age">6d</span> overdue</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="div">
+
+    <!-- Calendar -->
+    <div class="s-label">Calendar</div>
+    <div class="row" style="margin-bottom: 0;">
+      <div class="meta">Sat 29</div>
+      <div class="content">
+        <span class="cal-empty">No events today</span>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Reminders -->
+    <div class="s-label">Reminders</div>
+
+    <div class="reminder">
+      <div class="row">
+        <div class="meta">Task</div>
+        <div class="content">
+          <span class="reminder-name">Templates section</span><span class="tag">task</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="reminder">
+      <div class="row">
+        <div class="meta">Idea</div>
+        <div class="content">
+          <span class="reminder-name">Lev Phase 4</span><span class="tag">idea</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Overnight -->
+    <div class="s-label">Overnight</div>
+    <div class="row">
+      <div class="meta">Activity</div>
+      <div class="content">
+        <div class="overnight-text">Quiet night.<br>No meaningful communications.</div>
+      </div>
+    </div>
+
+  </div><!-- /.col--left -->
+
+
+  <!-- ══════════════════════════════════════════════
+       RIGHT — FORWARD
+  ══════════════════════════════════════════════ -->
+  <div class="col col--right">
+
+    <!-- Header -->
+    <div class="fwd-eyebrow">Looking ahead</div>
+    <div class="fwd-heading">Forward</div>
+
+    <!-- Tomorrow -->
+    <div class="s-label">Tomorrow — Sun 30 Mar</div>
+
+    <div class="tomorrow-event">
+      <div class="row">
+        <div class="meta">15:00</div>
+        <div class="content">
+          <div class="t-title">Eterno products</div>
+          <div class="t-detail">with Olga — Under Dogs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tomorrow-event" style="margin-bottom: 20px; margin-top: 16px;">
+      <div class="row">
+        <div class="meta">DUE</div>
+        <div class="content">
+          <div class="t-title">Sales Plan w/ KPIs</div>
+          <div class="t-detail">LZ — Jessica Louro</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="div">
+
+    <!-- Week timeline -->
+    <div class="s-label">This Week</div>
+
+    <ul class="week">
+
+      <li class="wday wday--busy">
+        <div class="wday-label">Mon 31</div>
+        <div class="wday-body">
+          <div class="wday-event"><span class="dot"></span>9:00 — PUNKS kickoff (Zafgod)</div>
+          <div class="wday-event"><span class="dot"></span>10:30 — Team standup</div>
+          <div class="wday-event"><span class="dot"></span>12:00 — Lev sync</div>
+          <div class="wday-event"><span class="dot"></span>14:00 — Basecamp review</div>
+          <div class="wday-event"><span class="dot"></span>15:30 — Vhils mystery box call</div>
+          <div class="wday-event"><span class="dot"></span>17:00 — LZ curator review</div>
+        </div>
+      </li>
+
+      <li class="wday wday--busy">
+        <div class="wday-label">Tue 01</div>
+        <div class="wday-body">
+          <div class="wday-event"><span class="dot"></span>11:00 — 0009.eth strategy</div>
+          <div class="wday-event"><span class="dot"></span>16:00 — Gallery ops</div>
+        </div>
+      </li>
+
+      <li class="wday">
+        <div class="wday-label">Wed 02</div>
+        <div class="wday-body">
+          <span class="wday-nothing">— nothing —</span>
+        </div>
+      </li>
+
+      <li class="wday wday--busy">
+        <div class="wday-label">Thu 03</div>
+        <div class="wday-body">
+          <div class="wday-event"><span class="dot"></span>17:00 — Claire</div>
+        </div>
+      </li>
+
+      <li class="wday">
+        <div class="wday-label">Fri 04</div>
+        <div class="wday-body">
+          <span class="wday-nothing">— nothing —</span>
+        </div>
+      </li>
+
+    </ul>
+
+    <hr class="div">
+
+    <!-- Milestones -->
+    <div class="s-label">Milestones</div>
+
+    <div class="milestone">
+      <div class="row">
+        <div class="meta">LZ</div>
+        <div class="content">
+          <div class="ms-name">Lucas Zanotto</div>
+          <div class="ms-meta">24 Apr 2026<span class="ms-count">26d</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="milestone">
+      <div class="row">
+        <div class="meta">PUNKS</div>
+        <div class="content">
+          <div class="ms-name">Punks 2026</div>
+          <div class="ms-meta">5 Jun 2026<span class="ms-count">68d</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sync footer -->
+    <div class="sync-footer">
+      <span class="sync-dot"></span>synced 3h ago
+    </div>
+
+  </div><!-- /.col--right -->
+
+</div><!-- /.spread -->
+
+</body>
+</html>

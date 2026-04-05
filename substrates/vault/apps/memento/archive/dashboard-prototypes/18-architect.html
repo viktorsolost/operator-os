@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAILY BRIEF — THE ARCHITECT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg: #FFFFFF;
+    --ink: #1A1A1A;
+    --rule: #D0D0D0;
+    --label: #888888;
+    --accent: #E07830;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ─── DRAWING SHEET BORDER ─── */
+  .sheet {
+    position: relative;
+    margin: 16px;
+    border: 1px solid var(--ink);
+    min-height: calc(100vh - 32px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── TITLE BLOCK HEADER ─── */
+  .title-block {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .title-block__left {
+    padding: 20px 24px 18px;
+    border-right: 1px solid var(--ink);
+  }
+
+  .title-block__project {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 4px;
+  }
+
+  .title-block__title {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .title-block__right {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    min-width: 320px;
+  }
+
+  .meta-cell {
+    padding: 10px 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .meta-cell:last-child {
+    border-bottom: none;
+  }
+
+  .meta-cell__label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--label);
+    white-space: nowrap;
+    min-width: 60px;
+  }
+
+  .meta-cell__value {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  /* ─── BODY GRID ─── */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    flex: 1;
+  }
+
+  /* ─── COLUMN HEADERS ─── */
+  .col-header {
+    padding: 8px 24px;
+    background: #F7F7F7;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .col-header__label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--label);
+  }
+
+  .col-header__tag {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--label);
+    opacity: 0.7;
+  }
+
+  /* ─── LEFT COLUMN — TODAY ─── */
+  .col-today {
+    border-right: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── RIGHT COLUMN — FORWARD ─── */
+  .col-forward {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── SECTION ─── */
+  .section {
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 24px;
+  }
+
+  .section:last-child {
+    border-bottom: none;
+  }
+
+  .section__label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 14px;
+  }
+
+  /* ─── THREAD TABLE ─── */
+  .thread-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .thread-table thead tr {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thread-table th {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--label);
+    text-align: left;
+    padding: 0 0 8px 0;
+  }
+
+  .thread-table th:last-child,
+  .thread-table td:last-child {
+    text-align: right;
+  }
+
+  .thread-table tbody tr {
+    border-bottom: 1px solid #EBEBEB;
+  }
+
+  .thread-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .thread-table td {
+    padding: 9px 0;
+    vertical-align: top;
+  }
+
+  .td-project {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    padding-right: 16px !important;
+    width: 56px;
+  }
+
+  .td-note {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .td-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--label);
+    letter-spacing: 0.03em;
+    display: block;
+    margin-top: 2px;
+  }
+
+  .td-age {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--label);
+    white-space: nowrap;
+    padding-left: 12px !important;
+    width: 40px;
+  }
+
+  /* ─── CALENDAR / REMINDERS ─── */
+  .data-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #EBEBEB;
+  }
+
+  .data-row:last-child {
+    border-bottom: none;
+  }
+
+  .data-row__key {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--label);
+    white-space: nowrap;
+    min-width: 100px;
+  }
+
+  .data-row__val {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink);
+  }
+
+  .data-row__val.dim {
+    color: var(--label);
+    font-style: italic;
+  }
+
+  /* ─── WEEK TABLE ─── */
+  .week-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .week-table tr {
+    border-bottom: 1px solid #EBEBEB;
+  }
+
+  .week-table tr:last-child {
+    border-bottom: none;
+  }
+
+  .week-table td {
+    padding: 8px 0;
+    vertical-align: top;
+  }
+
+  .wt-day {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--label);
+    white-space: nowrap;
+    width: 48px;
+    padding-right: 14px !important;
+  }
+
+  .wt-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    width: 32px;
+    padding-right: 10px !important;
+  }
+
+  .wt-events {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  .wt-events .event-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--label);
+    margin-right: 5px;
+  }
+
+  .wt-events .event-entry {
+    display: block;
+  }
+
+  .wt-events .dim {
+    color: #BBBBBB;
+    font-style: italic;
+  }
+
+  .wt-deadline {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    white-space: nowrap;
+    padding-left: 10px !important;
+    text-align: right;
+    vertical-align: top;
+  }
+
+  /* ─── OVERDUE SUMMARY TABLE ─── */
+  .overdue-summary {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+
+  .overdue-summary thead tr {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .overdue-summary th {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--label);
+    text-align: left;
+    padding: 0 12px 7px 0;
+  }
+
+  .overdue-summary th:last-child {
+    text-align: right;
+    padding-right: 0;
+  }
+
+  .overdue-summary td {
+    padding: 8px 12px 8px 0;
+    border-bottom: 1px solid #EBEBEB;
+    vertical-align: middle;
+  }
+
+  .overdue-summary td:last-child {
+    text-align: right;
+    padding-right: 0;
+  }
+
+  .overdue-summary tr:last-child td {
+    border-bottom: none;
+  }
+
+  .os-project {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    width: 56px;
+  }
+
+  .os-count {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    text-align: center;
+    width: 36px;
+  }
+
+  .os-status {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--label);
+  }
+
+  /* ─── DETAILS / EXPANDABLE ─── */
+  details {
+    border-bottom: 1px solid #EBEBEB;
+  }
+
+  details:last-of-type {
+    border-bottom: none;
+  }
+
+  details summary {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--label);
+    cursor: pointer;
+    padding: 8px 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details summary::before {
+    content: '▸';
+    font-size: 9px;
+    color: var(--rule);
+    transition: transform 0.15s ease;
+    display: inline-block;
+    width: 10px;
+  }
+
+  details[open] summary::before {
+    transform: rotate(90deg);
+  }
+
+  details summary:hover {
+    color: var(--ink);
+  }
+
+  details summary:hover::before {
+    color: var(--label);
+  }
+
+  .details-inner {
+    padding: 4px 0 12px 18px;
+  }
+
+  .details-inner .thread-table td {
+    padding: 6px 0;
+  }
+
+  /* ─── MILESTONES ─── */
+  .milestone-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid #EBEBEB;
+  }
+
+  .milestone-row:last-child {
+    border-bottom: none;
+  }
+
+  .ms-project {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+
+  .ms-date {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--label);
+    margin-left: 10px;
+  }
+
+  .ms-countdown {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--label);
+    letter-spacing: 0.04em;
+  }
+
+  .ms-countdown span {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ─── OVERNIGHT ─── */
+  .overnight-text {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--label);
+    font-style: italic;
+  }
+
+  /* ─── DRAWING BORDER INNER LINE ─── */
+  .sheet::after {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border: 1px solid var(--rule);
+    pointer-events: none;
+  }
+
+  /* ─── DRAWING REF NUMBER ─── */
+  .drawing-ref {
+    position: absolute;
+    bottom: 14px;
+    left: 24px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rule);
+    z-index: 1;
+  }
+
+  .drawing-sheet-no {
+    position: absolute;
+    bottom: 14px;
+    right: 24px;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--rule);
+    z-index: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+
+  <!-- ═══════════════════════════════════════════
+       TITLE BLOCK
+  ═══════════════════════════════════════════ -->
+  <header class="title-block">
+    <div class="title-block__left">
+      <div class="title-block__project">VIK OS · MEMENTO SYSTEM</div>
+      <div class="title-block__title">DAILY BRIEF</div>
+    </div>
+    <div class="title-block__right">
+      <div class="meta-cell">
+        <span class="meta-cell__label">DATE</span>
+        <span class="meta-cell__value">SUN 30 MAR 2026</span>
+      </div>
+      <div class="meta-cell">
+        <span class="meta-cell__label">SYNCED</span>
+        <span class="meta-cell__value">14H AGO</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════
+       BODY GRID
+  ═══════════════════════════════════════════ -->
+  <div class="body-grid">
+
+    <!-- ─── LEFT: TODAY ─── -->
+    <div class="col-today">
+
+      <!-- Column header -->
+      <div class="col-header">
+        <span class="col-header__label">Today</span>
+        <span class="col-header__tag">SUN 30 MAR — YOU ARE HERE</span>
+      </div>
+
+      <!-- THREADS -->
+      <div class="section">
+        <div class="section__label">Active Threads</div>
+        <table class="thread-table">
+          <thead>
+            <tr>
+              <th>REF</th>
+              <th>CONTACT</th>
+              <th>AGE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-project">LZ</td>
+              <td class="td-note">
+                Follow up Jessica
+                <span class="td-sub">Sales plan — awaiting response</span>
+              </td>
+              <td class="td-age">5d</td>
+            </tr>
+            <tr>
+              <td class="td-project">PUNKS</td>
+              <td class="td-note">
+                Waiting on Justin Aversano
+                <span class="td-sub">No response yet</span>
+              </td>
+              <td class="td-age">2d</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- OVERDUE DEADLINES -->
+      <div class="section">
+        <div class="section__label">Overdue Deadlines — 22 Items</div>
+
+        <!-- Summary table -->
+        <table class="overdue-summary">
+          <thead>
+            <tr>
+              <th>PROJECT</th>
+              <th style="text-align:center;">COUNT</th>
+              <th style="text-align:right;">STATUS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="os-project">LZ</td>
+              <td class="os-count" style="text-align:center;">12</td>
+              <td class="os-status">Mix of Viktor + team</td>
+            </tr>
+            <tr>
+              <td class="os-project">PUNKS</td>
+              <td class="os-count" style="text-align:center;">5</td>
+              <td class="os-status">Awaiting assets + copy</td>
+            </tr>
+            <tr>
+              <td class="os-project">VHILS</td>
+              <td class="os-count" style="text-align:center;">3</td>
+              <td class="os-status">Mystery box coordination</td>
+            </tr>
+            <tr>
+              <td class="os-project">0009</td>
+              <td class="os-count" style="text-align:center;">2</td>
+              <td class="os-status">Registration + contract</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Expandable detail per project -->
+        <details>
+          <summary>LZ — 12 items</summary>
+          <div class="details-inner">
+            <table class="thread-table">
+              <tbody>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Memória Descritiva
+                    <span class="td-sub">Viktor — 23d overdue</span>
+                  </td>
+                  <td class="td-age">23d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Mkt &amp; Comms plan w/ KPIs
+                    <span class="td-sub">David Cardoso — 12d overdue</span>
+                  </td>
+                  <td class="td-age">12d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    EXB_CARD
+                    <span class="td-sub">Pauline, Jessica, David, Carmen, Carolina, Viktor — 6d overdue</span>
+                  </td>
+                  <td class="td-age">6d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Sales plan w/ KPIs
+                    <span class="td-sub">Jessica Louro — 2d overdue</span>
+                  </td>
+                  <td class="td-age">2d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Press release draft
+                    <span class="td-sub">Viktor — 8d overdue</span>
+                  </td>
+                  <td class="td-age">8d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Collector list finalisation
+                    <span class="td-sub">Carmen — 4d overdue</span>
+                  </td>
+                  <td class="td-age">4d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Framing spec sign-off
+                    <span class="td-sub">Pauline — 5d overdue</span>
+                  </td>
+                  <td class="td-age">5d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Venue confirmation
+                    <span class="td-sub">Carolina — 3d overdue</span>
+                  </td>
+                  <td class="td-age">3d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Artwork condition reports
+                    <span class="td-sub">Viktor — 10d overdue</span>
+                  </td>
+                  <td class="td-age">10d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    VIP preview invites
+                    <span class="td-sub">Jessica, David — 7d overdue</span>
+                  </td>
+                  <td class="td-age">7d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Instagram campaign brief
+                    <span class="td-sub">David — 9d overdue</span>
+                  </td>
+                  <td class="td-age">9d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">LZ</td>
+                  <td class="td-note">
+                    Budget reconciliation
+                    <span class="td-sub">Viktor — 1d overdue</span>
+                  </td>
+                  <td class="td-age">1d</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>PUNKS — 5 items</summary>
+          <div class="details-inner">
+            <table class="thread-table">
+              <tbody>
+                <tr>
+                  <td class="td-project">PUNKS</td>
+                  <td class="td-note">
+                    Hero image selection
+                    <span class="td-sub">Viktor — 4d overdue</span>
+                  </td>
+                  <td class="td-age">4d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">PUNKS</td>
+                  <td class="td-note">
+                    Exhibition copy deck
+                    <span class="td-sub">Viktor — 6d overdue</span>
+                  </td>
+                  <td class="td-age">6d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">PUNKS</td>
+                  <td class="td-note">
+                    Print vendor brief
+                    <span class="td-sub">Carolina — 3d overdue</span>
+                  </td>
+                  <td class="td-age">3d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">PUNKS</td>
+                  <td class="td-note">
+                    Justin response pending
+                    <span class="td-sub">Justin Aversano — 2d overdue</span>
+                  </td>
+                  <td class="td-age">2d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">PUNKS</td>
+                  <td class="td-note">
+                    Logistics walkthrough
+                    <span class="td-sub">Venue team — 1d overdue</span>
+                  </td>
+                  <td class="td-age">1d</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>VHILS — 3 items</summary>
+          <div class="details-inner">
+            <table class="thread-table">
+              <tbody>
+                <tr>
+                  <td class="td-project">VHILS</td>
+                  <td class="td-note">
+                    Mystery box artwork files
+                    <span class="td-sub">Viktor — 5d overdue</span>
+                  </td>
+                  <td class="td-age">5d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">VHILS</td>
+                  <td class="td-note">
+                    Packaging spec approval
+                    <span class="td-sub">Vhils studio — 3d overdue</span>
+                  </td>
+                  <td class="td-age">3d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">VHILS</td>
+                  <td class="td-note">
+                    Drop announcement copy
+                    <span class="td-sub">Viktor — 2d overdue</span>
+                  </td>
+                  <td class="td-age">2d</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>0009 — 2 items</summary>
+          <div class="details-inner">
+            <table class="thread-table">
+              <tbody>
+                <tr>
+                  <td class="td-project">0009</td>
+                  <td class="td-note">
+                    ENS registration confirmation
+                    <span class="td-sub">Viktor — 4d overdue</span>
+                  </td>
+                  <td class="td-age">4d</td>
+                </tr>
+                <tr>
+                  <td class="td-project">0009</td>
+                  <td class="td-note">
+                    Contract review
+                    <span class="td-sub">Viktor — 2d overdue</span>
+                  </td>
+                  <td class="td-age">2d</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+      </div>
+
+      <!-- CALENDAR + REMINDERS -->
+      <div class="section">
+        <div class="section__label">Calendar &amp; Reminders</div>
+        <div class="data-row">
+          <span class="data-row__key">Calendar</span>
+          <span class="data-row__val dim">No events today</span>
+        </div>
+        <div class="data-row">
+          <span class="data-row__key">Reminders</span>
+          <span class="data-row__val dim">No reminders today</span>
+        </div>
+      </div>
+
+      <!-- OVERNIGHT -->
+      <div class="section">
+        <div class="section__label">Overnight</div>
+        <span class="overnight-text">Quiet night — no new signals.</span>
+      </div>
+
+    </div><!-- /col-today -->
+
+    <!-- ─── RIGHT: FORWARD ─── -->
+    <div class="col-forward">
+
+      <!-- Column header -->
+      <div class="col-header">
+        <span class="col-header__label">Forward</span>
+        <span class="col-header__tag">TOMORROW · WEEK · MILESTONES</span>
+      </div>
+
+      <!-- TOMORROW -->
+      <div class="section">
+        <div class="section__label">Tomorrow — Mon 31 Mar</div>
+
+        <!-- Deadlines -->
+        <div style="font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--label); margin-bottom: 8px;">Deadlines Due</div>
+        <table class="thread-table" style="margin-bottom: 16px;">
+          <tbody>
+            <tr>
+              <td class="td-project">LZ</td>
+              <td class="td-note">
+                Sales Plan w/ KPIs
+                <span class="td-sub">Jessica Louro</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="td-project">PUNKS</td>
+              <td class="td-note">
+                Exhibition brief v2
+                <span class="td-sub">Viktor</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Calendar -->
+        <div style="font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--label); margin-bottom: 8px;">Calendar</div>
+        <table class="week-table">
+          <tbody>
+            <tr>
+              <td class="wt-day">09:00</td>
+              <td class="wt-events">
+                <span class="event-entry">Team standup</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="wt-day">10:30</td>
+              <td class="wt-events">
+                <span class="event-entry">LZ production review</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="wt-day">12:00</td>
+              <td class="wt-events">
+                <span class="event-entry">Lunch — Carmen</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="wt-day">14:00</td>
+              <td class="wt-events">
+                <span class="event-entry">Vhils studio call</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="wt-day">16:00</td>
+              <td class="wt-events">
+                <span class="event-entry">PUNKS venue walkthrough</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="wt-day">18:30</td>
+              <td class="wt-events">
+                <span class="event-entry">Olga — Eterno products</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- WEEK SCHEDULE -->
+      <div class="section">
+        <div class="section__label">Week Schedule — 30 Mar – 5 Apr</div>
+        <table class="week-table">
+          <thead>
+            <tr>
+              <td class="wt-day" style="padding-bottom:6px; border-bottom:1px solid var(--rule);">
+                <span style="font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);">DAY</span>
+              </td>
+              <td class="wt-count" style="padding-bottom:6px; border-bottom:1px solid var(--rule);">
+                <span style="font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);">EVT</span>
+              </td>
+              <td style="padding-bottom:6px; border-bottom:1px solid var(--rule);">
+                <span style="font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);">EVENTS</span>
+              </td>
+              <td style="padding-bottom:6px; border-bottom:1px solid var(--rule); text-align:right;">
+                <span style="font-family:var(--mono);font-size:8px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--label);">DEADLINE</span>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="wt-day">SUN 30</td>
+              <td class="wt-count">—</td>
+              <td class="wt-events"><span class="event-entry dim">No events</span></td>
+              <td class="wt-deadline">—</td>
+            </tr>
+            <tr>
+              <td class="wt-day">MON 31</td>
+              <td class="wt-count">6</td>
+              <td class="wt-events">
+                <span class="event-entry">Standup · LZ review · Lunch</span>
+                <span class="event-entry">Vhils call · PUNKS walk · Olga</span>
+              </td>
+              <td class="wt-deadline">2 due</td>
+            </tr>
+            <tr>
+              <td class="wt-day">TUE 1</td>
+              <td class="wt-count">2</td>
+              <td class="wt-events">
+                <span class="event-entry">Collector meeting · Press call</span>
+              </td>
+              <td class="wt-deadline">—</td>
+            </tr>
+            <tr>
+              <td class="wt-day">WED 2</td>
+              <td class="wt-count">—</td>
+              <td class="wt-events"><span class="event-entry dim">Nothing scheduled</span></td>
+              <td class="wt-deadline">—</td>
+            </tr>
+            <tr>
+              <td class="wt-day">THU 3</td>
+              <td class="wt-count">1</td>
+              <td class="wt-events">
+                <span class="event-entry"><span class="event-time">17:00</span>Claire</span>
+              </td>
+              <td class="wt-deadline">—</td>
+            </tr>
+            <tr>
+              <td class="wt-day">FRI 4</td>
+              <td class="wt-count">—</td>
+              <td class="wt-events"><span class="event-entry dim">Nothing scheduled</span></td>
+              <td class="wt-deadline">—</td>
+            </tr>
+            <tr>
+              <td class="wt-day">SAT 5</td>
+              <td class="wt-count">—</td>
+              <td class="wt-events"><span class="event-entry dim">Nothing scheduled</span></td>
+              <td class="wt-deadline">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- MILESTONES -->
+      <div class="section">
+        <div class="section__label">Project Milestones</div>
+        <div class="milestone-row">
+          <div>
+            <span class="ms-project">LZ</span>
+            <span class="ms-date">APR 24</span>
+          </div>
+          <span class="ms-countdown"><span>25</span>d out</span>
+        </div>
+        <div class="milestone-row">
+          <div>
+            <span class="ms-project">PUNKS</span>
+            <span class="ms-date">JUN 5</span>
+          </div>
+          <span class="ms-countdown"><span>67</span>d out</span>
+        </div>
+      </div>
+
+    </div><!-- /col-forward -->
+
+  </div><!-- /body-grid -->
+
+  <!-- Drawing reference labels -->
+  <div class="drawing-ref">VIK-OS · BRIEF-20260330 · REV A</div>
+  <div class="drawing-sheet-no">SH 01 OF 01</div>
+
+</div><!-- /sheet -->
+
+</body>
+</html>

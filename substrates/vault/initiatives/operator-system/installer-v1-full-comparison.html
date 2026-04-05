@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Installer v1 — Full System Comparison</title>
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --surface-raised: #1c1c1c;
+    --border: #2a2a2a;
+    --text: #d4d4d4;
+    --text-dim: #7a7a7a;
+    --text-bright: #f0f0f0;
+    --copy: #3d8c40;
+    --copy-bg: rgba(61,140,64,0.08);
+    --rewrite: #b8860b;
+    --rewrite-bg: rgba(184,134,11,0.08);
+    --fresh: #4a7fb5;
+    --fresh-bg: rgba(74,127,181,0.08);
+    --exclude: #8b3a3a;
+    --exclude-bg: rgba(139,58,58,0.08);
+    --pending: #8b6914;
+    --pending-bg: rgba(139,105,20,0.08);
+    --defer: #666;
+    --accent: #999;
+    --mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Cascadia Code', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    background: var(--bg);
+    color: var(--text);
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-bottom: 48px;
+    font-family: var(--mono);
+  }
+
+  h2 {
+    font-family: var(--sans);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-top: 56px;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  h2 .dim { color: var(--text-dim); font-weight: 400; }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .section-desc {
+    color: var(--text-dim);
+    font-size: 12px;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+
+  /* ── Summary Stats ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-card .number {
+    font-family: var(--sans);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-card .label {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat-card.copy .number { color: var(--copy); }
+  .stat-card.rewrite .number { color: var(--rewrite); }
+  .stat-card.fresh .number { color: var(--fresh); }
+  .stat-card.exclude .number { color: var(--exclude); }
+  .stat-card.pending .number { color: var(--pending); }
+
+  /* ── Bar Chart ── */
+  .bar-chart {
+    display: flex;
+    height: 32px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 16px 0 8px;
+  }
+
+  .bar-segment {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    transition: flex 0.3s;
+  }
+
+  .bar-segment.copy { background: var(--copy); flex: 38; }
+  .bar-segment.rewrite { background: var(--rewrite); flex: 22; }
+  .bar-segment.fresh { background: var(--fresh); flex: 8; }
+  .bar-segment.pending { background: var(--pending); flex: 6; }
+  .bar-segment.exclude { background: var(--exclude); flex: 247; }
+
+  .bar-legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    font-size: 11px;
+  }
+
+  .bar-legend span::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .bar-legend .l-copy::before { background: var(--copy); }
+  .bar-legend .l-rewrite::before { background: var(--rewrite); }
+  .bar-legend .l-fresh::before { background: var(--fresh); }
+  .bar-legend .l-pending::before { background: var(--pending); }
+  .bar-legend .l-exclude::before { background: var(--exclude); }
+
+  /* ── Comparison Table ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 24px;
+    font-size: 12px;
+  }
+
+  .comp-table thead th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-dim);
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .comp-table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .comp-table tbody tr:hover { background: var(--surface); }
+
+  .comp-table td {
+    padding: 7px 12px;
+    vertical-align: top;
+  }
+
+  .comp-table td:first-child {
+    color: var(--text-bright);
+    white-space: nowrap;
+  }
+
+  .comp-table td:nth-child(2) { color: var(--text-dim); max-width: 280px; }
+  .comp-table td:nth-child(4) { color: var(--text-dim); max-width: 320px; }
+
+  /* ── Treatment Badges ── */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .badge.copy { color: var(--copy); background: var(--copy-bg); border: 1px solid rgba(61,140,64,0.25); }
+  .badge.rewrite { color: var(--rewrite); background: var(--rewrite-bg); border: 1px solid rgba(184,134,11,0.25); }
+  .badge.fresh { color: var(--fresh); background: var(--fresh-bg); border: 1px solid rgba(74,127,181,0.25); }
+  .badge.exclude { color: var(--exclude); background: var(--exclude-bg); border: 1px solid rgba(139,58,58,0.25); }
+  .badge.pending { color: var(--pending); background: var(--pending-bg); border: 1px solid rgba(139,105,20,0.25); }
+  .badge.defer { color: var(--defer); background: rgba(102,102,102,0.08); border: 1px solid rgba(102,102,102,0.25); }
+
+  /* ── Section Summary ── */
+  .section-summary {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0 8px;
+    flex-wrap: wrap;
+  }
+
+  .section-summary .count {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .section-summary .count strong { font-weight: 600; }
+  .section-summary .count.c-copy strong { color: var(--copy); }
+  .section-summary .count.c-rewrite strong { color: var(--rewrite); }
+  .section-summary .count.c-fresh strong { color: var(--fresh); }
+  .section-summary .count.c-exclude strong { color: var(--exclude); }
+  .section-summary .count.c-pending strong { color: var(--pending); }
+
+  /* ── Tree View ── */
+  .tree {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .tree .t-copy { color: var(--copy); }
+  .tree .t-rewrite { color: var(--rewrite); }
+  .tree .t-fresh { color: var(--fresh); }
+  .tree .t-dim { color: var(--text-dim); }
+  .tree .t-bright { color: var(--text-bright); }
+
+  /* ── Decision Table ── */
+  .decision-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12px;
+  }
+
+  .decision-table th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .decision-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  .decision-table tr:hover { background: var(--surface); }
+
+  /* ── Cut Summary ── */
+  .cut-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12px;
+  }
+
+  .cut-table th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .cut-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cut-table td:nth-child(2) { text-align: right; font-weight: 600; color: var(--exclude); }
+  .cut-table tr.total td { border-top: 2px solid var(--border); font-weight: 700; color: var(--text-bright); }
+  .cut-table tr.total td:nth-child(2) { color: var(--exclude); }
+
+  /* ── Cleanup Debt ── */
+  .debt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12px;
+  }
+
+  .debt-table th {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .debt-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .debt-table .status { color: var(--exclude); font-weight: 600; }
+
+  /* ── Note Callout ── */
+  .note {
+    background: var(--surface);
+    border-left: 3px solid var(--rewrite);
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 12px;
+    color: var(--text-dim);
+    border-radius: 0 4px 4px 0;
+  }
+
+  .note strong { color: var(--text); }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0 0;
+  }
+
+  /* ── Collapsible sections ── */
+  details {
+    margin: 4px 0;
+  }
+
+  details summary {
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  details summary::-webkit-details-marker { display: none; }
+
+  details summary::before {
+    content: '+';
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dim);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  details[open] summary::before { content: '-'; }
+
+  .excluded-group {
+    padding-left: 24px;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  .excluded-group .file-line {
+    padding: 2px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .excluded-group .file-line::before {
+    content: 'x';
+    color: var(--exclude);
+    font-weight: 600;
+    font-size: 11px;
+  }
+
+  @media (max-width: 900px) {
+    body { padding: 20px; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .comp-table td:nth-child(2),
+    .comp-table td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Installer v1 — Full System Comparison</h1>
+<p class="subtitle">Every file in VIK_OS today vs. what ships in a clean installed instance &middot; 2026-04-03</p>
+
+<!-- ═══════════════════════════════════════════════ GRAND SUMMARY ═══ -->
+
+<div class="stats-grid">
+  <div class="stat-card copy"><div class="number">38</div><div class="label">Copy</div></div>
+  <div class="stat-card rewrite"><div class="number">22</div><div class="label">Rewrite</div></div>
+  <div class="stat-card fresh"><div class="number">8</div><div class="label">Fresh</div></div>
+  <div class="stat-card pending"><div class="number">6</div><div class="label">Pending</div></div>
+  <div class="stat-card exclude"><div class="number">247</div><div class="label">Exclude</div></div>
+</div>
+
+<div class="bar-chart">
+  <div class="bar-segment copy">38</div>
+  <div class="bar-segment rewrite">22</div>
+  <div class="bar-segment fresh">8</div>
+  <div class="bar-segment pending">6</div>
+  <div class="bar-segment exclude">247</div>
+</div>
+<div class="bar-legend">
+  <span class="l-copy">Copy-core (12%)</span>
+  <span class="l-rewrite">Rewrite-template (7%)</span>
+  <span class="l-fresh">Generate-fresh (2%)</span>
+  <span class="l-pending">Pending decision (2%)</span>
+  <span class="l-exclude">Exclude (77%)</span>
+</div>
+
+<!-- ═══════════════════════════ 1. ROOT STARTUP ═══ -->
+<hr class="divider">
+<h2>1. Root Startup Files</h2>
+<p class="section-desc">The spine of the system. Defines how it boots.</p>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>BOOT.md</td><td>Canonical entrypoint. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical copy. No changes.</td></tr>
+<tr><td>ROUTING.md</td><td>Lane selection + handoff rules. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical copy. No changes.</td></tr>
+<tr><td>CLAUDE.md</td><td>Compatibility shim. Points to BOOT.md.</td><td><span class="badge copy">Copy</span></td><td>Identical copy. No changes.</td></tr>
+<tr><td>STRUCTURE.md</td><td>Structure guide. Mentions "VIK OS" as identity.</td><td><span class="badge rewrite">Rewrite</span></td><td>Replace "VIK OS" where identity-specific. Keep mechanics.</td></tr>
+<tr><td>memory.md</td><td>Viktor's cross-session truths. Dubai timezone, Eterno, projects, operator hierarchy.</td><td><span class="badge fresh">Fresh</span></td><td>Empty starter seeded from onboarding. Zero Viktor history.</td></tr>
+<tr><td>recent-context.md</td><td>Live session state, blockers, initiative progress.</td><td><span class="badge fresh">Fresh</span></td><td>Install-state-only starter. Zero Viktor context.</td></tr>
+</tbody>
+</table>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>3</strong> copy</div>
+  <div class="count c-rewrite"><strong>1</strong> rewrite</div>
+  <div class="count c-fresh"><strong>2</strong> fresh</div>
+</div>
+
+<!-- ═══════════════════════════ 2. OPERATOR ═══ -->
+<hr class="divider">
+<h2>2. Operator Directory <span class="dim">operator/</span></h2>
+<p class="section-desc">Agent behavior, roles, and doctrine. The core engine of the system.</p>
+
+<h3>2a. Operator Doctrine — Reusable Mechanics</h3>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>context-loading-rules.md</td><td>Load-class taxonomy. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>context-placement-rules.md</td><td>Where to write context. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>closeout-rules.md</td><td>Completion logging rules. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>delegation-contract.md</td><td>Sub-agent boundaries. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>model-policy.md</td><td>Model assignment by lane. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>capabilities.md</td><td>Capability truth-telling rules. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>clarification-protocol.md</td><td>Reusable operator mechanic. Locked decision.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+</tbody>
+</table>
+
+<h3>2b. Operator Doctrine — Needs Light Rewrite</h3>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>agent-role.md</td><td>Autonomy, escalation rules. Minimal Viktor refs.</td><td><span class="badge rewrite">Rewrite</span></td><td>Replace "Viktor" with {owner_name} in approval refs.</td></tr>
+<tr><td>working-style.md</td><td>Communication discipline. "Viktor's voice".</td><td><span class="badge rewrite">Rewrite</span></td><td>"Viktor's voice" &rarr; "{owner_name}'s voice". Swap tone_profile.</td></tr>
+<tr><td>decision-principles.md</td><td>Tradeoff resolution. Minimal Viktor refs.</td><td><span class="badge rewrite">Rewrite</span></td><td>"Viktor's decision authority" &rarr; "{owner_name}'s decision authority".</td></tr>
+</tbody>
+</table>
+
+<h3>2c. Operator Role Files — Agent Identities</h3>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>anton.md</td><td>Technical direction role. Opus posture.</td><td><span class="badge rewrite">Rewrite</span></td><td>Role dynamics preserved. Owner refs swapped.</td></tr>
+<tr><td>claudia.md</td><td>COO. Refs "Viktor's inbox", reminders.</td><td><span class="badge rewrite">Rewrite</span></td><td>"{owner_name}'s operational inbox". Same delegation model.</td></tr>
+<tr><td>jonah.md</td><td>VP Engineering. One "Viktor confirmed".</td><td><span class="badge rewrite">Rewrite</span></td><td>"{owner_name} confirmed". Same verification mandate.</td></tr>
+<tr><td>vera.md</td><td>Head of Design. "Viktor Design Preferences".</td><td><span class="badge rewrite">Rewrite</span></td><td>"{owner_name} Design Preferences". Prefs from onboarding.</td></tr>
+<tr><td>lev.md</td><td>CSO. Multiple Viktor decision refs.</td><td><span class="badge rewrite">Rewrite</span></td><td>"{owner_name}'s judgment". Same reasoning methodology.</td></tr>
+</tbody>
+</table>
+
+<h3>2d. Operator Context — Viktor-Specific Content</h3>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>identity.md</td><td>Viktor's role, Eterno, Vhils Studio, time allocation.</td><td><span class="badge fresh">Fresh</span></td><td>Generated from onboarding: owner_name, primary_role, timezone, tone, business_context.</td></tr>
+<tr><td>reminders.md</td><td>Viktor's 3 open reminders. Eterno, Phase 4, Newsletter.</td><td><span class="badge fresh">Fresh</span></td><td>Empty starter. "{owner_name} has no active reminders."</td></tr>
+<tr><td>claudia-memory.md</td><td>Viktor's email voice, exhibition workflow, Basecamp.</td><td><span class="badge fresh">Fresh</span></td><td>Empty starter. "No operational memory accumulated yet."</td></tr>
+<tr><td>CLAUDE.md</td><td>Routing shim for operator/.</td><td><span class="badge rewrite">Rewrite</span></td><td>Swap any Viktor refs. If pure routing, copy.</td></tr>
+</tbody>
+</table>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>7</strong> copy</div>
+  <div class="count c-rewrite"><strong>9</strong> rewrite</div>
+  <div class="count c-fresh"><strong>3</strong> fresh</div>
+</div>
+
+<!-- ═══════════════════════════ 3. TEMPLATES ═══ -->
+<hr class="divider">
+<h2>3. Templates <span class="dim">templates/</span></h2>
+<p class="section-desc">Reusable project and handoff starters.</p>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>README.md</td><td>Template structure philosophy.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>active-project/CLAUDE.md</td><td>Mentions "Viktor approves".</td><td><span class="badge rewrite">Rewrite</span></td><td>"{owner_name} approves".</td></tr>
+<tr><td>active-project/summary.md</td><td>Pure template with placeholders.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>active-project/decisions.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>active-project/open-questions.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>active-project/references.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>active-project/session-log.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>intake-project/CLAUDE.md</td><td>Mentions "Viktor approves".</td><td><span class="badge rewrite">Rewrite</span></td><td>"{owner_name} approves".</td></tr>
+<tr><td>intake-project/summary.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>intake-project/decisions.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>intake-project/open-questions.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>intake-project/references.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>intake-project/setup-status.md</td><td>Template.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>operator-handoff.md</td><td>Mentions "Viktor approval".</td><td><span class="badge rewrite">Rewrite</span></td><td>"{owner_name} approval".</td></tr>
+<tr><td>project-recipe.md</td><td>Core principle. Generic.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>new-repo-technical-checklist.md</td><td>Mentions operators by name.</td><td><span class="badge rewrite">Rewrite</span></td><td>Operator names are system roles — may actually be copy.</td></tr>
+<tr><td>new-repo-technical-onboarding.md</td><td>Mentions operators by name.</td><td><span class="badge rewrite">Rewrite</span></td><td>Same treatment as above.</td></tr>
+</tbody>
+</table>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>12</strong> copy</div>
+  <div class="count c-rewrite"><strong>5</strong> rewrite</div>
+</div>
+
+<!-- ═══════════════════════════ 4. DOMAINS ═══ -->
+<hr class="divider">
+<h2>4. Domains <span class="dim">domains/</span></h2>
+<p class="section-desc">Shared domain knowledge. Mostly reusable, one major problem file.</p>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>CLAUDE.md</td><td>Domain organization routing. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>exhibitions/CLAUDE.md</td><td>Exhibition routing logic. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>exhibitions/glossary.md</td><td>8 core exhibition terms. Generic.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>exhibitions/rules.md</td><td>41+ SOPs. Viktor name, Eterno Gallery, Drive IDs, team names (Sara, Goncalo, Ana Amancio, Filomena), production calendar IDs, Primavera ERP.</td><td><span class="badge exclude">Exclude</span></td><td>DOES NOT SHIP. Locked decision. Cleanup debt — must be split before any reusable exhibition doctrine ships.</td></tr>
+</tbody>
+</table>
+
+<div class="note"><strong>Cleanup debt:</strong> domains/exhibitions/rules.md is the single largest contaminated file. Contains reusable exhibition workflow patterns mixed with Viktor/Eterno operational residue. Must be split into reusable doctrine vs. owner-specific residue before shipping.</div>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>3</strong> copy</div>
+  <div class="count c-exclude"><strong>1</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 5. PROJECT TYPES ═══ -->
+<hr class="divider">
+<h2>5. Project Types <span class="dim">project-types/</span></h2>
+<p class="section-desc">Reusable lifecycle doctrine. Almost entirely clean.</p>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>CLAUDE.md</td><td>Routing guidance. Generic.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>exhibition/CLAUDE.md</td><td>Exhibition routing framework. Generic.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>exhibition/approval-rules.md</td><td>4 approval gates. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>exhibition/lifecycle.md</td><td>9 canonical stages. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>intake-decision-tree.md</td><td>5 asset evaluations. Names Viktor and Claudia in approval semantics.</td><td><span class="badge rewrite">Rewrite</span></td><td>Locked decision. Swap approval name refs.</td></tr>
+</tbody>
+</table>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>4</strong> copy</div>
+  <div class="count c-rewrite"><strong>1</strong> rewrite</div>
+</div>
+
+<!-- ═══════════════════════════ 6. BRANDS ═══ -->
+<hr class="divider">
+<h2>6. Brands <span class="dim">brands/</span></h2>
+<p class="section-desc">Brand wrapper mechanics (reusable) + Eterno brand pack (Viktor-specific).</p>
+
+<h3>6a. Brand System Mechanics</h3>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>session-wrapper.md</td><td>9-step brand activation. No owner refs.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>runtime.md</td><td>Points to session-wrapper. Minimal.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>operators/atlas.md</td><td>Brand strategy operator. Generic.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>operators/helena.md</td><td>Brand writing operator. Generic.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+<tr><td>registry.md</td><td>Lists only Eterno with aliases.</td><td><span class="badge fresh">Fresh</span></td><td>Empty or starter registry. Eterno removed.</td></tr>
+</tbody>
+</table>
+
+<h3>6b. Eterno Brand Pack — Does Not Ship</h3>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Entire brands/eterno/ tree — 14 files (Viktor's live brand content)</span></summary>
+<div class="excluded-group">
+  <div class="file-line">brands/eterno/README.md</div>
+  <div class="file-line">brands/eterno/registry.md</div>
+  <div class="file-line">brands/eterno/doctrine/approved-pack.md</div>
+  <div class="file-line">brands/eterno/doctrine/channels/instagram.md</div>
+  <div class="file-line">brands/eterno/doctrine/channels/x.md</div>
+  <div class="file-line">brands/eterno/doctrine/identity.md</div>
+  <div class="file-line">brands/eterno/doctrine/metrics.md</div>
+  <div class="file-line">brands/eterno/doctrine/open-questions.md</div>
+  <div class="file-line">brands/eterno/doctrine/tensions.md</div>
+  <div class="file-line">brands/eterno/doctrine/voice.md</div>
+  <div class="file-line">brands/eterno/corpus/ (3 analysis files)</div>
+  <div class="file-line">brands/eterno/sources/ (tweet batches, raw JSON, Instagram insights, strategy map)</div>
+</div>
+</details>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>4</strong> copy</div>
+  <div class="count c-fresh"><strong>1</strong> fresh</div>
+  <div class="count c-exclude"><strong>14</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 7. PROJECTS ═══ -->
+<hr class="divider">
+<h2>7. Projects <span class="dim">projects/</span></h2>
+<p class="section-desc">All projects are Viktor's live work. None transfer. Empty directory in clean instance.</p>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>CLAUDE.md</td><td>Project routing rules.</td><td><span class="badge copy">Copy</span></td><td>Identical (if generic).</td></tr>
+<tr><td>README.md</td><td>Structural governance.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+</tbody>
+</table>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Viktor's live projects — ~49 files across 7 projects</span></summary>
+<div class="excluded-group">
+  <div class="file-line">0009eth-2026/ (6 files)</div>
+  <div class="file-line">lucas-zanotto-2026/ (6 files)</div>
+  <div class="file-line">punks-2026/ (10 files incl. 5 call notes)</div>
+  <div class="file-line">eterno-strategy-2026/ (8 files + 1 CSV)</div>
+  <div class="file-line">exhibitiq-2026/ (5 files)</div>
+  <div class="file-line">vhils-x-ledger/ (5 files)</div>
+  <div class="file-line">nfc-boldtron/ (1 file)</div>
+</div>
+</details>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Test project residue — 9 files</span></summary>
+<div class="excluded-group">
+  <div class="file-line">test-exhibition-001/summary.md</div>
+  <div class="file-line">test-exhibition-002/summary.md</div>
+  <div class="file-line">test-proj-history/summary.md</div>
+  <div class="file-line">test-proj-idempotent/summary.md</div>
+  <div class="file-line">test-proj-mark/summary.md</div>
+  <div class="file-line">test-proj-no-template/summary.md</div>
+  <div class="file-line">test-proj-nodeletion/summary.md</div>
+  <div class="file-line">test-proj-overridden/summary.md</div>
+  <div class="file-line">test-proj-registry/summary.md</div>
+</div>
+</details>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>2</strong> copy</div>
+  <div class="count c-exclude"><strong>~58</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 8. INTAKE ═══ -->
+<hr class="divider">
+<h2>8. Intake <span class="dim">intake/</span></h2>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>CLAUDE.md</td><td>Routing rules for intake.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+</tbody>
+</table>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">atelier-sora-milan-2026/ — 6 files</span></summary>
+<div class="excluded-group">
+  <div class="file-line">CLAUDE.md, decisions.md, open-questions.md, references.md, setup-status.md, summary.md</div>
+</div>
+</details>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>1</strong> copy</div>
+  <div class="count c-exclude"><strong>6</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 9. HANDOFFS ═══ -->
+<hr class="divider">
+<h2>9. Handoffs <span class="dim">handoffs/</span></h2>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>README.md</td><td>Structural governance.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+</tbody>
+</table>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">3 handoff artifacts (Viktor session-specific)</span></summary>
+<div class="excluded-group">
+  <div class="file-line">anton-to-claudia-phase5-investigation.md</div>
+  <div class="file-line">anton-to-jonah-project-identity-cleanup.md</div>
+  <div class="file-line">claudia-to-jonah-linking-fixes.md</div>
+</div>
+</details>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>1</strong> copy</div>
+  <div class="count c-exclude"><strong>3</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 10. APPS ═══ -->
+<hr class="divider">
+<h2>10. Apps <span class="dim">apps/</span></h2>
+<p class="section-desc">Product context and archives. Memento plans/prototypes + Sera product docs. Massive historical residue.</p>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>README.md</td><td>Structural governance.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+</tbody>
+</table>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Memento editorial-pass — 1 file (Google Sheet IDs, Viktor pipeline specifics)</span></summary>
+<div class="excluded-group">
+  <div class="file-line">memento/editorial-pass.md</div>
+</div>
+</details>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Memento plan archives — 18 md files</span></summary>
+<div class="excluded-group">
+  <div class="file-line">anton-email-triage-decisions.md</div>
+  <div class="file-line">basecamp-sync-rewrite-anton.md</div>
+  <div class="file-line">handoff-email-triage-to-anton.md</div>
+  <div class="file-line">handoff-email-triage-to-claudia.md</div>
+  <div class="file-line">memento-technical-plan.md</div>
+  <div class="file-line">phase-1 through phase-5 handoffs (11 files)</div>
+  <div class="file-line">rapt-recommendation.md</div>
+  <div class="file-line">task-5-shared-sources-proposal.md</div>
+</div>
+</details>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Memento proposals — 8 md + 9 html</span></summary>
+<div class="excluded-group">
+  <div class="file-line">a.md, c.md, j.md, l.md</div>
+  <div class="file-line">brainstorm/ (anton, claudia, jonah, lev .md + .html)</div>
+  <div class="file-line">brainstorm/synthesis/ (4 .html)</div>
+  <div class="file-line">memento_brainstorm.html</div>
+</div>
+</details>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Dashboard prototypes — 20 html files</span></summary>
+<div class="excluded-group">
+  <div class="file-line">01-newspaper-cascade.html through 20-broadsheet.html</div>
+</div>
+</details>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">UX reference images — 25 files (16 jpg + 9 png)</span></summary>
+<div class="excluded-group">
+  <div class="file-line">refs-ux-designing/pinterest_*.jpg (16)</div>
+  <div class="file-line">refs-ux-designing/pinterest_*.png (9)</div>
+</div>
+</details>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Sera product docs — 11 files</span></summary>
+<div class="excluded-group">
+  <div class="file-line">personal-operator-app-overview.md</div>
+  <div class="file-line">product-framing.md, setup-model.md, summary.md, decisions.md, open-questions.md</div>
+  <div class="file-line">agents/anton.md, agents/claudia.md, agents/joana.md</div>
+  <div class="file-line">pilot-users/alexandre.md, pilot-users/alexandre-interview-brief.md</div>
+</div>
+</details>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>1</strong> copy</div>
+  <div class="count c-exclude"><strong>~91</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 11. AUDITS ═══ -->
+<hr class="divider">
+<h2>11. Audits <span class="dim">audits/</span></h2>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>README.md</td><td>Structural governance.</td><td><span class="badge copy">Copy</span></td><td>Identical.</td></tr>
+</tbody>
+</table>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">2026-03-28 audit artifacts — 8 files</span></summary>
+<div class="excluded-group">
+  <div class="file-line">anton-routing-audit.md, claudia-routing-audit.md, jonah-routing-audit.md, lev-routing-audit.md</div>
+  <div class="file-line">global-issues.md, resolution-plan.md</div>
+  <div class="file-line">resolution-plan.html, vik-os-routing-reference.html</div>
+</div>
+</details>
+
+<div class="section-summary">
+  <div class="count c-copy"><strong>1</strong> copy</div>
+  <div class="count c-exclude"><strong>8</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 12. INITIATIVES ═══ -->
+<hr class="divider">
+<h2>12. Initiatives <span class="dim">initiatives/</span></h2>
+<p class="section-desc">Deep system-building context. Historical initiative work + installer authority documents with pending decisions.</p>
+
+<h3>12a. Operator Routing and Handoffs Initiative</h3>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Entire initiative — 10 files (historical work)</span></summary>
+<div class="excluded-group">
+  <div class="file-line">contract-spec-anton.md</div>
+  <div class="file-line">decisions.md, open-questions.md, summary.md, session-log.md</div>
+  <div class="file-line">phase-3-architecture-anton.md, review-anton.md</div>
+  <div class="file-line">runtime-self-check.md, runtime-smoke-tests.md</div>
+  <div class="file-line">boot-manifest.json</div>
+</div>
+</details>
+
+<h3>12b. Operator System Initiative — Authority Documents</h3>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Role</th><th>Treatment</th><th>Decision Needed</th></tr></thead>
+<tbody>
+<tr><td>system-instantiation-contract.md</td><td>Canonical contract for new instances</td><td><span class="badge pending">Pending</span></td><td>Ship as architecture reference? Or do_not_ship as build-time doc?</td></tr>
+<tr><td>system-instantiation-generated-file-matrix.md</td><td>Maps onboarding inputs &rarr; files</td><td><span class="badge pending">Pending</span></td><td>Same decision.</td></tr>
+<tr><td>system-instantiation-onboarding-schema.md</td><td>Defines what onboarding asks</td><td><span class="badge pending">Pending</span></td><td>Same decision.</td></tr>
+<tr><td>installer-target-replication-contract.md</td><td>Narrow infrastructure sublayer</td><td><span class="badge pending">Pending</span></td><td>Same decision.</td></tr>
+<tr><td>runtime-bridges.md</td><td>Bridge principle + current bridge list</td><td><span class="badge pending">Pending</span></td><td>Could argue ship — tells user how bridges work.</td></tr>
+<tr><td>installer-v1-manifest-spec.md</td><td>The manifest schema itself</td><td><span class="badge pending">Pending</span></td><td>Same decision.</td></tr>
+<tr><td>installer-v1-full-comparison.md</td><td>This comparison doc</td><td><span class="badge exclude">Exclude</span></td><td>Build-time reference only.</td></tr>
+<tr><td>installer-v1-full-comparison.html</td><td>This HTML file</td><td><span class="badge exclude">Exclude</span></td><td>Build-time reference only.</td></tr>
+</tbody>
+</table>
+
+<h3>12b. Operator System Initiative — Working Files</h3>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">Working files + operator sub-files — ~20 files</span></summary>
+<div class="excluded-group">
+  <div class="file-line">summary.md, session-log.md, open-questions.md</div>
+  <div class="file-line">team-map.md, validation.md, project-identity-rule.md</div>
+  <div class="file-line">system-instantiation-vocabulary.md</div>
+  <div class="file-line">handoff-rules.md (maybe copy — no owner refs)</div>
+  <div class="file-line">routing-model.md (maybe copy — no owner refs)</div>
+  <div class="file-line">operators/anton.md, operators/atlas.md, operators/claudia.md</div>
+  <div class="file-line">operators/helena.md, operators/jonah.md, operators/lev.md, operators/vera.md</div>
+</div>
+</details>
+
+<h3>12c. Internal Drive Migration</h3>
+
+<details>
+<summary><span class="badge exclude">Exclude</span> <span style="color:var(--text-dim)">1 file — Viktor's migration plan</span></summary>
+<div class="excluded-group">
+  <div class="file-line">internal-drive-migration/plan.md</div>
+</div>
+</details>
+
+<div class="section-summary">
+  <div class="count c-pending"><strong>6</strong> pending</div>
+  <div class="count c-exclude"><strong>~22</strong> exclude</div>
+</div>
+
+<!-- ═══════════════════════════ 13. RUNTIME BRIDGES ═══ -->
+<hr class="divider">
+<h2>13. Runtime Bridge Files <span class="dim">outside VIK_OS</span></h2>
+<p class="section-desc">These live in the user's home directory. All are generated for the target machine.</p>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Local Content</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>~/.claude/CLAUDE.md</td><td>Points to Viktor's vault path. Names Viktor.</td><td><span class="badge rewrite">Rewrite</span></td><td>Point to {vault_location}. Swap {owner_name}.</td></tr>
+<tr><td>~/.codex/instructions.md</td><td>Points to Viktor's vault. (If Codex selected.)</td><td><span class="badge rewrite">Rewrite</span></td><td>Point to {vault_location}.</td></tr>
+<tr><td>~/.gemini/GEMINI.md</td><td>Points to Viktor's vault. (If Gemini selected.)</td><td><span class="badge rewrite">Rewrite</span></td><td>Point to {vault_location}.</td></tr>
+<tr><td>~/.openclaw/workspace/START_HERE.md</td><td>Points to Viktor's vault. (If OpenClaw selected.)</td><td><span class="badge rewrite">Rewrite</span></td><td>Point to {vault_location}.</td></tr>
+<tr><td>~/.openclaw/workspace/AGENTS.md</td><td>Viktor's timezone and paths.</td><td><span class="badge rewrite">Rewrite</span></td><td>Swap {owner_name}, {timezone}, {vault_location}.</td></tr>
+</tbody>
+</table>
+
+<h3>Runtime Config Files</h3>
+
+<table class="comp-table">
+<thead><tr><th>Local File</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>~/.codex/config.toml</td><td><span class="badge fresh">Fresh</span></td><td>Target-local config. No Viktor allowlists.</td></tr>
+<tr><td>~/.codex/auth.json</td><td><span class="badge defer">Defer</span></td><td>Prompt user post-install.</td></tr>
+<tr><td>~/.codex/history.jsonl, sqlite</td><td><span class="badge exclude">Exclude</span></td><td>Runtime residue.</td></tr>
+<tr><td>~/.gemini/projects.json</td><td><span class="badge fresh">Fresh</span></td><td>Target-local project list.</td></tr>
+<tr><td>~/.gemini/trustedFolders.json</td><td><span class="badge fresh">Fresh</span></td><td>Target-local trusted folders.</td></tr>
+<tr><td>~/.gemini/settings.json</td><td><span class="badge fresh">Fresh</span></td><td>Safe starter settings.</td></tr>
+<tr><td>~/.gemini/oauth_creds.json</td><td><span class="badge defer">Defer</span></td><td>Prompt user.</td></tr>
+<tr><td>~/.gemini/google_accounts.json</td><td><span class="badge defer">Defer</span></td><td>Prompt user.</td></tr>
+<tr><td>~/.gemini/installation_id, state.json</td><td><span class="badge exclude">Exclude</span></td><td>Machine identity / runtime state.</td></tr>
+<tr><td>~/.gemini/antigravity-browser-profile/</td><td><span class="badge exclude">Exclude</span></td><td>Browser residue.</td></tr>
+<tr><td>~/.openclaw/openclaw.json</td><td><span class="badge fresh">Fresh</span></td><td>Safe starter config. No tokens.</td></tr>
+<tr><td>~/.openclaw/credentials/*</td><td><span class="badge defer">Defer</span></td><td>Prompt user.</td></tr>
+<tr><td>~/.openclaw/identity/*, devices/*</td><td><span class="badge exclude">Exclude</span></td><td>Machine identity, pairing state.</td></tr>
+<tr><td>~/.openclaw/telegram/*</td><td><span class="badge exclude">Exclude</span></td><td>Channel state.</td></tr>
+<tr><td>~/.openclaw/logs/*</td><td><span class="badge exclude">Exclude</span></td><td>Runtime residue.</td></tr>
+<tr><td>~/.claude/ caches, backups</td><td><span class="badge exclude">Exclude</span></td><td>Runtime residue.</td></tr>
+</tbody>
+</table>
+
+<!-- ═══════════════════════════ 14. MEMENTO SUBSTRATE ═══ -->
+<hr class="divider">
+<h2>14. Memento Substrate <span class="dim">~/VIK/Coding/Memento/</span></h2>
+<p class="section-desc">The pipeline repo. Code ships, state does not.</p>
+
+<table class="comp-table">
+<thead><tr><th>Surface</th><th>Treatment</th><th>Installed Content</th></tr></thead>
+<tbody>
+<tr><td>Source code (sync engines, derivation, pipeline, dashboard)</td><td><span class="badge copy">Copy</span></td><td>Owner-neutral substrate code. Preserves system behavior.</td></tr>
+<tr><td>Contracts and docs (owner-neutral, path-neutral)</td><td><span class="badge copy">Copy</span></td><td>Substrate behavior docs.</td></tr>
+<tr><td>Config files with /Users/viktorsl/ paths</td><td><span class="badge rewrite">Rewrite</span></td><td>Swap all paths to {home_root}, {workspace_root}, {vault_location}.</td></tr>
+<tr><td>state/captures/*</td><td><span class="badge exclude">Exclude</span></td><td>Viktor's captured data.</td></tr>
+<tr><td>state/derived/*</td><td><span class="badge exclude">Exclude</span></td><td>Viktor's derived outputs.</td></tr>
+<tr><td>state/store/*</td><td><span class="badge exclude">Exclude</span></td><td>Viktor's project stores.</td></tr>
+<tr><td>state/logs/*, state/runtime/*, state/sync_log/*</td><td><span class="badge exclude">Exclude</span></td><td>Runtime logs, state, timestamps.</td></tr>
+<tr><td>plan/*</td><td><span class="badge exclude">Exclude</span></td><td>Build-time implementation plans.</td></tr>
+</tbody>
+</table>
+
+<!-- ═══════════════════════════ CLEAN INSTANCE TREE ═══ -->
+<hr class="divider">
+<h2>Clean Installed Instance</h2>
+<p class="section-desc">What the new user's system looks like after install.</p>
+
+<div class="tree"><span class="t-bright">NEW_SYSTEM/</span>
+<span class="t-copy">├── BOOT.md</span>                          <span class="t-dim">[COPY]</span>
+<span class="t-copy">├── ROUTING.md</span>                       <span class="t-dim">[COPY]</span>
+<span class="t-copy">├── CLAUDE.md</span>                        <span class="t-dim">[COPY]</span>
+<span class="t-rewrite">├── STRUCTURE.md</span>                     <span class="t-dim">[REWRITE]</span>
+<span class="t-fresh">├── memory.md</span>                        <span class="t-dim">[FRESH]</span>
+<span class="t-fresh">├── recent-context.md</span>                <span class="t-dim">[FRESH]</span>
+├── <span class="t-bright">operator/</span>
+<span class="t-fresh">│   ├── identity.md</span>                  <span class="t-dim">[FRESH — canonical owner identity]</span>
+<span class="t-rewrite">│   ├── anton.md</span>                     <span class="t-dim">[REWRITE]</span>
+<span class="t-rewrite">│   ├── claudia.md</span>                   <span class="t-dim">[REWRITE]</span>
+<span class="t-rewrite">│   ├── jonah.md</span>                     <span class="t-dim">[REWRITE]</span>
+<span class="t-rewrite">│   ├── vera.md</span>                      <span class="t-dim">[REWRITE]</span>
+<span class="t-rewrite">│   ├── lev.md</span>                       <span class="t-dim">[REWRITE]</span>
+<span class="t-rewrite">│   ├── agent-role.md</span>                <span class="t-dim">[REWRITE]</span>
+<span class="t-rewrite">│   ├── working-style.md</span>             <span class="t-dim">[REWRITE]</span>
+<span class="t-rewrite">│   ├── decision-principles.md</span>       <span class="t-dim">[REWRITE]</span>
+<span class="t-copy">│   ├── context-loading-rules.md</span>     <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── context-placement-rules.md</span>   <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── closeout-rules.md</span>            <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── delegation-contract.md</span>       <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── model-policy.md</span>              <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── capabilities.md</span>              <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── clarification-protocol.md</span>    <span class="t-dim">[COPY]</span>
+<span class="t-fresh">│   ├── reminders.md</span>                 <span class="t-dim">[FRESH]</span>
+<span class="t-fresh">│   ├── claudia-memory.md</span>            <span class="t-dim">[FRESH]</span>
+<span class="t-rewrite">│   └── CLAUDE.md</span>                    <span class="t-dim">[REWRITE]</span>
+├── <span class="t-bright">domains/</span>
+<span class="t-copy">│   ├── CLAUDE.md</span>                    <span class="t-dim">[COPY]</span>
+│   └── <span class="t-bright">exhibitions/</span>
+<span class="t-copy">│       ├── CLAUDE.md</span>                <span class="t-dim">[COPY]</span>
+<span class="t-copy">│       └── glossary.md</span>              <span class="t-dim">[COPY]</span>
+<span class="t-dim">│       (rules.md does NOT exist — cleanup debt)</span>
+├── <span class="t-bright">project-types/</span>
+<span class="t-copy">│   ├── CLAUDE.md</span>                    <span class="t-dim">[COPY]</span>
+<span class="t-rewrite">│   ├── intake-decision-tree.md</span>      <span class="t-dim">[REWRITE]</span>
+│   └── <span class="t-bright">exhibition/</span>
+<span class="t-copy">│       ├── CLAUDE.md</span>                <span class="t-dim">[COPY]</span>
+<span class="t-copy">│       ├── approval-rules.md</span>        <span class="t-dim">[COPY]</span>
+<span class="t-copy">│       └── lifecycle.md</span>             <span class="t-dim">[COPY]</span>
+├── <span class="t-bright">templates/</span>
+<span class="t-copy">│   ├── README.md</span>                    <span class="t-dim">[COPY]</span>
+│   ├── <span class="t-bright">active-project/</span>              <span class="t-dim">[COPY + 1 REWRITE]</span>
+│   ├── <span class="t-bright">intake-project/</span>              <span class="t-dim">[COPY + 1 REWRITE]</span>
+<span class="t-rewrite">│   ├── operator-handoff.md</span>          <span class="t-dim">[REWRITE]</span>
+<span class="t-copy">│   ├── project-recipe.md</span>            <span class="t-dim">[COPY]</span>
+<span class="t-rewrite">│   └── new-repo-technical-*.md</span>      <span class="t-dim">[REWRITE x2]</span>
+├── <span class="t-bright">brands/</span>
+<span class="t-copy">│   ├── session-wrapper.md</span>           <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── runtime.md</span>                   <span class="t-dim">[COPY]</span>
+<span class="t-fresh">│   ├── registry.md</span>                  <span class="t-dim">[FRESH — empty]</span>
+│   └── <span class="t-bright">operators/</span>
+<span class="t-copy">│       ├── atlas.md</span>                 <span class="t-dim">[COPY]</span>
+<span class="t-copy">│       └── helena.md</span>                <span class="t-dim">[COPY]</span>
+<span class="t-dim">│   (no eterno/ — excluded)</span>
+├── <span class="t-bright">projects/</span>
+<span class="t-copy">│   ├── CLAUDE.md</span>                    <span class="t-dim">[COPY]</span>
+<span class="t-copy">│   ├── README.md</span>                    <span class="t-dim">[COPY]</span>
+<span class="t-dim">│   └── (empty)</span>
+├── <span class="t-bright">intake/</span>
+<span class="t-copy">│   ├── CLAUDE.md</span>                    <span class="t-dim">[COPY]</span>
+<span class="t-dim">│   └── (empty)</span>
+├── <span class="t-bright">handoffs/</span>
+<span class="t-copy">│   ├── README.md</span>                    <span class="t-dim">[COPY]</span>
+<span class="t-dim">│   └── (empty)</span>
+├── <span class="t-bright">apps/</span>
+<span class="t-copy">│   ├── README.md</span>                    <span class="t-dim">[COPY]</span>
+<span class="t-dim">│   └── (empty)</span>
+├── <span class="t-bright">audits/</span>
+<span class="t-copy">│   ├── README.md</span>                    <span class="t-dim">[COPY]</span>
+<span class="t-dim">│   └── (empty)</span>
+└── <span class="t-bright">initiatives/</span>
+<span class="t-dim">    └── (empty — or authority docs if decision = ship)</span></div>
+
+<!-- ═══════════════════════════ CUT SUMMARY ═══ -->
+<hr class="divider">
+<h2>What Gets Cut — Categorized</h2>
+
+<table class="cut-table">
+<thead><tr><th>Cut Category</th><th>Files</th><th>Reason</th></tr></thead>
+<tbody>
+<tr><td>Viktor's live projects</td><td>~49</td><td>owner_specific_residue</td></tr>
+<tr><td>Viktor's intake projects</td><td>6</td><td>owner_specific_residue</td></tr>
+<tr><td>Eterno brand pack</td><td>14</td><td>owner_specific_residue</td></tr>
+<tr><td>Memento plan archives</td><td>26</td><td>historical_work_residue</td></tr>
+<tr><td>Memento proposals + HTML</td><td>17</td><td>historical_work_residue</td></tr>
+<tr><td>Dashboard prototypes</td><td>20</td><td>historical_work_residue</td></tr>
+<tr><td>UX reference images</td><td>25</td><td>historical_work_residue</td></tr>
+<tr><td>Sera product docs</td><td>11</td><td>historical_work_residue</td></tr>
+<tr><td>Audit artifacts</td><td>8</td><td>historical_work_residue</td></tr>
+<tr><td>Routing initiative files</td><td>10</td><td>historical_work_residue</td></tr>
+<tr><td>Operator system working files</td><td>~20</td><td>build_time_only / historical</td></tr>
+<tr><td>Handoff artifacts</td><td>3</td><td>owner_specific_residue</td></tr>
+<tr><td>Editorial pass doc</td><td>1</td><td>owner_specific_residue</td></tr>
+<tr><td>Test project residue</td><td>9</td><td>historical_work_residue</td></tr>
+<tr><td>Internal drive migration</td><td>1</td><td>owner_specific_residue</td></tr>
+<tr><td>.DS_Store / system files</td><td>3</td><td>system_residue</td></tr>
+<tr class="total"><td>TOTAL CUT</td><td>~247</td><td></td></tr>
+</tbody>
+</table>
+
+<!-- ═══════════════════════════ PENDING DECISIONS ═══ -->
+<hr class="divider">
+<h2>Pending Decisions — 6 Files</h2>
+<p class="section-desc">These authority documents need an explicit installed_instance_role. Viktor must decide.</p>
+
+<table class="decision-table">
+<thead><tr><th>File</th><th>Build-Time Role</th><th>Recommendation</th></tr></thead>
+<tbody>
+<tr><td>system-instantiation-contract.md</td><td>required_authority</td><td>Likely <strong>do_not_ship</strong> — build-time design doc</td></tr>
+<tr><td>system-instantiation-generated-file-matrix.md</td><td>required_authority</td><td>Likely <strong>do_not_ship</strong> — build-time design doc</td></tr>
+<tr><td>system-instantiation-onboarding-schema.md</td><td>required_authority</td><td>Likely <strong>do_not_ship</strong> — build-time design doc</td></tr>
+<tr><td>installer-target-replication-contract.md</td><td>required_authority</td><td>Likely <strong>do_not_ship</strong> — build-time design doc</td></tr>
+<tr><td>runtime-bridges.md</td><td>required_authority</td><td>Could argue <strong>ship</strong> — tells user how bridges work</td></tr>
+<tr><td>installer-v1-manifest-spec.md</td><td>required_authority</td><td>Likely <strong>do_not_ship</strong> — build-time design doc</td></tr>
+</tbody>
+</table>
+
+<!-- ═══════════════════════════ CLEANUP DEBT ═══ -->
+<hr class="divider">
+<h2>Cleanup Debt Before Implementation</h2>
+
+<table class="debt-table">
+<thead><tr><th>Item</th><th>Status</th><th>Blocks</th></tr></thead>
+<tbody>
+<tr><td>Split domains/exhibitions/rules.md into reusable doctrine vs. owner residue</td><td class="status">NOT STARTED</td><td>Any reusable exhibition doctrine shipping</td></tr>
+<tr><td>Decide authority-file installed_instance_role for 6 files</td><td class="status">NOT STARTED</td><td>Manifest completion</td></tr>
+<tr><td>Audit templates/active-project/CLAUDE.md for "Viktor approves"</td><td class="status">NOT STARTED</td><td>Template copy-core promotion</td></tr>
+<tr><td>Audit templates/intake-project/CLAUDE.md for same</td><td class="status">NOT STARTED</td><td>Template copy-core promotion</td></tr>
+<tr><td>Audit templates/operator-handoff.md for same</td><td class="status">NOT STARTED</td><td>Template copy-core promotion</td></tr>
+<tr><td>Verify operator/CLAUDE.md contents</td><td class="status">NOT STARTED</td><td>Operator directory classification</td></tr>
+</tbody>
+</table>
+
+<hr class="divider">
+<p style="color:var(--text-dim); font-size:11px; margin-top:24px; text-align:center;">
+  Generated 2026-04-03 &middot; installer-v1-full-comparison &middot; ~321 files audited
+</p>
+
+</body>
+</html>

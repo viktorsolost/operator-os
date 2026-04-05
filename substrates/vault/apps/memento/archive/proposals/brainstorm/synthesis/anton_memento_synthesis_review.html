@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memento Synthesis Review</title>
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --bg-soft: #10141a;
+      --panel: rgba(18, 24, 34, 0.82);
+      --panel-2: rgba(24, 31, 44, 0.92);
+      --panel-3: #151b26;
+      --line: rgba(151, 175, 219, 0.16);
+      --line-strong: rgba(151, 175, 219, 0.28);
+      --text: #eef3ff;
+      --muted: #a7b4cf;
+      --soft: #cfd8ee;
+      --blue: #8fb8ff;
+      --violet: #b89bff;
+      --green: #8de0b4;
+      --gold: #f0c97c;
+      --rose: #f1a7c2;
+      --shadow: 0 30px 80px rgba(0,0,0,.35);
+      --radius: 28px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(143,184,255,.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(184,155,255,.14), transparent 24%),
+        linear-gradient(180deg, #090b0f 0%, #0d1117 100%);
+    }
+    .wrap {
+      width: min(1280px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 80px;
+    }
+    .nav {
+      position: sticky;
+      top: 14px;
+      z-index: 20;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .nav a {
+      text-decoration: none;
+      color: var(--soft);
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(14,18,25,.72);
+      backdrop-filter: blur(14px);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .hero, .panel, .mockup, .quote-band {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      border-radius: var(--radius);
+    }
+    .hero {
+      padding: 36px;
+      overflow: hidden;
+      position: relative;
+    }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 14px;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    h1,h2,h3,h4,p { margin: 0; }
+    h1 {
+      font-size: clamp(42px, 7vw, 88px);
+      line-height: .92;
+      letter-spacing: -.05em;
+      max-width: 900px;
+    }
+    .hero .lead {
+      max-width: 860px;
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.6;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      margin-top: 28px;
+    }
+    .quote-band {
+      padding: 24px;
+      background: linear-gradient(135deg, rgba(143,184,255,.11), rgba(184,155,255,.11));
+      border-color: rgba(184,200,255,.22);
+    }
+    .quote-band .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+    .quote-band .quote {
+      font-size: clamp(24px, 3vw, 40px);
+      line-height: 1.08;
+      letter-spacing: -.04em;
+      font-weight: 800;
+    }
+    .mini-stack {
+      display: grid;
+      gap: 14px;
+    }
+    .mini-card, .panel {
+      padding: 22px;
+    }
+    .mini-card {
+      border-radius: 22px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--line);
+    }
+    .mini-card .kicker, .panel .kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 12px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .mini-card h3, .panel h2, .panel h3 {
+      letter-spacing: -.03em;
+    }
+    .mini-card p, .panel p {
+      margin-top: 10px;
+      color: var(--soft);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+    .section-title {
+      margin: 42px 0 18px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .panel h2 {
+      font-size: clamp(28px, 3.4vw, 46px);
+      line-height: 1.06;
+      margin-bottom: 10px;
+    }
+    .panel .subhead {
+      font-size: 18px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+    .pillrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .pill {
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+      color: var(--soft);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+    .stat, .micro {
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+    }
+    .stat .num {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      color: #fff;
+    }
+    .stat .txt, .micro p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    ul {
+      margin: 14px 0 0 18px;
+      padding: 0;
+      color: var(--soft);
+      line-height: 1.75;
+    }
+    li + li { margin-top: 6px; }
+    .mockup-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .mockup {
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(18,24,34,.96), rgba(12,16,24,.96));
+    }
+    .device-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .dots { display: flex; gap: 6px; }
+    .dots span {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      display: inline-block;
+    }
+    .screen {
+      margin-top: 16px;
+      border-radius: 22px;
+      padding: 18px;
+      background: #0f141d;
+      border: 1px solid rgba(255,255,255,.06);
+      min-height: 620px;
+      position: relative;
+      overflow: hidden;
+    }
+    .screen h3 {
+      font-size: 13px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      margin-bottom: 10px;
+    }
+    .screen .bigline {
+      font-size: 34px;
+      line-height: 1.05;
+      letter-spacing: -.04em;
+      margin-bottom: 14px;
+      max-width: 460px;
+    }
+    .chat {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .msg {
+      padding: 14px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.55;
+      max-width: 88%;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .msg.ai {
+      background: rgba(143,184,255,.10);
+      color: #e8f0ff;
+    }
+    .msg.user {
+      background: rgba(255,255,255,.05);
+      color: #f4f7ff;
+      justify-self: end;
+    }
+    .taskrail {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .task {
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+    .task .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .task strong { display: block; font-size: 15px; margin-bottom: 6px; }
+    .task p { color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .inputbar {
+      position: absolute;
+      left: 18px; right: 18px; bottom: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      border-radius: 18px;
+      padding: 14px 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .vik-shell {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .sidebar {
+      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.025);
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .side-item {
+      padding: 12px 12px;
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+      border: 1px solid transparent;
+    }
+    .side-item.active {
+      color: #fff;
+      background: rgba(143,184,255,.12);
+      border-color: rgba(143,184,255,.18);
+    }
+    .mainpane {
+      display: grid;
+      gap: 14px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+    }
+    .box {
+      border: 1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.03);
+      border-radius: 18px;
+      padding: 16px;
+    }
+    .tiny {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .list div {
+      padding: 12px 13px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.04);
+      color: var(--soft);
+      font-size: 13px;
+    }
+    .badge {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(141,224,180,.12);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .compare-card {
+      padding: 22px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+    }
+    .compare-card h3 { font-size: 24px; margin-bottom: 10px; }
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    @media (max-width: 1100px) {
+      .hero-grid, .split, .mockup-wrap, .comparison, .row { grid-template-columns: 1fr; }
+      .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+      .vik-shell { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .wrap { width: min(100% - 24px, 1280px); }
+      .hero, .panel, .mockup { border-radius: 22px; }
+      .hero { padding: 24px; }
+      .screen { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <a href="#overview">Overview</a>
+      <a href="#consensus">Consensus</a>
+      <a href="#memento">Memento Vision</a>
+      <a href="#vikos">Stripped VIK OS</a>
+      <a href="#mockups">App Looks</a>
+      <a href="#decision">Decision Frame</a>
+    </div>
+
+    <section class="hero" id="overview">
+      <div class="eyebrow">Synthesis review</div>
+      <h1>Memento as the quiet operator, VIK OS as the stripped execution shell.</h1>
+      <p class="lead">This review combines the strongest ideas across Anton, Claudia, Jonah, and Lev, then turns them into one new identity. Half of this document holds the aspirational vision of Memento. The other half grounds that vision in the most realistic stripped version of VIK OS that can actually be built and shipped.</p>
+      <div class="hero-grid">
+        <div class="quote-band">
+          <span class="label">Shared center of gravity</span>
+          <div class="quote">A personal companion that holds context, reduces cognitive load, and turns life forward without making the owner operate software.</div>
+        </div>
+        <div class="mini-stack">
+          <div class="mini-card">
+            <span class="kicker">New identity</span>
+            <h3>Memento, The Quiet Operator</h3>
+            <p>Not an assistant waiting for prompts. Not a dashboard demanding management. A calm, trusted presence that carries continuity, resolves what matters, and handles the operational tail of life.</p>
+          </div>
+          <div class="mini-card">
+            <span class="kicker">Two-track output</span>
+            <h3>Vision + implementation</h3>
+            <p>50% pure Memento, the long-term product. 50% stripped VIK OS, the realistic execution shell that can host that future without dragging old complexity forward.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title" id="consensus">What the four proposals converged on</div>
+    <div class="grid-4">
+      <div class="stat"><div class="num">1</div><div class="txt">The real problem is not productivity. It is cognitive load, continuity loss, and the invisible second job of managing your own life.</div></div>
+      <div class="stat"><div class="num">2</div><div class="txt">The product should be personal, not company software. One human, one truth layer, one trust relationship.</div></div>
+      <div class="stat"><div class="num">3</div><div class="txt">The core loop is context in, judgment applied, work done. Not browsing, not dashboards, not manual upkeep.</div></div>
+      <div class="stat"><div class="num">4</div><div class="txt">Trust is the main constraint. Autonomy only works if the system earns the right to act.</div></div>
+    </div>
+
+    <div class="comparison">
+      <div class="compare-card">
+        <h3>From Claudia and Lev</h3>
+        <p>The deepest value is emotional. Memento reduces cognitive loneliness, removes the second job, and feels like relief rather than software labor.</p>
+      </div>
+      <div class="compare-card">
+        <h3>From Anton and Jonah</h3>
+        <p>The product must stay structurally honest. Minimal primitives, ruthless UI reduction, hard trust boundaries, and a completion engine that actually gets things done.</p>
+      </div>
+    </div>
+
+    <div class="section-title" id="memento">50%, The Memento vision</div>
+    <div class="split">
+      <section class="panel">
+        <span class="kicker">Identity</span>
+        <h2>The Quiet Operator</h2>
+        <p class="subhead">The new synthesis identity is not “chief of staff” or “assistant” or “second brain.” It is a quiet operator, a presence that carries continuity and handles the operational tail of life.</p>
+        <div class="pillrow">
+          <span class="pill">Calm</span>
+          <span class="pill">Private</span>
+          <span class="pill">Adult</span>
+          <span class="pill">Warm</span>
+          <span class="pill">Precise</span>
+          <span class="pill">Invisible when healthy</span>
+        </div>
+        <div class="grid-3">
+          <div class="micro"><p><strong>What it feels like</strong><br/>Relief, not stimulation.</p></div>
+          <div class="micro"><p><strong>What it does</strong><br/>Carries continuity, remembers what matters, closes loops.</p></div>
+          <div class="micro"><p><strong>What it avoids</strong><br/>Noise, guilt, dashboards, and attention traps.</p></div>
+        </div>
+      </section>
+      <section class="panel">
+        <span class="kicker">Core promise</span>
+        <h2>Hold the truth, carry the rest.</h2>
+        <p class="subhead">Across the four proposals, the strongest contract is a hybrid: the user lives and keeps reality accessible, while Memento handles what follows from that reality. The product promise is not organization. It is less weight.</p>
+        <ul>
+          <li>It sees the streams where life already happens</li>
+          <li>It builds a living model of people, projects, commitments, and patterns</li>
+          <li>It decides what matters now</li>
+          <li>It acts where trust allows</li>
+          <li>It asks only when judgment is personal or stakes are high</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="split" style="margin-top:18px;">
+      <section class="panel">
+        <span class="kicker">What Memento becomes</span>
+        <h2>A presence, not an app.</h2>
+        <p>The ideal Memento is mostly invisible. It does not ask the user to open pages, browse projects, groom lists, or keep the machine alive. It watches, understands, intervenes, and compounds its understanding over years.</p>
+        <div class="grid-4">
+          <div class="micro"><p><strong>Perception</strong><br/>Email, calendar, notes, messages, files, ambient signals.</p></div>
+          <div class="micro"><p><strong>Understanding</strong><br/>A living model of relationships, priorities, obligations, and patterns.</p></div>
+          <div class="micro"><p><strong>Action</strong><br/>Drafts, sends, moves, prepares, follows up, closes loops.</p></div>
+          <div class="micro"><p><strong>Trust</strong><br/>Observe, mirror, suggest, propose, act.</p></div>
+        </div>
+      </section>
+      <section class="panel">
+        <span class="kicker">What gives it soul</span>
+        <h2>It removes the invisible second job.</h2>
+        <p>Claudia named the second job. Lev named cognitive loneliness. Jonah named completion. Anton named the structural contract. Together they point to a product whose real value is not productivity but a reduction in mental drag.</p>
+        <ul>
+          <li>No more carrying every open loop in your head</li>
+          <li>No more losing continuity across people and projects</li>
+          <li>No more re-explaining your world to software</li>
+          <li>No more dashboards as compensation for weak context</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="section-title" id="vikos">50%, The realistic stripped VIK OS</div>
+    <div class="split">
+      <section class="panel">
+        <span class="kicker">What survives</span>
+        <h2>The execution shell.</h2>
+        <p class="subhead">VIK OS should not survive as a dashboard product. It should survive as the stripped shell that provides connectors, memory, approvals, observability, and execution while the Memento layer matures.</p>
+        <ul>
+          <li>Connectors into Gmail, Calendar, Sheets, Basecamp, vault, notes</li>
+          <li>Memory primitives, distilled truths, recent context, project context</li>
+          <li>A conversation surface as the front door</li>
+          <li>An approvals surface for high-stakes actions</li>
+          <li>A handling-now view instead of broad navigation</li>
+          <li>History and audit for trust</li>
+        </ul>
+      </section>
+      <section class="panel">
+        <span class="kicker">What dies</span>
+        <h2>The scaffolding UI.</h2>
+        <p class="subhead">Jonah’s read is the bluntest and most useful: most of current VIK OS is scaffolding built because the context engine was not strong enough yet. That scaffolding should not become the product.</p>
+        <ul>
+          <li>Project browsing pages</li>
+          <li>Milestone and task inspection pages</li>
+          <li>Deep navigation structures</li>
+          <li>Standalone dashboards and stats views</li>
+          <li>Pipeline visualization as a user surface</li>
+          <li>Manual intake and management flows wherever conversation can replace them</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="grid-3" style="margin-top:18px;">
+      <div class="stat"><div class="num">Core shell</div><div class="txt">Chat, Handling Now, Approvals, Context Inspect, History</div></div>
+      <div class="stat"><div class="num">Real role</div><div class="txt">Execution substrate and trust shell, not the final emotional product layer</div></div>
+      <div class="stat"><div class="num">Design rule</div><div class="txt">If a screen does not improve truth, context resolution, execution quality, or trust, cut it</div></div>
+    </div>
+
+    <section class="panel" style="margin-top:18px;">
+      <span class="kicker">Practical implementation stance</span>
+      <h2>Build Memento through a stripped VIK OS, not beside it.</h2>
+      <p>That means keep the working substrate, but hide most of its engineering complexity behind a smaller product shell. The user should meet a calm product. Underneath, the system can still use execution machinery, memory layers, and connectors. The mistake would be surfacing that machinery as identity.</p>
+      <div class="pillrow">
+        <span class="pill">Keep substrate</span>
+        <span class="pill">Delete browsing</span>
+        <span class="pill">Compress navigation</span>
+        <span class="pill">Elevate conversation</span>
+        <span class="pill">Gate autonomy with trust</span>
+      </div>
+    </section>
+
+    <div class="section-title" id="mockups">What the two products would look like</div>
+    <div class="mockup-wrap">
+      <section class="mockup">
+        <div class="device-top">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>Memento, The Quiet Operator</div>
+          <div>Vision layer</div>
+        </div>
+        <div class="screen">
+          <h3>Morning brief</h3>
+          <div class="bigline">Good morning. Three things matter today. Two are already handled.</div>
+          <div class="chat">
+            <div class="msg ai">I moved the 3:00 PM call to 3:30 PM after your overrun. They confirmed. The Berlin thread is drifting. I drafted a follow-up in your voice.</div>
+            <div class="msg ai">James will likely raise pricing on the 2 PM call. I pulled the last agreement and highlighted the contradiction from March 12.</div>
+            <div class="msg user">Send the Berlin follow-up and keep the pricing note pinned.</div>
+            <div class="msg ai">Done. I’ll remind you 10 minutes before the call with only the context that matters.</div>
+          </div>
+          <div class="taskrail">
+            <div class="task">
+              <div class="top"><span>Handled silently</span><span>09:12</span></div>
+              <strong>Rescheduled lower-priority meeting</strong>
+              <p>Conflict detected after calendar overrun. Tone matched prior approvals.</p>
+            </div>
+            <div class="task">
+              <div class="top"><span>Needs judgment</span><span>Today</span></div>
+              <strong>Approve revised collector reply</strong>
+              <p>Sensitive thread, medium confidence, financial implication. Awaiting your call.</p>
+            </div>
+          </div>
+          <div class="inputbar">Ask anything, correct anything, or say nothing. Memento is already working.</div>
+        </div>
+      </section>
+
+      <section class="mockup">
+        <div class="device-top">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div>VIK OS, stripped shell</div>
+          <div>Implementable layer</div>
+        </div>
+        <div class="screen">
+          <h3>Execution shell</h3>
+          <div class="bigline">Small interface. High visibility. No browsing for the sake of browsing.</div>
+          <div class="vik-shell">
+            <aside class="sidebar">
+              <div class="side-item active">Handling Now</div>
+              <div class="side-item">Approvals</div>
+              <div class="side-item">Context Inspect</div>
+              <div class="side-item">History</div>
+              <div class="side-item">Connections</div>
+              <div class="side-item">Trust Settings</div>
+            </aside>
+            <div class="mainpane">
+              <div class="row">
+                <div class="box">
+                  <div class="tiny">Handling now</div>
+                  <div style="font-size:24px; line-height:1.15; letter-spacing:-.03em;">4 active threads, 2 blocked, 1 decision needed <span class="badge">priority</span></div>
+                  <div class="list">
+                    <div>Berlin follow-up drafted, waiting for approval</div>
+                    <div>Pricing contradiction detected, briefing ready for 2 PM call</div>
+                    <div>Collector invoice matched to prior scope, queued</div>
+                  </div>
+                </div>
+                <div class="box">
+                  <div class="tiny">Approvals</div>
+                  <div class="list">
+                    <div>Send revised collector reply</div>
+                    <div>Approve payment release</div>
+                    <div>Confirm travel date shift</div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="box">
+                  <div class="tiny">Context inspect</div>
+                  <div style="font-size:20px; letter-spacing:-.03em; margin-bottom:8px;">Berlin thread</div>
+                  <p style="margin:0; color:var(--muted); font-size:14px;">7 emails, 2 missed replies, collector sensitivity high, tone drift detected, next move recommended within 24h.</p>
+                </div>
+                <div class="box">
+                  <div class="tiny">History</div>
+                  <div class="list">
+                    <div>09:12, Meeting moved automatically</div>
+                    <div>08:44, Morning brief prepared</div>
+                    <div>07:58, Overnight triage completed</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="comparison">
+      <div class="compare-card">
+        <h3>Memento app look</h3>
+        <p>Warm, calm, private, conversational. Minimal surfaces. Mostly narrative. The interface feels like a trusted study, not a control room. The user experiences guidance, handling, and continuity.</p>
+      </div>
+      <div class="compare-card">
+        <h3>Stripped VIK OS look</h3>
+        <p>Sharper, more operational, still minimal. It is the control shell for trust, approvals, and inspectability. It keeps the substrate visible only where visibility is necessary.</p>
+      </div>
+    </div>
+
+    <div class="section-title" id="decision">Decision frame</div>
+    <div class="split">
+      <section class="panel">
+        <span class="kicker">If you optimize for the final product</span>
+        <h2>Memento should feel like a presence.</h2>
+        <p>That means less interface, more continuity, richer memory, stronger timing, and a premium emotional identity. It becomes a category-defining personal companion if it truly reduces the mental burden of living and working.</p>
+      </section>
+      <section class="panel">
+        <span class="kicker">If you optimize for the next serious build</span>
+        <h2>Strip VIK OS to the shell and let it host the future.</h2>
+        <p>That means deleting most UI complexity, keeping the execution substrate, and reshaping the product around the five surviving surfaces: chat, handling now, approvals, context inspect, and history.</p>
+      </section>
+    </div>
+
+    <section class="panel" style="margin-top:18px;">
+      <span class="kicker">Bottom line</span>
+      <h2>The right move is not choosing one over the other.</h2>
+      <p>Memento is the identity, promise, and long-term product. Stripped VIK OS is the realistic shell that can ship while that promise is earned. One is the emotional truth. The other is the implementation truth. The strongest product is built when the shell stays small and the vision stays uncompromised.</p>
+      <p class="footer-note">Source synthesis: Anton emphasized structural clarity and ruthless reduction. Claudia framed the emotional problem as the invisible second job. Jonah grounded the product in completion and called out how much of current VIK OS is scaffolding. Lev gave the deepest framing of cognitive loneliness, presence, and product identity. This document intentionally merges those strengths into one new artifact.</p>
+    </section>
+  </div>
+</body>
+</html>

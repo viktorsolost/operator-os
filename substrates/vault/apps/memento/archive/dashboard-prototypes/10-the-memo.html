@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Memo — Daily Brief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:     #FAFAFA;
+      --ink:    #1A1A1A;
+      --dim:    #6B6860;
+      --rule:   #1A1A1A;
+      --lite:   #D8D6D2;
+      --orange: #E05A2B;
+      --mono:   'JetBrains Mono', monospace;
+      --sans:   'Barlow', sans-serif;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── WRAPPER ─── */
+
+    .memo {
+      width: 80%;
+      margin: 0 auto;
+      padding: 80px 0 112px;
+    }
+
+    /* ─── PROVENANCE ─── */
+
+    .memo__provenance {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 52px;
+    }
+
+    /* ─── HEADER BLOCK ─── */
+
+    .memo__header {
+      margin-bottom: 0;
+    }
+
+    .memo__fields {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      column-gap: 36px;
+      row-gap: 0;
+    }
+
+    .f-label {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      line-height: 1;
+      padding-top: 14px;
+    }
+
+    .f-value {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1;
+      padding: 10px 0 10px;
+      border-bottom: 1px solid var(--lite);
+    }
+
+    .f-label.re {
+      padding-top: 18px;
+    }
+
+    .f-value.re {
+      font-family: var(--sans);
+      font-size: 30px;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      line-height: 1.18;
+      color: var(--ink);
+      padding: 14px 0 20px;
+      border-bottom: none;
+    }
+
+    .rule-heavy {
+      height: 2px;
+      background: var(--rule);
+      border: none;
+      margin-top: 0;
+    }
+
+    /* ─── BODY ─── */
+
+    .memo__body {
+      /* rows */
+    }
+
+    /* ─── SECTION ─── */
+
+    .section {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      column-gap: 36px;
+      padding: 44px 0;
+      border-bottom: 2px solid var(--rule);
+    }
+
+    .section:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .s-numeral {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-align: right;
+      padding-top: 2px;
+      line-height: 1;
+    }
+
+    .s-content {
+      /* fill */
+    }
+
+    .s-heading {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 28px;
+    }
+
+    /* ─── URGENT THREAD ─── */
+
+    .urgent {
+      padding-bottom: 26px;
+      margin-bottom: 26px;
+      border-bottom: 1px solid var(--lite);
+    }
+
+    .urgent__eyebrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 10px;
+    }
+
+    .urgent__title {
+      font-family: var(--sans);
+      font-size: 24px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .urgent__meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--dim);
+    }
+
+    .urgent__sep {
+      display: inline-block;
+      width: 1px;
+      height: 10px;
+      background: var(--lite);
+    }
+
+    .urgent__age {
+      color: var(--orange);
+      font-weight: 600;
+    }
+
+    /* ─── THREAD ROW ─── */
+
+    .threads {
+      margin-bottom: 32px;
+    }
+
+    .thread-row {
+      display: grid;
+      grid-template-columns: 72px 1fr 40px;
+      column-gap: 0;
+      padding: 8px 0;
+      border-bottom: 1px solid #ECEAE6;
+      align-items: baseline;
+    }
+
+    .thread-row:last-child {
+      border-bottom: none;
+    }
+
+    .tr-project {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .tr-title {
+      font-family: var(--sans);
+      font-size: 14.5px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .tr-age {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--dim);
+      text-align: right;
+    }
+
+    /* ─── BLOCK LABEL ─── */
+
+    .blk-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 12px;
+    }
+
+    .blk {
+      margin-bottom: 28px;
+    }
+
+    /* ─── OVERDUE GROUP ─── */
+
+    .overdue-group {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ECEAE6;
+    }
+
+    .overdue-group:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .overdue-group__header {
+      font-family: var(--sans);
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .overdue-group__header .count-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--orange);
+      margin-left: 8px;
+    }
+
+    .overdue-sub {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--dim);
+      padding: 5px 0;
+      border-bottom: 1px solid #F2F0EC;
+      display: grid;
+      grid-template-columns: 1fr 36px;
+    }
+
+    .overdue-sub:last-child {
+      border-bottom: none;
+    }
+
+    .overdue-sub__label {
+      font-family: var(--sans);
+      font-size: 13.5px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .overdue-sub__age {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--orange);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .overdue-summary-row {
+      display: grid;
+      grid-template-columns: 1fr 36px;
+      padding: 5px 0;
+      border-bottom: 1px solid #F2F0EC;
+    }
+
+    .overdue-summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .overdue-summary-row__label {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--dim);
+    }
+
+    .overdue-summary-row__count {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--dim);
+      text-align: right;
+    }
+
+    /* ─── CALENDAR ─── */
+
+    .cal-empty {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--dim);
+    }
+
+    /* ─── REMINDERS ─── */
+
+    .reminder-row {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      column-gap: 20px;
+      padding: 6px 0;
+      border-bottom: 1px solid #ECEAE6;
+      align-items: baseline;
+    }
+
+    .reminder-row:last-child {
+      border-bottom: none;
+    }
+
+    .rr-type {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .rr-text {
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    /* ─── OVERNIGHT ─── */
+
+    .overnight-note {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--dim);
+    }
+
+    /* ─── TABLE — shared ─── */
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table thead tr {
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .data-table th {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-align: left;
+      padding: 0 16px 9px 0;
+    }
+
+    .data-table th:last-child { padding-right: 0; }
+
+    .data-table td {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink);
+      padding: 8px 16px 8px 0;
+      border-bottom: 1px solid #ECEAE6;
+      vertical-align: top;
+      line-height: 1.45;
+    }
+
+    .data-table td:last-child { padding-right: 0; }
+
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Activity columns */
+    .col-proj   { width: 116px; font-weight: 600; letter-spacing: 0.08em; }
+    .col-counts { width: 110px; color: var(--dim); font-size: 10px; }
+    .col-hi     { font-family: var(--sans); font-size: 13px; font-weight: 400; color: var(--ink); }
+
+    /* Week columns */
+    .col-day    { width: 96px; font-weight: 600; }
+    .col-n      { width: 52px; color: var(--dim); }
+    .col-n.has  { color: var(--ink); font-weight: 600; }
+    .col-sched  { font-family: var(--sans); font-size: 13px; color: var(--ink); line-height: 1.55; }
+    .col-sched.none { color: var(--dim); font-style: italic; }
+
+    /* ─── TOMORROW ─── */
+
+    .event-block {
+      margin-bottom: 16px;
+    }
+
+    .ev-time {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--dim);
+      margin-bottom: 3px;
+    }
+
+    .ev-title {
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .ev-with {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+
+    /* ─── MILESTONES ─── */
+
+    .milestones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--lite);
+      border-bottom: 1px solid var(--lite);
+      margin-top: 28px;
+      margin-bottom: 22px;
+    }
+
+    .ms {
+      padding: 16px 0;
+    }
+
+    .ms:first-child {
+      padding-right: 36px;
+      border-right: 1px solid var(--lite);
+    }
+
+    .ms:last-child {
+      padding-left: 36px;
+    }
+
+    .ms__label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 5px;
+    }
+
+    .ms__date {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .ms__count {
+      font-family: var(--mono);
+      font-size: 10.5px;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+
+    /* ─── SYNC LINE ─── */
+
+    .sync-line {
+      font-family: var(--mono);
+      font-size: 9.5px;
+      color: var(--dim);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── RESPONSIVE ─── */
+
+    @media (max-width: 920px) {
+      .memo { width: 90%; }
+      .milestones { grid-template-columns: 1fr; }
+      .ms:first-child {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--lite);
+      }
+      .ms:last-child { padding-left: 0; }
+    }
+
+    @media print {
+      html, body { background: white; }
+      .memo { padding: 56px 0 72px; }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="memo">
+
+  <!-- Provenance -->
+  <div class="memo__provenance">Memento &middot; Internal Memo</div>
+
+  <!-- ─── HEADER ─── -->
+  <div class="memo__header">
+    <div class="memo__fields">
+
+      <span class="f-label">To</span>
+      <span class="f-value">Viktor</span>
+
+      <span class="f-label">From</span>
+      <span class="f-value">Claudia</span>
+
+      <span class="f-label">Date</span>
+      <span class="f-value">Sunday, 30 March 2026</span>
+
+      <span class="f-label re">Re</span>
+      <span class="f-value re">2 threads, 22 overdue, 7 calls Monday,<br>opening in 25 days</span>
+
+    </div>
+  </div>
+
+  <hr class="rule-heavy" />
+
+  <!-- ─── BODY ─── -->
+  <div class="memo__body">
+
+    <!-- ════════════════════════════
+         I.  TODAY
+    ════════════════════════════ -->
+    <div class="section">
+      <div class="s-numeral">I.</div>
+      <div class="s-content">
+
+        <div class="s-heading">Today &mdash; Sunday, 30 March</div>
+
+        <!-- Open threads -->
+        <div class="blk threads">
+          <div class="blk-label">Open Threads</div>
+          <div class="thread-row">
+            <span class="tr-project">LZ</span>
+            <span class="tr-title">Waiting on Jessica</span>
+            <span class="tr-age">5d</span>
+          </div>
+          <div class="thread-row">
+            <span class="tr-project">PUNKS</span>
+            <span class="tr-title">Waiting on Justin</span>
+            <span class="tr-age">2d</span>
+          </div>
+        </div>
+
+        <!-- Overdue Deadlines -->
+        <div class="blk">
+          <div class="blk-label">Overdue Deadlines &mdash; 22 items</div>
+
+          <!-- Lucas Zanotto group -->
+          <div class="overdue-group">
+            <div class="overdue-group__header">
+              Lucas Zanotto
+              <span class="count-badge">19 items overdue</span>
+            </div>
+
+            <!-- 3 most critical -->
+            <div class="overdue-sub">
+              <span class="overdue-sub__label">Memória Descritiva (Viktor)</span>
+              <span class="overdue-sub__age">27d</span>
+            </div>
+            <div class="overdue-sub">
+              <span class="overdue-sub__label">Mkt &amp; Comms plan w/ KPIs (David Cardoso)</span>
+              <span class="overdue-sub__age">27d</span>
+            </div>
+            <div class="overdue-sub">
+              <span class="overdue-sub__label">Exhibition card (Pauline, Jessica, David, Carmen)</span>
+              <span class="overdue-sub__age">27d</span>
+            </div>
+
+            <!-- Grouped counts -->
+            <div class="overdue-summary-row">
+              <span class="overdue-summary-row__label">Contract chain: 6 items (16&ndash;20d)</span>
+              <span class="overdue-summary-row__count">6</span>
+            </div>
+            <div class="overdue-summary-row">
+              <span class="overdue-summary-row__label">Comms: 5 items (6&ndash;22d)</span>
+              <span class="overdue-summary-row__count">5</span>
+            </div>
+            <div class="overdue-summary-row">
+              <span class="overdue-summary-row__label">Other: 5 items (10&ndash;26d)</span>
+              <span class="overdue-summary-row__count">5</span>
+            </div>
+          </div>
+
+          <!-- PUNKS group -->
+          <div class="overdue-group">
+            <div class="overdue-group__header">
+              PUNKS
+              <span class="count-badge">3 items overdue (2d each)</span>
+            </div>
+            <div class="overdue-sub">
+              <span class="overdue-sub__label">Contract review (Justin)</span>
+              <span class="overdue-sub__age">2d</span>
+            </div>
+            <div class="overdue-sub">
+              <span class="overdue-sub__label">Artwork list confirmation</span>
+              <span class="overdue-sub__age">2d</span>
+            </div>
+            <div class="overdue-sub">
+              <span class="overdue-sub__label">Sales channel brief</span>
+              <span class="overdue-sub__age">2d</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Calendar -->
+        <div class="blk">
+          <div class="blk-label">Calendar</div>
+          <div class="cal-empty">No events scheduled.</div>
+        </div>
+
+        <!-- Reminders -->
+        <div class="blk">
+          <div class="blk-label">Reminders</div>
+          <div class="reminder-row">
+            <span class="rr-type">TASK</span>
+            <span class="rr-text">Templates section</span>
+          </div>
+          <div class="reminder-row">
+            <span class="rr-type">IDEA</span>
+            <span class="rr-text">Lev Phase 4</span>
+          </div>
+        </div>
+
+        <!-- Overnight -->
+        <div class="blk">
+          <div class="blk-label">Overnight</div>
+          <div class="overnight-note">Quiet night. No meaningful communications.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         II.  TOMORROW
+    ════════════════════════════ -->
+    <div class="section">
+      <div class="s-numeral">II.</div>
+      <div class="s-content">
+
+        <div class="s-heading">Tomorrow &mdash; Monday, 31 March</div>
+
+        <!-- Deadlines -->
+        <div class="blk">
+          <div class="blk-label">Deadlines</div>
+          <div class="thread-row">
+            <span class="tr-project">LZ</span>
+            <span class="tr-title">Artwork list first draft (Vik) &mdash; due Thu Apr 4</span>
+            <span class="tr-age">Thu</span>
+          </div>
+          <div class="thread-row">
+            <span class="tr-project">LZ</span>
+            <span class="tr-title">Artist statement (Vik) &mdash; due Sun Apr 5</span>
+            <span class="tr-age">Sun</span>
+          </div>
+        </div>
+
+        <!-- Calendar events -->
+        <div class="event-block">
+          <div class="ev-time">09:00</div>
+          <div class="ev-title">Team standup</div>
+        </div>
+
+        <div class="event-block">
+          <div class="ev-time">10:30</div>
+          <div class="ev-title">Zafgod call</div>
+          <div class="ev-with">PUNKS</div>
+        </div>
+
+        <div class="event-block">
+          <div class="ev-time">12:00</div>
+          <div class="ev-title">LZ gallery sync</div>
+        </div>
+
+        <div class="event-block">
+          <div class="ev-time">14:00</div>
+          <div class="ev-title">Basecamp review</div>
+        </div>
+
+        <div class="event-block">
+          <div class="ev-time">16:00</div>
+          <div class="ev-title">Lev check-in</div>
+        </div>
+
+        <div class="event-block">
+          <div class="ev-time">18:00</div>
+          <div class="ev-title">Eterno board</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════
+         III.  THIS WEEK
+    ════════════════════════════ -->
+    <div class="section">
+      <div class="s-numeral">III.</div>
+      <div class="s-content">
+
+        <div class="s-heading">This Week &mdash; 31 Mar &ndash; 5 Apr</div>
+
+        <table class="data-table" style="margin-bottom:28px;">
+          <thead>
+            <tr>
+              <th class="col-day">Day</th>
+              <th class="col-n">Events</th>
+              <th class="col-sched">Schedule</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-day">Mon 31</td>
+              <td class="col-n has">6</td>
+              <td class="col-sched">
+                09:00 &ndash; Team standup<br>
+                10:30 &ndash; Zafgod call (PUNKS)<br>
+                12:00 &ndash; LZ gallery sync<br>
+                14:00 &ndash; Basecamp review<br>
+                16:00 &ndash; Lev check-in<br>
+                18:00 &ndash; Eterno board
+              </td>
+            </tr>
+            <tr>
+              <td class="col-day">Tue 1</td>
+              <td class="col-n has">2</td>
+              <td class="col-sched">2 events</td>
+            </tr>
+            <tr>
+              <td class="col-day">Wed 2</td>
+              <td class="col-n">0</td>
+              <td class="col-sched none">&mdash;</td>
+            </tr>
+            <tr>
+              <td class="col-day">Thu 3</td>
+              <td class="col-n has">1</td>
+              <td class="col-sched">Claire &middot; 17:00 &middot; Deadline: Artwork list first draft (LZ)</td>
+            </tr>
+            <tr>
+              <td class="col-day">Fri 4</td>
+              <td class="col-n">0</td>
+              <td class="col-sched">Deadline: Artwork list first draft (LZ)</td>
+            </tr>
+            <tr>
+              <td class="col-day">Sat 5</td>
+              <td class="col-n">0</td>
+              <td class="col-sched">Deadline: Artist statement (LZ)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Milestones -->
+        <div class="milestones">
+          <div class="ms">
+            <div class="ms__label">Milestone &middot; LZ</div>
+            <div class="ms__date">24 April 2026</div>
+            <div class="ms__count">25 days</div>
+          </div>
+          <div class="ms">
+            <div class="ms__label">Milestone &middot; PUNKS</div>
+            <div class="ms__date">5 June 2026</div>
+            <div class="ms__count">67 days</div>
+          </div>
+        </div>
+
+        <div class="sync-line">Last sync &middot; 14h ago</div>
+
+      </div>
+    </div>
+
+  </div><!-- /memo__body -->
+</div><!-- /memo -->
+
+</body>
+</html>

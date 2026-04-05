@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIK OS — Tension Grid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --white:     #FFFFFF;
+  --ink:       #0A0A0A;
+  --secondary: #5A5A54;
+  --label:     #A0A098;
+  --rule:      #E0E0D8;
+  --orange:    #E05A2B;
+  --gap:       16px;
+}
+
+html, body {
+  width: 100%;
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── MASTER GRID ────────────────────────────────────────────── */
+/* 12 equal columns, 16px gaps, 56px outer padding              */
+.page {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--gap);
+  padding: 0 56px;
+  row-gap: 0;
+}
+
+/* ── UTILITY ────────────────────────────────────────────────── */
+.rule-full  { grid-column: 1 / -1; height: 1px; background: var(--rule); }
+.gap-xs     { grid-column: 1 / -1; height: 16px; }
+.gap-sm     { grid-column: 1 / -1; height: 32px; }
+.gap-md     { grid-column: 1 / -1; height: 48px; }
+.gap-lg     { grid-column: 1 / -1; height: 72px; }
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOCK 1  HEADER
+   Date: col 1–8  |  Sync: col 9–12
+   ══════════════════════════════════════════════════════════════ */
+
+.header-date {
+  grid-column: 1 / 9;
+  padding-top: 52px;
+  padding-bottom: 0;
+}
+
+.header-date__day {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--label);
+  margin-bottom: 12px;
+}
+
+.header-date__main {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(44px, 5.5vw, 76px);
+  font-weight: 700;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.header-date__main em {
+  font-style: normal;
+  font-weight: 300;
+  color: var(--secondary);
+}
+
+/* Sync lives in the right margin — isolated, minimal */
+.header-sync {
+  grid-column: 9 / 13;
+  padding-top: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.sync-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--label);
+  text-align: right;
+  line-height: 1.8;
+}
+
+.sync-line strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.sync-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--orange);
+  margin-right: 8px;
+  position: relative;
+  top: -1px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOCK 2  THREADS
+   ══════════════════════════════════════════════════════════════
+
+   GRID BREAK: The LZ / Jessica thread bleeds the full 12 cols.
+   It is the only element that does this. The extra width +
+   larger type signals urgency without any colour or badge.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── URGENT THREAD  col 1–12  (THE BREAK) ── */
+.thread-urgent {
+  grid-column: 1 / 13;
+  padding: 32px 0 28px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--gap);
+  align-items: baseline;
+}
+
+.thread-urgent__project {
+  grid-column: 1 / 2;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  padding-top: 6px;
+}
+
+.thread-urgent__title {
+  grid-column: 2 / 10;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(22px, 2.6vw, 34px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1.05;
+}
+
+.thread-urgent__meta {
+  grid-column: 10 / 13;
+  text-align: right;
+  align-self: center;
+}
+
+.thread-urgent__status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--label);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.thread-urgent__age {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--orange);
+}
+
+/* ── STANDARD THREAD  col 2–8  (indented, contained) ── */
+.thread-row {
+  grid-column: 2 / 9;
+  padding: 16px 0 15px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
+.thread-row__project {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--label);
+  min-width: 60px;
+}
+
+.thread-row__title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  flex: 1;
+}
+
+.thread-row__meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--secondary);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOCK 3  OVERNIGHT + REMINDERS (side-by-side split)
+   Overnight: col 1–6  |  Reminders: col 7–12
+   ══════════════════════════════════════════════════════════════ */
+
+.overnight-block {
+  grid-column: 1 / 7;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.overnight-block__head {
+  margin-bottom: 18px;
+}
+
+.overnight-body {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--secondary);
+  max-width: 420px;
+}
+
+.overnight-body strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* calendar none */
+.cal-note {
+  margin-top: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--label);
+}
+
+/* Reminders side */
+.reminders-block {
+  grid-column: 7 / 13;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-left: 1px solid var(--rule);
+  padding-left: 32px;
+}
+
+.reminders-block__head {
+  margin-bottom: 18px;
+}
+
+.reminder-item {
+  padding: 11px 0;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.reminder-item:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.ri-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--label);
+  min-width: 44px;
+}
+
+.ri-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOCK 4  TOMORROW
+   GRID BREAK: Steps IN to col 4–10 (narrower = temporal distance)
+   Label floats in col 1–3, right-aligned to the indent.
+   ══════════════════════════════════════════════════════════════ */
+
+.tomorrow-label-col {
+  grid-column: 1 / 4;
+  padding-top: 40px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+/* THE STEP-IN — narrower span signals future tense */
+.tomorrow-block {
+  grid-column: 4 / 11;
+  padding-top: 40px;
+  padding-bottom: 44px;
+}
+
+.tomorrow-block__head {
+  margin-bottom: 18px;
+}
+
+.tomorrow-item {
+  padding: 13px 0;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.tomorrow-item:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.ti-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--label);
+  letter-spacing: 0.1em;
+  min-width: 42px;
+}
+
+.ti-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink);
+  flex: 1;
+}
+
+.ti-attendee {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--secondary);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* right breathing col, deliberately empty */
+.tomorrow-spacer {
+  grid-column: 11 / 13;
+  padding-top: 40px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOCK 5  WEEK  (full-width sub-grid)
+   ══════════════════════════════════════════════════════════════ */
+
+.week-block {
+  grid-column: 1 / 13;
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.week-block__head {
+  margin-bottom: 24px;
+}
+
+.week-days {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0 var(--gap);
+}
+
+.week-day {
+  border-top: 1px solid var(--rule);
+  padding-top: 14px;
+}
+
+.wd-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.wd-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+.wd-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--label);
+}
+
+.wd-count {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.wd-count.none {
+  color: var(--rule);
+}
+
+.wd-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.wd-event {
+  padding: 7px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.wd-event:first-child {
+  border-top: none;
+}
+
+.wd-event__time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--label);
+  margin-bottom: 2px;
+}
+
+.wd-event__name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.wd-event__who {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--secondary);
+  margin-top: 1px;
+  letter-spacing: 0.02em;
+}
+
+.wd-none {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--rule);
+  letter-spacing: 0.06em;
+  padding-top: 6px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BLOCK 6  MILESTONES
+   GRID BREAK: Right-anchored col 9–12 only.
+   Cols 1–8 empty, making the right-heavy block feel deliberate.
+   ══════════════════════════════════════════════════════════════ */
+
+.milestones-void {
+  grid-column: 1 / 9;
+  padding-top: 36px;
+  padding-bottom: 52px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.milestones-void__note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--rule);
+  padding-bottom: 14px;
+}
+
+/* THE RIGHT-ANCHOR BREAK */
+.milestones-block {
+  grid-column: 9 / 13;
+  padding-top: 36px;
+  padding-bottom: 52px;
+}
+
+.milestones-block__head {
+  margin-bottom: 14px;
+  text-align: right;
+}
+
+.milestone-item {
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  justify-content: flex-end;
+}
+
+.milestone-item:last-child {
+  border-bottom: 1px solid var(--rule);
+}
+
+.mi-project {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--label);
+  flex: 1;
+  text-align: right;
+  padding-right: 16px;
+}
+
+.mi-date {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  white-space: nowrap;
+  min-width: 64px;
+  text-align: right;
+}
+
+.mi-days {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--secondary);
+  letter-spacing: 0.06em;
+  min-width: 32px;
+  text-align: right;
+  padding-left: 12px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FOOTER
+   ══════════════════════════════════════════════════════════════ */
+
+.footer {
+  grid-column: 1 / -1;
+  padding: 20px 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer__id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+.footer__ts {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--label);
+}
+</style>
+</head>
+<body>
+
+<main class="page">
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOCK 1 · HEADER
+     Date: col 1–8   Sync status: col 9–12
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="header-date">
+  <div class="header-date__day">Saturday</div>
+  <div class="header-date__main">29 <em>Mar</em> 2026</div>
+</div>
+
+<div class="header-sync">
+  <div class="sync-line"><span class="sync-dot"></span><strong>Synced</strong> 3h ago</div>
+  <div class="sync-line">Gmail · Basecamp · Drive</div>
+  <div class="sync-line">Calendar · OK</div>
+</div>
+
+<div class="gap-lg"></div>
+<div class="rule-full"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOCK 2 · THREADS
+     LZ / Jessica → FULL WIDTH BREAK (col 1–12)
+     PUNKS        → contained col 2–8
+     ══════════════════════════════════════════════════════════════ -->
+
+<!-- GRID BREAK: this thread bleeds all 12 columns.
+     Every other content row is col 2–8. This one isn't. -->
+<div class="thread-urgent">
+  <div class="thread-urgent__project">LZ</div>
+  <div class="thread-urgent__title">Follow up with Jessica<br>on sales plan</div>
+  <div class="thread-urgent__meta">
+    <span class="thread-urgent__status">Awaiting reply</span>
+    <span class="thread-urgent__age">4d overdue</span>
+  </div>
+</div>
+
+<div class="thread-row">
+  <div class="thread-row__project">PUNKS</div>
+  <div class="thread-row__title">Waiting on Justin Aversano</div>
+  <div class="thread-row__meta">1d · pending</div>
+</div>
+
+<div class="gap-md"></div>
+<div class="rule-full"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOCK 2.5 · OVERDUE DEADLINES
+     col 2–8 (indented, contained)
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="thread-row">
+  <div class="thread-row__project">LZ</div>
+  <div class="thread-row__title">Memória Descritiva</div>
+  <div class="thread-row__meta">Viktor · 23d overdue</div>
+</div>
+
+<div class="thread-row">
+  <div class="thread-row__project">LZ</div>
+  <div class="thread-row__title">Mkt & Comms plan w/ KPIs</div>
+  <div class="thread-row__meta">David Cardoso · 12d overdue</div>
+</div>
+
+<div class="thread-row">
+  <div class="thread-row__project">LZ</div>
+  <div class="thread-row__title">EXB_CARD</div>
+  <div class="thread-row__meta">Pauline/Jessica/David/Carmen/Carolina/Viktor · 6d overdue</div>
+</div>
+
+<div class="gap-md"></div>
+<div class="rule-full"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOCK 3 · OVERNIGHT + REMINDERS
+     Overnight: col 1–6   Reminders: col 7–12
+     Side-by-side. Internal border separates. No cards.
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="overnight-block">
+  <div class="overnight-block__head eyebrow">Overnight</div>
+  <div class="overnight-body">
+    Quiet night. No meaningful communications.
+  </div>
+  <div class="cal-note">— no calendar events today</div>
+</div>
+
+<div class="reminders-block">
+  <div class="reminders-block__head eyebrow">Reminders</div>
+
+  <div class="reminder-item">
+    <div class="ri-type">Task</div>
+    <div class="ri-text">Templates section</div>
+  </div>
+
+  <div class="reminder-item">
+    <div class="ri-type">Idea</div>
+    <div class="ri-text">Lev Phase 4</div>
+  </div>
+</div>
+
+<div class="rule-full"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOCK 4 · TOMORROW
+     GRID BREAK: steps IN to col 4–10.
+     Narrower span = temporal distance = not-today.
+     Label floats left in col 1–3, right-aligned to the indent.
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="tomorrow-label-col">
+  <div class="eyebrow" style="padding-top: 46px;">Tomorrow</div>
+</div>
+
+<!-- THE STEP-IN: col 4–10, narrower than everything else -->
+<div class="tomorrow-block">
+  <div class="tomorrow-block__head">
+    <div class="eyebrow">Sun 30 Mar</div>
+  </div>
+
+  <div class="tomorrow-item">
+    <div class="ti-time">15:00</div>
+    <div class="ti-text">Eterno products review</div>
+    <div class="ti-attendee">with Olga</div>
+  </div>
+
+  <div class="tomorrow-item">
+    <div class="ti-time">—</div>
+    <div class="ti-text">LZ — Sales Plan w/ KPIs</div>
+    <div class="ti-attendee">Jessica Louro</div>
+  </div>
+</div>
+
+<div class="tomorrow-spacer"></div>
+
+<div class="rule-full"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOCK 5 · WEEK  col 1–12, 5-column inner grid Mon–Fri
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="week-block">
+  <div class="week-block__head eyebrow">Week Ahead</div>
+
+  <div class="week-days">
+
+    <!-- Monday: 6 events — heaviest day -->
+    <div class="week-day">
+      <div class="wd-header">
+        <div class="wd-name">Mon</div>
+        <div class="wd-date">31</div>
+      </div>
+      <div class="wd-count">6</div>
+      <div class="wd-events">
+        <div class="wd-event">
+          <div class="wd-event__time">09:00</div>
+          <div class="wd-event__name">Team standup</div>
+        </div>
+        <div class="wd-event">
+          <div class="wd-event__time">10:30</div>
+          <div class="wd-event__name">LZ editorial brief</div>
+          <div class="wd-event__who">Jessica</div>
+        </div>
+        <div class="wd-event">
+          <div class="wd-event__time">12:00</div>
+          <div class="wd-event__name">Lunch — Vhils team</div>
+        </div>
+        <div class="wd-event">
+          <div class="wd-event__time">14:00</div>
+          <div class="wd-event__name">PUNKS collector call</div>
+          <div class="wd-event__who">Zafgod</div>
+        </div>
+        <div class="wd-event">
+          <div class="wd-event__time">16:00</div>
+          <div class="wd-event__name">0009.eth OpenSea check</div>
+        </div>
+        <div class="wd-event">
+          <div class="wd-event__time">18:30</div>
+          <div class="wd-event__name">Strategy wrap</div>
+          <div class="wd-event__who">Lev</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tuesday: 2 events -->
+    <div class="week-day">
+      <div class="wd-header">
+        <div class="wd-name">Tue</div>
+        <div class="wd-date">1 Apr</div>
+      </div>
+      <div class="wd-count">2</div>
+      <div class="wd-events">
+        <div class="wd-event">
+          <div class="wd-event__time">11:00</div>
+          <div class="wd-event__name">Mystery Box review</div>
+          <div class="wd-event__who">Filipe</div>
+        </div>
+        <div class="wd-event">
+          <div class="wd-event__time">15:00</div>
+          <div class="wd-event__name">Eterno ops sync</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wednesday: nothing -->
+    <div class="week-day">
+      <div class="wd-header">
+        <div class="wd-name">Wed</div>
+        <div class="wd-date">2</div>
+      </div>
+      <div class="wd-count none">0</div>
+      <div class="wd-none">—</div>
+    </div>
+
+    <!-- Thursday: 1 event -->
+    <div class="week-day">
+      <div class="wd-header">
+        <div class="wd-name">Thu</div>
+        <div class="wd-date">3</div>
+      </div>
+      <div class="wd-count">1</div>
+      <div class="wd-events">
+        <div class="wd-event">
+          <div class="wd-event__time">17:00</div>
+          <div class="wd-event__name">Check-in</div>
+          <div class="wd-event__who">Claire</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Friday: nothing -->
+    <div class="week-day">
+      <div class="wd-header">
+        <div class="wd-name">Fri</div>
+        <div class="wd-date">4</div>
+      </div>
+      <div class="wd-count none">0</div>
+      <div class="wd-none">—</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="rule-full"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     BLOCK 6 · MILESTONES
+     GRID BREAK: right-anchored col 9–12 only.
+     Cols 1–8 are void. The asymmetry is the point.
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="milestones-void">
+  <div class="milestones-void__note">milestones →</div>
+</div>
+
+<!-- THE RIGHT-ANCHOR — nothing left of col 9 -->
+<div class="milestones-block">
+  <div class="milestones-block__head eyebrow">Milestones</div>
+
+  <div class="milestone-item">
+    <div class="mi-project">LZ</div>
+    <div class="mi-date">Apr 24</div>
+    <div class="mi-days">26d</div>
+  </div>
+
+  <div class="milestone-item">
+    <div class="mi-project">PUNKS</div>
+    <div class="mi-date">Jun 5</div>
+    <div class="mi-days">68d</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FOOTER
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="rule-full"></div>
+
+<div class="footer">
+  <div class="footer__id">VIK OS · Prototype 09 · Tension Grid</div>
+  <div class="footer__ts">Sat 29 Mar 2026</div>
+</div>
+
+</main>
+
+</body>
+</html>

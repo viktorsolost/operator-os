@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 SUN MAR 2026 — Daily Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #F0EDE8;
+  --ink: #000000;
+  --rule-thick: #000000;
+  --rule-thin: #CCCCCC;
+  --accent: #E84D1A;
+  --label-size: 10px;
+  --label-tracking: 0.12em;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ──────────────────────────────────────────────────
+   TYPE SYSTEM
+────────────────────────────────────────────────── */
+
+.label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--label-size);
+  font-weight: 400;
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+  display: block;
+}
+
+.value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.1;
+  display: block;
+  margin-top: 4px;
+}
+
+.value-lg {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.1;
+  display: block;
+  margin-top: 5px;
+}
+
+.value-xl {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.05;
+  display: block;
+  margin-top: 6px;
+}
+
+.value-xxl {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 38px;
+  font-weight: 500;
+  line-height: 1.0;
+  display: block;
+  margin-top: 6px;
+}
+
+/* ──────────────────────────────────────────────────
+   FIELD — label above, value below, no box
+────────────────────────────────────────────────── */
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ──────────────────────────────────────────────────
+   RULES
+────────────────────────────────────────────────── */
+
+.rule-thick {
+  border: none;
+  border-top: 3px solid var(--rule-thick);
+  margin: 0;
+}
+
+.rule-thin {
+  border: none;
+  border-top: 1px solid var(--rule-thin);
+  margin: 0;
+}
+
+/* ──────────────────────────────────────────────────
+   PAGE SHELL
+────────────────────────────────────────────────── */
+
+.page {
+  width: 100%;
+  padding: 0 0 80px;
+}
+
+/* ──────────────────────────────────────────────────
+   DATE HEADER
+────────────────────────────────────────────────── */
+
+.date-header {
+  padding: 40px 48px 32px;
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+}
+
+.date-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(120px, 15vw, 240px);
+  font-weight: 300;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  display: block;
+  flex-shrink: 0;
+}
+
+.date-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+/* ──────────────────────────────────────────────────
+   SECTION WRAPPERS
+────────────────────────────────────────────────── */
+
+.section {
+  padding: 24px 48px;
+}
+
+/* ──────────────────────────────────────────────────
+   SECTION HEADERS
+────────────────────────────────────────────────── */
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.section-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+}
+
+/* ──────────────────────────────────────────────────
+   FIELD ROWS — horizontal grids of fields
+────────────────────────────────────────────────── */
+
+.field-row {
+  display: flex;
+  gap: 0;
+}
+
+.field-row .field {
+  flex: 1;
+  padding-right: 32px;
+}
+
+.field-row .field:last-child {
+  padding-right: 0;
+}
+
+.field-row .field + .field {
+  border-left: 1px solid var(--rule-thin);
+  padding-left: 24px;
+  padding-right: 32px;
+}
+
+/* ──────────────────────────────────────────────────
+   THREAD ITEMS
+────────────────────────────────────────────────── */
+
+.thread-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.thread-item {
+  display: flex;
+  align-items: stretch;
+  padding: 16px 0;
+}
+
+.thread-item + .thread-item {
+  border-top: 1px solid var(--rule-thin);
+}
+
+.thread-item-inner {
+  display: flex;
+  gap: 48px;
+  align-items: flex-end;
+  flex: 1;
+}
+
+.thread-item-inner .field {
+  flex-shrink: 0;
+}
+
+.thread-item-inner .field.stretch {
+  flex: 1;
+}
+
+/* ──────────────────────────────────────────────────
+   ACCENT — urgent marker (used max 2x)
+────────────────────────────────────────────────── */
+
+.accent {
+  color: var(--accent);
+}
+
+.accent-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+/* ──────────────────────────────────────────────────
+   OVERDUE — labeled field + details expander
+────────────────────────────────────────────────── */
+
+.overdue-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.overdue-summary-row {
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+}
+
+.overdue-summary-row .field {
+  flex: 1;
+  padding-right: 32px;
+}
+
+.overdue-summary-row .field:last-child {
+  padding-right: 0;
+}
+
+.overdue-summary-row .field + .field {
+  border-left: 1px solid var(--rule-thin);
+  padding-left: 24px;
+  padding-right: 32px;
+}
+
+details {
+  margin-top: 0;
+}
+
+details summary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: #888;
+  cursor: pointer;
+  list-style: none;
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::before {
+  content: '▸';
+  font-size: 8px;
+  transition: transform 0.15s ease;
+  display: inline-block;
+}
+
+details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+details summary:hover {
+  color: var(--ink);
+}
+
+.details-grid {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 2px solid var(--rule-thin);
+  padding-left: 16px;
+}
+
+.details-item {
+  display: flex;
+  gap: 32px;
+  align-items: flex-end;
+  padding: 8px 0;
+}
+
+.details-item + .details-item {
+  border-top: 1px solid var(--rule-thin);
+}
+
+.details-item .field {
+  flex-shrink: 0;
+}
+
+.details-item .field.stretch {
+  flex: 1;
+}
+
+.details-item .value-sm {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.2;
+  display: block;
+  margin-top: 3px;
+}
+
+/* ──────────────────────────────────────────────────
+   WEEK GRID
+────────────────────────────────────────────────── */
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+}
+
+.week-day {
+  padding: 16px 20px 20px;
+}
+
+.week-day + .week-day {
+  border-left: 1px solid var(--rule-thin);
+}
+
+.week-day .label {
+  margin-bottom: 10px;
+}
+
+.week-event {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+.week-event-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.week-event.deadline .week-event-time {
+  color: var(--accent);
+}
+
+.week-event.deadline span:last-child {
+  color: var(--accent);
+}
+
+.week-day-empty {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #BBBBBB;
+  margin-top: 4px;
+}
+
+/* ──────────────────────────────────────────────────
+   MILESTONES ROW
+────────────────────────────────────────────────── */
+
+.milestone-row {
+  display: flex;
+  gap: 0;
+}
+
+.milestone-row .field {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.milestone-row .field:last-child {
+  padding-right: 0;
+}
+
+.milestone-row .field + .field {
+  border-left: 1px solid var(--rule-thin);
+  padding-left: 28px;
+  padding-right: 40px;
+}
+
+/* ──────────────────────────────────────────────────
+   FOOTER
+────────────────────────────────────────────────── */
+
+.footer-bar {
+  padding: 16px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-bar .label {
+  display: inline;
+}
+
+/* ──────────────────────────────────────────────────
+   CALENDAR EVENT GRID (tomorrow)
+────────────────────────────────────────────────── */
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+
+.cal-event {
+  padding: 0 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cal-event + .cal-event {
+  border-left: 1px solid var(--rule-thin);
+  padding-left: 24px;
+}
+
+.cal-event:nth-child(3n+1) {
+  border-left: none;
+  padding-left: 0;
+}
+
+.cal-event:nth-child(n+4) {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule-thin);
+}
+
+.cal-event:nth-child(n+4):nth-child(3n+1) {
+  border-left: none;
+  padding-left: 0;
+}
+
+.cal-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: #888;
+  text-transform: uppercase;
+}
+
+.cal-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.cal-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #888;
+  text-transform: uppercase;
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ═══════════════════════════════════════════
+       DATE HEADER
+  ═══════════════════════════════════════════ -->
+
+  <div class="date-header">
+    <span class="date-num">30</span>
+    <div class="date-meta">
+      <div class="field">
+        <span class="label">Day</span>
+        <span class="value-lg">SUN</span>
+      </div>
+      <div class="field">
+        <span class="label">Period</span>
+        <span class="value-lg">MAR 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule-thick">
+
+  <!-- ═══════════════════════════════════════════
+       TODAY
+  ═══════════════════════════════════════════ -->
+
+  <div class="section">
+    <div class="section-head">
+      <span class="section-label">Today</span>
+      <span class="section-meta">SUN 30 MAR</span>
+    </div>
+
+    <!-- Threads -->
+    <div class="thread-list" style="margin-bottom: 0;">
+
+      <!-- Jessica — LARGEST FIELD -->
+      <div class="thread-item">
+        <div class="thread-item-inner">
+          <div class="field">
+            <span class="label">Thread</span>
+            <span class="value-xxl"><span class="accent-dot"></span>Jessica</span>
+          </div>
+          <div class="field stretch">
+            <span class="label">Context</span>
+            <span class="value-xxl">LZ — Follow up, sales plan</span>
+          </div>
+          <div class="field">
+            <span class="label">Age</span>
+            <span class="value-xxl accent">5d</span>
+          </div>
+          <div class="field">
+            <span class="label">Status</span>
+            <span class="value-xxl">Open</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Justin -->
+      <div class="thread-item">
+        <div class="thread-item-inner">
+          <div class="field">
+            <span class="label">Thread</span>
+            <span class="value-xl">Justin</span>
+          </div>
+          <div class="field stretch">
+            <span class="label">Context</span>
+            <span class="value-xl">PUNKS — Waiting, Justin Aversano</span>
+          </div>
+          <div class="field">
+            <span class="label">Age</span>
+            <span class="value-xl">2d</span>
+          </div>
+          <div class="field">
+            <span class="label">Status</span>
+            <span class="value-xl">Waiting</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="rule-thin">
+
+  <!-- Overdue -->
+  <div class="section" style="padding-top: 20px;">
+    <div class="section-head">
+      <span class="section-label">Overdue</span>
+      <span class="section-meta accent">22 items</span>
+    </div>
+
+    <div class="overdue-block">
+      <div class="overdue-summary-row">
+
+        <!-- LZ summary -->
+        <div class="field">
+          <span class="label">Overdue</span>
+          <span class="value-lg"><span class="accent-dot"></span>LZ / 19 ITEMS / 25D TO OPENING</span>
+          <details>
+            <summary>Expand items</summary>
+            <div class="details-grid">
+              <div class="details-item">
+                <div class="field" style="min-width: 100px;">
+                  <span class="label">Item</span>
+                  <span class="value-sm">Memória Descritiva</span>
+                </div>
+                <div class="field stretch">
+                  <span class="label">Owner</span>
+                  <span class="value-sm">Viktor</span>
+                </div>
+                <div class="field">
+                  <span class="label">Overdue</span>
+                  <span class="value-sm accent">23d</span>
+                </div>
+              </div>
+              <div class="details-item">
+                <div class="field" style="min-width: 100px;">
+                  <span class="label">Item</span>
+                  <span class="value-sm">Mkt & Comms plan w/ KPIs</span>
+                </div>
+                <div class="field stretch">
+                  <span class="label">Owner</span>
+                  <span class="value-sm">David Cardoso</span>
+                </div>
+                <div class="field">
+                  <span class="label">Overdue</span>
+                  <span class="value-sm accent">12d</span>
+                </div>
+              </div>
+              <div class="details-item">
+                <div class="field" style="min-width: 100px;">
+                  <span class="label">Item</span>
+                  <span class="value-sm">EXB_CARD</span>
+                </div>
+                <div class="field stretch">
+                  <span class="label">Owner</span>
+                  <span class="value-sm">Pauline, Jessica, David, Carmen, Carolina, Viktor</span>
+                </div>
+                <div class="field">
+                  <span class="label">Overdue</span>
+                  <span class="value-sm accent">6d</span>
+                </div>
+              </div>
+              <div class="details-item">
+                <div class="field stretch">
+                  <span class="label">Remaining</span>
+                  <span class="value-sm">+ 16 more items</span>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <!-- PUNKS summary -->
+        <div class="field">
+          <span class="label">Overdue</span>
+          <span class="value-lg">PUNKS / 3 ITEMS / 67D TO OPENING</span>
+          <details>
+            <summary>Expand items</summary>
+            <div class="details-grid">
+              <div class="details-item">
+                <div class="field" style="min-width: 120px;">
+                  <span class="label">Item</span>
+                  <span class="value-sm">Artist brief</span>
+                </div>
+                <div class="field stretch">
+                  <span class="label">Owner</span>
+                  <span class="value-sm">Viktor</span>
+                </div>
+                <div class="field">
+                  <span class="label">Overdue</span>
+                  <span class="value-sm accent">5d</span>
+                </div>
+              </div>
+              <div class="details-item">
+                <div class="field" style="min-width: 120px;">
+                  <span class="label">Item</span>
+                  <span class="value-sm">Contract draft</span>
+                </div>
+                <div class="field stretch">
+                  <span class="label">Owner</span>
+                  <span class="value-sm">Viktor</span>
+                </div>
+                <div class="field">
+                  <span class="label">Overdue</span>
+                  <span class="value-sm accent">3d</span>
+                </div>
+              </div>
+              <div class="details-item">
+                <div class="field" style="min-width: 120px;">
+                  <span class="label">Item</span>
+                  <span class="value-sm">Justin follow-up</span>
+                </div>
+                <div class="field stretch">
+                  <span class="label">Owner</span>
+                  <span class="value-sm">Viktor</span>
+                </div>
+                <div class="field">
+                  <span class="label">Overdue</span>
+                  <span class="value-sm accent">2d</span>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule-thin">
+
+  <!-- Calendar + Reminders + Overnight -->
+  <div class="section" style="padding-top: 20px;">
+    <div class="field-row">
+      <div class="field">
+        <span class="label">Calendar</span>
+        <span class="value">No events</span>
+      </div>
+      <div class="field">
+        <span class="label">Reminders</span>
+        <span class="value">No reminders</span>
+      </div>
+      <div class="field">
+        <span class="label">Overnight</span>
+        <span class="value">Quiet night</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule-thick">
+
+  <!-- ═══════════════════════════════════════════
+       TOMORROW
+  ═══════════════════════════════════════════ -->
+
+  <div class="section">
+    <div class="section-head">
+      <span class="section-label">Tomorrow</span>
+      <span class="section-meta">MON 31 MAR</span>
+    </div>
+
+    <!-- Deadlines -->
+    <div class="section-head" style="margin-bottom: 12px;">
+      <span class="section-label" style="font-size: 9px; color: #888;">Deadlines</span>
+    </div>
+    <div class="field-row" style="margin-bottom: 28px;">
+      <div class="field">
+        <span class="label">Deadline</span>
+        <span class="value-lg"><span class="accent-dot"></span>Artwork list — Apr 4</span>
+      </div>
+      <div class="field">
+        <span class="label">Deadline</span>
+        <span class="value-lg">Artist statement — Apr 5</span>
+      </div>
+    </div>
+
+    <!-- Calendar events -->
+    <div class="section-head" style="margin-bottom: 12px;">
+      <span class="section-label" style="font-size: 9px; color: #888;">Calendar — 6 events</span>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-event">
+        <span class="cal-time">09:00</span>
+        <span class="cal-title">Team standup</span>
+        <span class="cal-sub">All projects</span>
+      </div>
+      <div class="cal-event">
+        <span class="cal-time">10:00</span>
+        <span class="cal-title">LZ review</span>
+        <span class="cal-sub">Lucas Zanotto</span>
+      </div>
+      <div class="cal-event">
+        <span class="cal-time">12:00</span>
+        <span class="cal-title">Gallery call</span>
+        <span class="cal-sub">Eterno</span>
+      </div>
+      <div class="cal-event">
+        <span class="cal-time">14:00</span>
+        <span class="cal-title">Vhils check-in</span>
+        <span class="cal-sub">Mystery Box</span>
+      </div>
+      <div class="cal-event">
+        <span class="cal-time">16:00</span>
+        <span class="cal-title">PUNKS sync</span>
+        <span class="cal-sub">Punks 2026</span>
+      </div>
+      <div class="cal-event">
+        <span class="cal-time">19:00</span>
+        <span class="cal-title">Eterno review</span>
+        <span class="cal-sub">Products</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule-thick">
+
+  <!-- ═══════════════════════════════════════════
+       THIS WEEK — DAY GRID
+  ═══════════════════════════════════════════ -->
+
+  <div class="section">
+    <div class="section-head">
+      <span class="section-label">This Week</span>
+      <span class="section-meta">MON 31 MAR — SAT 4 APR</span>
+    </div>
+  </div>
+
+  <hr class="rule-thin">
+
+  <div class="week-grid">
+
+    <div class="week-day">
+      <span class="label">Mon 31 Mar</span>
+      <div class="week-event">
+        <span class="week-event-time">09:00</span>
+        <span>Team standup</span>
+      </div>
+      <div class="week-event">
+        <span class="week-event-time">10:00</span>
+        <span>LZ review</span>
+      </div>
+      <div class="week-event">
+        <span class="week-event-time">12:00</span>
+        <span>Gallery call</span>
+      </div>
+      <div class="week-event">
+        <span class="week-event-time">14:00</span>
+        <span>Vhils check-in</span>
+      </div>
+      <div class="week-event">
+        <span class="week-event-time">16:00</span>
+        <span>PUNKS sync</span>
+      </div>
+      <div class="week-event">
+        <span class="week-event-time">19:00</span>
+        <span>Eterno review</span>
+      </div>
+    </div>
+
+    <div class="week-day">
+      <span class="label">Tue 1 Apr</span>
+      <div class="week-event">
+        <span class="week-event-time">10:00</span>
+        <span>Gallery call</span>
+      </div>
+      <div class="week-event">
+        <span class="week-event-time">16:00</span>
+        <span>Sales debrief</span>
+      </div>
+    </div>
+
+    <div class="week-day">
+      <span class="label">Wed 2 Apr</span>
+      <span class="week-day-empty">— clear —</span>
+    </div>
+
+    <div class="week-day">
+      <span class="label">Thu 3 Apr</span>
+      <div class="week-event">
+        <span class="week-event-time">17:00</span>
+        <span>Claire</span>
+      </div>
+    </div>
+
+    <div class="week-day">
+      <span class="label">Fri 4 Apr</span>
+      <div class="week-event deadline">
+        <span class="week-event-time">DUE</span>
+        <span>Artwork list</span>
+      </div>
+    </div>
+
+    <div class="week-day">
+      <span class="label">Sat 5 Apr</span>
+      <div class="week-event deadline">
+        <span class="week-event-time">DUE</span>
+        <span>Artist statement</span>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="rule-thick">
+
+  <!-- ═══════════════════════════════════════════
+       MILESTONES
+  ═══════════════════════════════════════════ -->
+
+  <div class="section">
+    <div class="section-head">
+      <span class="section-label">Milestones</span>
+    </div>
+
+    <div class="milestone-row">
+      <div class="field">
+        <span class="label">Project</span>
+        <span class="value-lg">LZ</span>
+      </div>
+      <div class="field">
+        <span class="label">Target Date</span>
+        <span class="value-lg">Apr 24</span>
+      </div>
+      <div class="field">
+        <span class="label">Days Out</span>
+        <span class="value-lg accent">25d</span>
+      </div>
+      <div class="field" style="flex: 2; border-left: 1px solid var(--rule-thin); padding-left: 28px;">
+        <span class="label">Note</span>
+        <span class="value-lg">Lucas Zanotto opening</span>
+      </div>
+    </div>
+
+    <hr class="rule-thin" style="margin: 20px 0;">
+
+    <div class="milestone-row">
+      <div class="field">
+        <span class="label">Project</span>
+        <span class="value-lg">PUNKS</span>
+      </div>
+      <div class="field">
+        <span class="label">Target Date</span>
+        <span class="value-lg">Jun 5</span>
+      </div>
+      <div class="field">
+        <span class="label">Days Out</span>
+        <span class="value-lg">67d</span>
+      </div>
+      <div class="field" style="flex: 2; border-left: 1px solid var(--rule-thin); padding-left: 28px;">
+        <span class="label">Note</span>
+        <span class="value-lg">Punks 2026 opening</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule-thick">
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+
+  <div class="footer-bar">
+    <div>
+      <span class="label" style="display: inline; margin-right: 24px;">Sync</span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 400;">14h ago</span>
+    </div>
+    <div>
+      <span class="label" style="display: inline; margin-right: 24px;">Issued</span>
+      <span style="font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 400;">SUN 30 MAR 2026 — 07:00</span>
+    </div>
+    <div>
+      <span class="label" style="display: inline; margin-right: 24px;">Document</span>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 400; letter-spacing: 0.06em;">BP-20260330-001</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

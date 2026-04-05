@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anton, Memento Brainstorm</title>
+  <style>
+    :root {
+      --bg: #0a0d12;
+      --bg2: #0f1520;
+      --panel: rgba(18, 24, 36, 0.82);
+      --panel-strong: rgba(22, 29, 43, 0.95);
+      --text: #edf2ff;
+      --muted: #9daccc;
+      --line: rgba(140, 164, 214, 0.18);
+      --blue: #8db4ff;
+      --violet: #b39aff;
+      --green: #86e0b0;
+      --shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(141,180,255,.16), transparent 32%),
+        radial-gradient(circle at top right, rgba(179,154,255,.12), transparent 28%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    }
+    .wrap {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 36px 0 80px;
+    }
+    .hero, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+    .hero {
+      padding: 38px;
+      position: relative;
+      overflow: hidden;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--blue);
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+    h1, h2, h3 { margin: 0; }
+    h1 {
+      font-size: clamp(44px, 7vw, 88px);
+      line-height: .95;
+      letter-spacing: -.04em;
+      max-width: 760px;
+    }
+    .hero p.lead {
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 22px 0 0;
+    }
+    .quote {
+      margin-top: 30px;
+      padding: 22px 24px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(141,180,255,.12), rgba(179,154,255,.12));
+      border: 1px solid rgba(160,180,255,.18);
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.08;
+      font-weight: 700;
+      letter-spacing: -.03em;
+      max-width: 780px;
+    }
+    .meta {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .panel {
+      padding: 24px;
+    }
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+    .span-3 { grid-column: span 3; }
+    .kicker {
+      color: var(--muted);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      margin-bottom: 10px;
+    }
+    .big {
+      font-size: clamp(24px, 3.4vw, 42px);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #dce5fb;
+      margin: 12px 0 0;
+    }
+    .muted { color: var(--muted); }
+    ul, ol {
+      margin: 14px 0 0 20px;
+      padding: 0;
+      color: #dce5fb;
+      line-height: 1.75;
+    }
+    li + li { margin-top: 6px; }
+    .pillrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color: #d7e3ff;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .number {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -.04em;
+      color: #fff;
+    }
+    .two-col {
+      columns: 2;
+      column-gap: 32px;
+    }
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 18px 0;
+    }
+    .nav {
+      position: sticky;
+      top: 14px;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 0 0 18px;
+    }
+    .nav a {
+      text-decoration: none;
+      color: #dbe6ff;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(12,17,26,.72);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .emphasis {
+      color: var(--green);
+      font-weight: 700;
+    }
+    @media (max-width: 900px) {
+      .span-8, .span-6, .span-4, .span-3 { grid-column: span 12; }
+      .two-col { columns: 1; }
+      .hero { padding: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <a href="#thesis">Thesis</a>
+      <a href="#utopia">Utopia</a>
+      <a href="#tensions">Tradeoffs</a>
+      <a href="#vikos">VIK OS</a>
+      <a href="#shell">Shell</a>
+      <a href="#why">Why</a>
+    </div>
+
+    <section class="hero" id="thesis">
+      <div class="eyebrow">Anton, Memento Brainstorm</div>
+      <h1>The smallest correct version of the idea.</h1>
+      <p class="lead">Memento should not become another dashboard, another organizer, or another piece of software that asks the owner to manage it. It should become a personal operator that turns trusted context into forward motion.</p>
+      <div class="quote">I maintain truth.<br/>Memento handles the rest.</div>
+      <div class="meta">Date: 2026-03-28 · Lens: product, structure, identity, trust, stripped-down future</div>
+    </section>
+
+    <div class="grid">
+      <section class="panel span-6">
+        <div class="kicker">What it is</div>
+        <div class="big">A context engine with an action loop.</div>
+        <p>Memento should continuously read real life context, resolve meaning, infer what matters, and move life and work forward with as little owner input as possible.</p>
+      </section>
+      <section class="panel span-6">
+        <div class="kicker">What it is not</div>
+        <div class="big">Not a page-heavy product pretending to be intelligence.</div>
+        <p>Not a task manager. Not a CRM with AI attached. Not a workspace layer for teams. Not software that demands constant grooming just to stay useful.</p>
+      </section>
+
+      <section class="panel span-12" id="utopia">
+        <div class="kicker">The utopia, ignoring VIK OS</div>
+        <div class="big">In the pure version, the product is not pages. It is one loop.</div>
+        <div class="grid" style="margin-top:18px;">
+          <div class="panel span-3"><div class="number">1</div><p>Observe truth</p></div>
+          <div class="panel span-3"><div class="number">2</div><p>Resolve context</p></div>
+          <div class="panel span-3"><div class="number">3</div><p>Infer importance</p></div>
+          <div class="panel span-3"><div class="number">4</div><p>Plan the next useful move</p></div>
+          <div class="panel span-3"><div class="number">5</div><p>Execute within trust boundaries</p></div>
+          <div class="panel span-3"><div class="number">6</div><p>Report only when useful</p></div>
+          <div class="panel span-3"><div class="number">7</div><p>Learn from corrections</p></div>
+          <div class="panel span-3"><div class="number">8</div><p>Continue</p></div>
+        </div>
+        <p>This means the owner should not need to sit down and “use Memento” very much. The system should already be carrying continuity in the background.</p>
+      </section>
+
+      <section class="panel span-3">
+        <div class="kicker">Layer 1</div>
+        <h2>Truth</h2>
+        <p>Email, calendar, messages, notes, files, documents, reminders, traces of real life.</p>
+      </section>
+      <section class="panel span-3">
+        <div class="kicker">Layer 2</div>
+        <h2>Context</h2>
+        <p>Who matters, what changed, what is blocked, what is implied, what is sensitive, what is next.</p>
+      </section>
+      <section class="panel span-3">
+        <div class="kicker">Layer 3</div>
+        <h2>Execution</h2>
+        <p>Draft, send, schedule, follow up, prepare, remind, capture, close loops.</p>
+      </section>
+      <section class="panel span-3">
+        <div class="kicker">Layer 4</div>
+        <h2>Trust</h2>
+        <p>Silently do, passively notify, ask approval, or refuse autonomous action.</p>
+      </section>
+
+      <section class="panel span-12">
+        <div class="kicker">Emotional standard</div>
+        <div class="big">It should feel like relief, not software labor.</div>
+        <div class="pillrow">
+          <div class="pill">Steady</div>
+          <div class="pill">Quiet</div>
+          <div class="pill">Trustworthy</div>
+          <div class="pill">Low-drag</div>
+          <div class="pill">Present</div>
+          <div class="pill">Carrying continuity</div>
+        </div>
+      </section>
+
+      <section class="panel span-6" id="tensions">
+        <div class="kicker">Pros</div>
+        <ul>
+          <li>Clear value proposition</li>
+          <li>Cleaner product architecture</li>
+          <li>Less feature sprawl</li>
+          <li>Real path to autonomy</li>
+          <li>Moat becomes trusted context continuity</li>
+        </ul>
+      </section>
+      <section class="panel span-6">
+        <div class="kicker">Risks and tensions</div>
+        <ul>
+          <li>Weak context makes the whole system fake-smart</li>
+          <li>Personal data is messy and contradictory</li>
+          <li>Trust is easy to lose</li>
+          <li>Autonomous mistakes are expensive</li>
+          <li>Zero-input is asymptotic, not immediate</li>
+        </ul>
+      </section>
+
+      <section class="panel span-12">
+        <div class="kicker">Core tension</div>
+        <div class="big">The more autonomous the system becomes, the more dangerous its mistakes become.</div>
+        <p>The real challenge is not whether AI can do actions. It is whether it can earn the right to do them repeatedly.</p>
+      </section>
+
+      <section class="panel span-12" id="vikos">
+        <div class="kicker">Returning to VIK OS</div>
+        <div class="big">Most permanent UI should be treated as guilty until proven useful.</div>
+        <p>If all we really need is context in and task done out, then most page structure is suspect by default. The stronger the context loop becomes, the less the owner should need to navigate.</p>
+      </section>
+
+      <section class="panel span-6">
+        <div class="kicker">Likely worth keeping</div>
+        <ul>
+          <li>Conversation</li>
+          <li>Approvals</li>
+          <li>Handling Now</li>
+          <li>Context Inspect</li>
+          <li>History / Audit</li>
+          <li>Preferences / Trust controls</li>
+        </ul>
+      </section>
+      <section class="panel span-6">
+        <div class="kicker">Likely adding complexity</div>
+        <ul>
+          <li>Deep navigation systems</li>
+          <li>Standalone dashboards</li>
+          <li>Status surfaces for reassurance</li>
+          <li>Manual milestone upkeep</li>
+          <li>Project pages that restate existing truth</li>
+          <li>Admin-heavy list management</li>
+        </ul>
+      </section>
+
+      <section class="panel span-12">
+        <div class="kicker">Survival test</div>
+        <div class="big">A screen should survive only if it materially improves truth, context resolution, execution quality, or trust.</div>
+        <p>If removing it does not harm one of those four, it should probably die.</p>
+      </section>
+
+      <section class="panel span-12" id="shell">
+        <div class="kicker">Minimum viable shell</div>
+        <div class="pillrow">
+          <div class="pill">Chat</div>
+          <div class="pill">Handling Now</div>
+          <div class="pill">Approvals</div>
+          <div class="pill">Context Inspect</div>
+          <div class="pill">History</div>
+        </div>
+        <p>The future of this product is not more interface. It is less interface made possible by stronger context.</p>
+      </section>
+
+      <section class="panel span-12" id="why">
+        <div class="kicker">Why this product matters</div>
+        <div class="big">People are drowning less in tasks than in continuity loss.</div>
+        <p>Important context gets buried. Promises fragment. Open loops slip. Mental load accumulates. Memento should exist to carry continuity with dignity, so a person can stay present in their actual life while the system carries more of the remembering, structuring, following through, and forward motion.</p>
+        <div class="divider"></div>
+        <p><span class="emphasis">Final position:</span> Memento should be built as a context engine with an action loop, not as an app with AI features.</p>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

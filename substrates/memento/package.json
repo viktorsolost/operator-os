@@ -1,0 +1,22 @@
+{
+  "name": "memento",
+  "version": "0.1.0",
+  "description": "Store-first project journal system",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "pipeline": "node pipeline/cli/run.js",
+    "sync:basecamp": "node pipeline/cli/run.js basecamp_sync",
+    "sync:gmail": "node pipeline/cli/run.js gmail_sync",
+    "sync:calendar": "node pipeline/cli/run.js calendar_sync",
+    "sync:drive": "node pipeline/cli/run.js drive_sync",
+    "enrich": "node pipeline/cli/run.js store_enrich",
+    "api": "node pipeline/api/server.js"
+  },
+  "dependencies": {
+    "dotenv": "16.6.1"
+  }
+}

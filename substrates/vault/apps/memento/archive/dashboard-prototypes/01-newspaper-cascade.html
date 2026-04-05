@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Brief — 30 March 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F7F5F0;
+      --ink:       #1A1A1A;
+      --mid:       #6B6860;
+      --dim:       #9B9790;
+      --accent:    #E05A2B;
+      --rule:      rgba(26,26,26,0.13);
+      --pad:       clamp(24px, 4vw, 80px);
+      --rail:      128px;
+      --gap:       clamp(20px, 3vw, 48px);
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1.5;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    /* ── UTILITY ─────────────────────────────── */
+    .mono       { font-family: 'JetBrains Mono', monospace; }
+    .serif      { font-family: 'Playfair Display', serif; }
+    .caps       { text-transform: uppercase; letter-spacing: 0.18em; }
+    .rule-top   { border-top: 1px solid var(--rule); }
+    .rule-bot   { border-bottom: 1px solid var(--rule); }
+
+    /* ── MASTHEAD ────────────────────────────── */
+    .masthead {
+      padding: 22px var(--pad) 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .masthead-id {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .masthead-sync {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── DATE BLOCK ──────────────────────────── */
+    .date-block {
+      padding: 0 var(--pad) 20px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .date-dayname {
+      font-size: clamp(10px, 1vw, 13px);
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 2px;
+    }
+    .date-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(72px, 10vw, 160px);
+      font-weight: 300;
+      line-height: 0.9;
+      color: var(--ink);
+      letter-spacing: -0.025em;
+    }
+
+    /* ── PAGE BODY ───────────────────────────── */
+    .page-body {
+      padding: 0 var(--pad);
+    }
+
+    /* ── SECTION ─────────────────────────────── */
+    .section {
+      margin-top: 60px;
+    }
+    .section-header {
+      padding-top: 14px;
+      margin-bottom: 44px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      align-items: baseline;
+      gap: clamp(12px, 2vw, 32px);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 2.4vw, 32px);
+      font-weight: 400;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+    }
+    .section-meta {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding-top: 4px;
+    }
+
+    /* ── RAIL GRID ───────────────────────────── */
+    .rg {
+      display: grid;
+      grid-template-columns: var(--rail) 1fr;
+      column-gap: var(--gap);
+      align-items: start;
+    }
+
+    .rail {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding-top: 5px;
+      line-height: 1.5;
+    }
+    .rail.accent { color: var(--accent); }
+
+    /* ── SUB-LABEL ───────────────────────────── */
+    .sub-label {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 20px;
+    }
+
+    /* ── SPACING BETWEEN SUB-BLOCKS ─────────── */
+    .gap-lg  { height: 48px; }
+    .gap-md  { height: 32px; }
+    .gap-sm  { height: 20px; }
+
+    /* ── OPEN THREADS ────────────────────────── */
+
+    /* URGENT thread — dominant size */
+    .thread-urgent {
+      padding-bottom: 28px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .thread-urgent .t-project {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .thread-urgent .t-body {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 3.4vw, 46px);
+      font-weight: 300;
+      line-height: 1.18;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .thread-urgent .t-status {
+      margin-top: 12px;
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--mid);
+      letter-spacing: 0.04em;
+    }
+    .thread-urgent .t-age {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* secondary thread — smaller */
+    .thread-secondary {
+      padding-bottom: 4px;
+    }
+    .thread-secondary .t-project {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 5px;
+    }
+    .thread-secondary .t-body {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(16px, 1.9vw, 24px);
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+    .thread-secondary .t-status {
+      margin-top: 6px;
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+    }
+    .thread-secondary .t-age {
+      font-weight: 500;
+      color: var(--mid);
+    }
+
+    /* ── TWO-COL SPLIT (calendar / reminders) ── */
+    .split-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: clamp(40px, 6vw, 100px);
+    }
+
+    /* ── CALENDAR ────────────────────────────── */
+    .cal-empty {
+      font-size: 12px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--dim);
+    }
+
+    /* ── REMINDERS ───────────────────────────── */
+    .reminder-list { display: flex; flex-direction: column; }
+    .reminder-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 14px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--rule);
+      align-items: baseline;
+    }
+    .reminder-item:last-child { border-bottom: none; }
+    .reminder-type {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding-top: 2px;
+    }
+    .reminder-text {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.55;
+    }
+
+    /* ── OVERNIGHT ───────────────────────────── */
+    .overnight-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(14px, 1.5vw, 18px);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--mid);
+      line-height: 1.5;
+    }
+
+    /* ── TOMORROW ────────────────────────────── */
+    .tomorrow-event {}
+    .tomorrow-time {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      margin-bottom: 4px;
+    }
+    .tomorrow-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 400;
+      color: var(--ink);
+    }
+    .tomorrow-with {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--mid);
+      margin-top: 5px;
+    }
+
+    /* ── WEEK GRID ───────────────────────────── */
+    .week-rows { width: 100%; }
+
+    .week-row {
+      display: grid;
+      grid-template-columns: var(--rail) 1fr;
+      column-gap: var(--gap);
+      padding: 13px 0;
+      border-bottom: 1px solid var(--rule);
+      align-items: start;
+    }
+    .week-row:last-child { border-bottom: none; }
+
+    .week-day {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      line-height: 1.5;
+    }
+    .week-count {
+      display: block;
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+      letter-spacing: 0.06em;
+      margin-top: 1px;
+    }
+
+    .week-events {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .week-event-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    .we-time {
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--dim);
+      letter-spacing: 0.04em;
+      min-width: 38px;
+      flex-shrink: 0;
+    }
+    .we-title { flex: 1; }
+    .we-with {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+    }
+    .week-empty {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    /* ── WEEK DEADLINE BADGE ─────────────────── */
+    .week-deadline {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.55;
+      margin-top: 4px;
+    }
+    .wd-badge {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 1px 5px;
+      border: 1px solid var(--accent);
+      flex-shrink: 0;
+      opacity: 0.75;
+    }
+    .wd-text { flex: 1; }
+    .wd-who {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+    }
+
+    /* ── MILESTONES ──────────────────────────── */
+    .milestones {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: clamp(40px, 5vw, 80px);
+      margin-top: 52px;
+      padding-top: 24px;
+      border-top: 1px solid var(--rule);
+    }
+    .milestone {}
+    .ms-project {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 6px;
+    }
+    .ms-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .ms-date {
+      font-size: 10px;
+      font-weight: 400;
+      color: var(--mid);
+      margin-top: 5px;
+    }
+    .ms-count {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(40px, 5vw, 72px);
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1;
+      margin-top: 8px;
+      letter-spacing: -0.02em;
+    }
+    .ms-unit {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    /* ── FOOTER ──────────────────────────────── */
+    .footer {
+      margin-top: 88px;
+      padding: 22px var(--pad) 36px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-l, .footer-r {
+      font-size: 8px;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    /* ── HORIZONTAL DIVIDER ──────────────────── */
+    .h-rule {
+      height: 1px;
+      background: var(--rule);
+      margin: 44px 0;
+    }
+
+    /* ── OVERDUE DETAILS/SUMMARY ─────────────── */
+    .overdue-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .overdue-summary-row {
+      display: grid;
+      grid-template-columns: var(--rail) 1fr;
+      column-gap: var(--gap);
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    details.overdue-block {
+      width: 100%;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 16px;
+      margin-bottom: 0;
+    }
+    details.overdue-block + details.overdue-block {
+      margin-top: 16px;
+    }
+
+    details.overdue-block summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      outline: none;
+      user-select: none;
+    }
+    details.overdue-block summary::-webkit-details-marker { display: none; }
+
+    .od-toggle {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--dim);
+      flex-shrink: 0;
+      transition: color 0.15s;
+      /* chevron via content on open/closed state */
+    }
+    details.overdue-block summary .od-toggle::before {
+      content: '▸ ';
+    }
+    details.overdue-block[open] summary .od-toggle::before {
+      content: '▾ ';
+    }
+
+    .od-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(16px, 1.9vw, 22px);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--ink);
+    }
+    .od-sub {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--mid);
+      letter-spacing: 0.04em;
+    }
+    .od-sub .accent { color: var(--accent); font-weight: 600; }
+
+    .od-body {
+      margin-top: 20px;
+      margin-left: calc(var(--rail) + var(--gap));
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* group within expanded overdue */
+    .od-group {}
+    .od-group-label {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--dim);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 10px;
+    }
+
+    .od-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 0 16px;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(26,26,26,0.06);
+      align-items: baseline;
+    }
+    .od-item:last-child { border-bottom: none; }
+
+    .od-item-name {
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .od-item-who {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+      white-space: nowrap;
+    }
+    .od-item-age {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+      text-align: right;
+      min-width: 36px;
+    }
+    .od-item-note {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+      grid-column: 1 / -1;
+      padding-bottom: 3px;
+      font-style: italic;
+    }
+
+    /* today's calendar event list */
+    .today-events {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .today-event-item {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .te-time {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+      min-width: 44px;
+      flex-shrink: 0;
+    }
+    .te-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(13px, 1.5vw, 16px);
+      font-weight: 400;
+      color: var(--ink);
+      flex: 1;
+    }
+    .te-with {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--dim);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ── MASTHEAD ───────────────────────────── -->
+  <header class="masthead rule-bot">
+    <div class="masthead-id">VIK OS &nbsp;·&nbsp; Daily Brief</div>
+    <div class="masthead-sync">Last synced 14 hours ago</div>
+  </header>
+
+  <!-- ── DATE ───────────────────────────────── -->
+  <div class="date-block">
+    <div class="date-dayname">Sunday</div>
+    <h1 class="date-headline">30 March 2026</h1>
+  </div>
+
+  <div class="page-body">
+
+    <!-- ══════════════════════════════════════════
+         BLOCK 1 — TODAY
+    ══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-title">Today</div>
+        <div class="section-meta">Sunday 30 March</div>
+      </div>
+
+      <!-- OPEN THREADS -->
+      <div class="sub-label">Open Threads</div>
+
+      <!-- Thread 1 — URGENT -->
+      <div class="rg thread-urgent">
+        <div class="rail accent">Urgent</div>
+        <div>
+          <div class="t-project">Lucas Zanotto</div>
+          <div class="t-body">Follow up with Jessica<br>on sales plan.</div>
+          <div class="t-status">Waiting on reply &nbsp;·&nbsp; <span class="t-age">5 days</span></div>
+        </div>
+      </div>
+
+      <!-- Thread 2 — secondary -->
+      <div class="rg thread-secondary">
+        <div class="rail">Pending</div>
+        <div>
+          <div class="t-project">PUNKS</div>
+          <div class="t-body">Waiting on Justin Aversano to confirm artist call.</div>
+          <div class="t-status">Waiting on reply &nbsp;·&nbsp; <span class="t-age">2 days</span></div>
+        </div>
+      </div>
+
+      <div class="h-rule"></div>
+
+      <!-- OVERDUE DEADLINES — 22 items, collapsed -->
+      <div class="sub-label">Overdue Deadlines &nbsp;·&nbsp; 22 items</div>
+
+      <div class="overdue-wrapper">
+
+        <!-- LZ block -->
+        <div class="overdue-summary-row">
+          <div class="rail accent">19 items</div>
+          <details class="overdue-block">
+            <summary>
+              <div>
+                <div class="od-toggle"></div>
+              </div>
+              <div>
+                <div class="od-headline">Lucas Zanotto — 19 overdue</div>
+                <div class="od-sub">Opening <span class="accent">Apr 24</span> &nbsp;·&nbsp; 25 days away</div>
+              </div>
+            </summary>
+
+            <div class="od-body">
+
+              <!-- Group: Most critical -->
+              <div class="od-group">
+                <div class="od-group-label">Most Critical &nbsp;·&nbsp; 27d overdue &nbsp;·&nbsp; In progress</div>
+                <div class="od-item">
+                  <div class="od-item-name">Artwork checklist first draft</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">27d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Production schedule created</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">27d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Production calendar shared</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">27d</div>
+                </div>
+              </div>
+
+              <!-- Group: Contract chain -->
+              <div class="od-group">
+                <div class="od-group-label">Contract Chain &nbsp;·&nbsp; 16–20d overdue &nbsp;·&nbsp; All blocked</div>
+                <div class="od-item">
+                  <div class="od-item-name">Contract adapted + signed</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">20d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">RFI sent to artist</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">20d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Contract signed internally</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">18d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">RFI signed + returned</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">17d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Signed contract shared</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">17d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Signed contract uploaded</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">16d</div>
+                </div>
+              </div>
+
+              <!-- Group: Comms -->
+              <div class="od-group">
+                <div class="od-group-label">Comms &nbsp;·&nbsp; 6–22d overdue</div>
+                <div class="od-item">
+                  <div class="od-item-name">Comms briefing + meeting</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">22d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Artist assets uploaded</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">22d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Comms plan prepared</div>
+                  <div class="od-item-who">David</div>
+                  <div class="od-item-age">15d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Comms plan approved</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">12d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Luma RSVP created</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">6d</div>
+                </div>
+              </div>
+
+              <!-- Group: Other -->
+              <div class="od-group">
+                <div class="od-group-label">Other</div>
+                <div class="od-item">
+                  <div class="od-item-name">GDrive folder</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">26d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Suppliers verified</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">26d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Final artwork checklist</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">20d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Artwork list final</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">20d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Articles in Primavera</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">10d</div>
+                </div>
+              </div>
+
+            </div>
+          </details>
+        </div>
+
+        <!-- PUNKS block -->
+        <div class="overdue-summary-row">
+          <div class="rail accent">3 items</div>
+          <details class="overdue-block">
+            <summary>
+              <div>
+                <div class="od-toggle"></div>
+              </div>
+              <div>
+                <div class="od-headline">PUNKS — 3 overdue</div>
+                <div class="od-sub">Opening <span class="accent">Jun 5</span> &nbsp;·&nbsp; 67 days away</div>
+              </div>
+            </summary>
+
+            <div class="od-body">
+              <div class="od-group">
+                <div class="od-group-label">Production</div>
+                <div class="od-item">
+                  <div class="od-item-name">Production calendar shared</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">2d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">WhatsApp group</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">2d</div>
+                </div>
+                <div class="od-item">
+                  <div class="od-item-name">Production schedule</div>
+                  <div class="od-item-who">Vik</div>
+                  <div class="od-item-age">2d</div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+      <div class="h-rule"></div>
+
+      <!-- CALENDAR + REMINDERS -->
+      <div class="split-2">
+
+        <div>
+          <div class="sub-label">Calendar</div>
+          <div class="rg">
+            <div class="rail">Sun 30</div>
+            <div class="cal-empty">No events today.</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="sub-label">Reminders</div>
+          <div class="reminder-list">
+            <div class="reminder-item">
+              <div class="reminder-type">Task</div>
+              <div class="reminder-text">Create a templates/reference section in Eterno's shared Drive folder</div>
+            </div>
+            <div class="reminder-item">
+              <div class="reminder-type">Idea</div>
+              <div class="reminder-text">Bring Lev in for Phase 4 surface design</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="h-rule"></div>
+
+      <!-- OVERNIGHT -->
+      <div class="sub-label">Overnight</div>
+      <div class="rg">
+        <div class="rail">Status</div>
+        <div class="overnight-text">
+          Quiet night. Pipeline ran initial sync — no meaningful communications or updates.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         BLOCK 2 — TOMORROW
+    ══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-title">Tomorrow</div>
+        <div class="section-meta">Monday 31 March &nbsp;·&nbsp; 7 events</div>
+      </div>
+
+      <!-- Deadlines due Thu/Sun -->
+      <div class="rg">
+        <div class="rail">Deadlines</div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="thread-secondary" style="padding-bottom: 0;">
+            <div class="t-project">Lucas Zanotto</div>
+            <div class="t-body">Artwork list first draft</div>
+            <div class="t-status">Assigned to Vik &nbsp;·&nbsp; <span class="t-age">Due Thu Apr 4</span></div>
+          </div>
+          <div class="thread-secondary" style="padding-bottom: 0;">
+            <div class="t-project">Lucas Zanotto</div>
+            <div class="t-body">Artist statement received</div>
+            <div class="t-status">Assigned to Vik &nbsp;·&nbsp; <span class="t-age">Due Sun Apr 5</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-md"></div>
+
+      <!-- Calendar events -->
+      <div class="rg">
+        <div class="rail">Calendar</div>
+        <div class="today-events">
+          <div class="today-event-item">
+            <span class="te-time">2:00pm</span>
+            <span class="te-title">Eterno Strategy</span>
+          </div>
+          <div class="today-event-item">
+            <span class="te-time">3:20pm</span>
+            <span class="te-title">B2C Comms: Weekly Operations</span>
+          </div>
+          <div class="today-event-item">
+            <span class="te-time">4:00pm</span>
+            <span class="te-title">Eterno &times; Zaf — PUNKS</span>
+            <span class="te-with">Zafgod</span>
+          </div>
+          <div class="today-event-item">
+            <span class="te-time">5:00pm</span>
+            <span class="te-title">Eterno &times; Piv — PUNKS</span>
+            <span class="te-with">PIV</span>
+          </div>
+          <div class="today-event-item">
+            <span class="te-time">6:00pm</span>
+            <span class="te-title">Eterno &times; Darko — PUNKS</span>
+            <span class="te-with">Darko</span>
+          </div>
+          <div class="today-event-item">
+            <span class="te-time">8:30pm</span>
+            <span class="te-title">Eterno &times; Coldie — PUNKS</span>
+            <span class="te-with">Coldie</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         BLOCK 3 — THIS WEEK
+    ══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-title">This Week</div>
+        <div class="section-meta">31 March — 5 April &nbsp;·&nbsp; 9 events + 3 deadlines</div>
+      </div>
+
+      <div class="week-rows">
+
+        <div class="week-row">
+          <div class="week-day">
+            Mon 31
+            <span class="week-count">6 events</span>
+          </div>
+          <div class="week-events">
+            <div class="week-event-line">
+              <span class="we-time">2:00pm</span>
+              <span class="we-title">Eterno Strategy</span>
+            </div>
+            <div class="week-event-line">
+              <span class="we-time">3:20pm</span>
+              <span class="we-title">B2C Comms: Weekly Operations</span>
+            </div>
+            <div class="week-event-line">
+              <span class="we-time">4:00pm</span>
+              <span class="we-title">Eterno &times; Zaf — PUNKS</span>
+              <span class="we-with">Zafgod</span>
+            </div>
+            <div class="week-event-line">
+              <span class="we-time">5:00pm</span>
+              <span class="we-title">Eterno &times; Piv — PUNKS</span>
+              <span class="we-with">PIV</span>
+            </div>
+            <div class="week-event-line">
+              <span class="we-time">6:00pm</span>
+              <span class="we-title">Eterno &times; Darko — PUNKS</span>
+              <span class="we-with">Darko</span>
+            </div>
+            <div class="week-event-line">
+              <span class="we-time">8:30pm</span>
+              <span class="we-title">Eterno &times; Coldie — PUNKS</span>
+              <span class="we-with">Coldie</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-row">
+          <div class="week-day">
+            Tue 1
+            <span class="week-count">2 events</span>
+          </div>
+          <div class="week-events">
+            <div class="week-event-line">
+              <span class="we-time">2:30pm</span>
+              <span class="we-title">B2C Comms: Weekly Curatorial</span>
+              <span class="we-with">Delfina, Jessica, Pauline, Leonor + 3</span>
+            </div>
+            <div class="week-event-line">
+              <span class="we-time">5:30pm</span>
+              <span class="we-title">Eterno &times; Pindar — PUNKS</span>
+              <span class="we-with">Pindar Van Arman</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-row">
+          <div class="week-day">Wed 2</div>
+          <div class="week-empty">Nothing scheduled.</div>
+        </div>
+
+        <div class="week-row">
+          <div class="week-day">
+            Thu 3
+            <span class="week-count">1 event + 1 deadline</span>
+          </div>
+          <div class="week-events">
+            <div class="week-event-line">
+              <span class="we-time">5:00pm</span>
+              <span class="we-title">Eterno &times; Claire — PUNKS</span>
+              <span class="we-with">Claire Silver</span>
+            </div>
+            <div class="week-deadline">
+              <span class="wd-badge">Due</span>
+              <span class="wd-text">LZ — Photographer confirmed</span>
+              <span class="wd-who">David</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-row">
+          <div class="week-day">
+            Fri 4
+            <span class="week-count">1 deadline</span>
+          </div>
+          <div class="week-events">
+            <div class="week-deadline">
+              <span class="wd-badge">Due</span>
+              <span class="wd-text">LZ — Artwork list first draft</span>
+              <span class="wd-who">Vik</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-row">
+          <div class="week-day">
+            Sat 5
+            <span class="week-count">1 deadline</span>
+          </div>
+          <div class="week-events">
+            <div class="week-deadline">
+              <span class="wd-badge">Due</span>
+              <span class="wd-text">LZ — Artist statement received</span>
+              <span class="wd-who">Vik</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MILESTONES -->
+      <div class="milestones">
+
+        <div class="milestone">
+          <div class="ms-project">Lucas Zanotto</div>
+          <div class="ms-title">Opening</div>
+          <div class="ms-date">24 April 2026</div>
+          <div class="ms-count">25</div>
+          <div class="ms-unit">days away</div>
+        </div>
+
+        <div class="milestone">
+          <div class="ms-project">PUNKS</div>
+          <div class="ms-title">Opening</div>
+          <div class="ms-date">5 June 2026</div>
+          <div class="ms-count">67</div>
+          <div class="ms-unit">days away</div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+  <!-- ── FOOTER ──────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-l">VIK OS &nbsp;·&nbsp; Memento &nbsp;·&nbsp; Read-only</div>
+    <div class="footer-r">01-newspaper-cascade &nbsp;·&nbsp; 30 Mar 2026</div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Above The Fold — Daily Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Syne:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #F5F3EE;
+    --ink:       #1A1A1A;
+    --mid:       #8A8680;
+    --dim:       #C4C0B8;
+    --fire:      #E05A2B;
+    --mono:      'JetBrains Mono', monospace;
+    --syne:      'Syne', sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     ABOVE THE FOLD — COMPLETE IN ONE VIEWPORT
+  ══════════════════════════════════════════════════════════════ */
+
+  .atf {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 12vh 25vh 45vh 18vh;
+    grid-template-areas:
+      "hd"
+      "px"
+      "gz"
+      "ft";
+    padding: 0 3.6rem;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────────── */
+
+  .zone-hd {
+    grid-area: hd;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--dim);
+  }
+
+  .date-main {
+    font-family: var(--syne);
+    font-size: clamp(2rem, 3.8vw, 3.6rem);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .date-sub {
+    margin-left: 1.4rem;
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  .sync-rail {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+  }
+
+  .sync-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--dim);
+    flex-shrink: 0;
+  }
+
+  .dot.ok   { background: #5A9E6B; }
+  .dot.stale{ background: var(--dim); }
+
+  .sync-ts {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: var(--dim);
+    letter-spacing: 0.04em;
+    padding-left: 0.4rem;
+    border-left: 1px solid var(--dim);
+  }
+
+  /* ── PRIORITY ────────────────────────────────────────────────── */
+
+  .zone-px {
+    grid-area: px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--dim);
+    gap: 0.7rem;
+  }
+
+  .px-eye {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fire);
+  }
+
+  .px-hed {
+    font-family: var(--syne);
+    font-size: clamp(1.7rem, 3.2vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+
+  .px-hed em {
+    font-style: normal;
+    color: var(--fire);
+  }
+
+  .px-rail {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+  }
+
+  .px-tag {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+    padding-right: 1.4rem;
+  }
+
+  .px-tag.fire { color: var(--fire); }
+
+  .px-sep {
+    width: 1px;
+    height: 9px;
+    background: var(--dim);
+    margin-right: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  /* ── GRID ZONE ───────────────────────────────────────────────── */
+
+  .zone-gz {
+    grid-area: gz;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--dim);
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 1.1rem 0;
+    overflow: hidden;
+  }
+
+  .col + .col {
+    padding-left: 2.2rem;
+    border-left: 1px solid var(--dim);
+    margin-left: 2.2rem;
+  }
+
+  .col-hd {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mid);
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--dim);
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .col-hd span {
+    font-weight: 400;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* section within a column */
+  .sec {
+    display: flex;
+    flex-direction: column;
+    gap: 0.24rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .sec:last-child { margin-bottom: 0; }
+
+  .sec-lbl {
+    font-family: var(--mono);
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 0.22rem;
+  }
+
+  /* generic data row */
+  .dr {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    line-height: 1.4;
+  }
+
+  .dr-name {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 400;
+    color: var(--ink);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .dr-name.hi  { color: var(--fire); font-weight: 600; }
+  .dr-name.nil { color: var(--dim); }
+
+  .dr-note {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 400;
+    color: var(--mid);
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .dr-note.hi  { color: var(--fire); }
+  .dr-note.nil { color: var(--dim); }
+
+  .dr-age {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 600;
+    color: var(--dim);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .dr-age.hi { color: var(--fire); }
+
+  /* badge */
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.1em 0.45em;
+    border-radius: 2px;
+  }
+
+  .badge.task  { background: var(--ink);  color: var(--bg); }
+  .badge.idea  { background: var(--mid);  color: var(--bg); }
+  .badge.event { background: var(--dim);  color: var(--ink); }
+
+  /* tomorrow big event */
+  .tmr-event {
+    font-family: var(--syne);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-top: 0.15rem;
+  }
+
+  .tmr-time {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+  }
+
+  .tmr-with {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: var(--mid);
+    margin-top: 0.1rem;
+  }
+
+  /* tomorrow event list */
+  .tmr-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.18rem;
+    margin-top: 0.3rem;
+  }
+
+  .tmr-item {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 400;
+    color: var(--mid);
+    display: flex;
+    gap: 0.55rem;
+    align-items: baseline;
+  }
+
+  .tmr-item-time {
+    font-weight: 600;
+    color: var(--ink);
+    flex-shrink: 0;
+    min-width: 3rem;
+  }
+
+  /* week grid */
+  .wk-row {
+    display: grid;
+    grid-template-columns: 3.8rem 1.6rem 1fr;
+    align-items: baseline;
+    gap: 0.3rem;
+    padding: 0.2rem 0;
+  }
+
+  .wk-day {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  .wk-n {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-align: right;
+  }
+
+  .wk-n.z { color: var(--dim); }
+
+  .wk-ev {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 400;
+    color: var(--mid);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .wk-ev.z { color: var(--dim); font-style: italic; }
+
+  /* Monday detail sub-items */
+  .wk-detail {
+    padding-left: 5.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.06rem;
+    margin-top: -0.1rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .wk-detail-item {
+    font-family: var(--mono);
+    font-size: 0.54rem;
+    font-weight: 400;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+
+  /* overdue summary block */
+  .overdue-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .overdue-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+  }
+
+  .overdue-proj {
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fire);
+    flex-shrink: 0;
+    min-width: 3.6rem;
+  }
+
+  .overdue-count {
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    font-weight: 600;
+    color: var(--fire);
+    flex-shrink: 0;
+  }
+
+  .overdue-meta {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 400;
+    color: var(--mid);
+    white-space: nowrap;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────────────────── */
+
+  .zone-ft {
+    grid-area: ft;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3.6rem;
+  }
+
+  .ft-lbl {
+    font-family: var(--mono);
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 0.5rem;
+  }
+
+  /* milestones */
+  .milestones {
+    display: flex;
+    align-items: baseline;
+    gap: 2.8rem;
+  }
+
+  .ms {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+  }
+
+  .ms-proj {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  .ms-date {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .ms-cd {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    color: var(--dim);
+  }
+
+  /* overnight */
+  .on-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.16rem 0;
+  }
+
+  .on-proj {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+    flex-shrink: 0;
+    min-width: 6.8rem;
+  }
+
+  .on-sum {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 400;
+    color: var(--dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* ══════════════════════════════════════════════════════════════
+     BELOW THE FOLD — OPTIONAL DEPTH
+  ══════════════════════════════════════════════════════════════ */
+
+  .btf {
+    padding: 4rem 3.6rem 7rem;
+    border-top: 1px solid var(--dim);
+  }
+
+  .btf-lbl {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 3rem;
+  }
+
+  .btf-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3.6rem;
+  }
+
+  .btf-col-hd {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 1.4rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--dim);
+  }
+
+  .btf-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.22rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--dim);
+  }
+
+  .btf-title {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .btf-title.hi { color: var(--fire); }
+
+  .btf-meta {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    font-weight: 400;
+    color: var(--mid);
+  }
+
+  .btf-tags {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: 0.2rem;
+  }
+
+  .btf-tag {
+    font-family: var(--mono);
+    font-size: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mid);
+    border: 1px solid var(--dim);
+    padding: 0.1em 0.5em;
+    border-radius: 2px;
+  }
+
+  .btf-tag.hi {
+    color: var(--fire);
+    border-color: var(--fire);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--  ABOVE THE FOLD                                                 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<main class="atf">
+
+  <!-- HEADER: Date + Sync -->
+  <header class="zone-hd">
+    <div style="display:flex; align-items:baseline; gap:0;">
+      <div class="date-main">Sunday, 30 March 2026</div>
+      <div class="date-sub">Week 14</div>
+    </div>
+    <div class="sync-rail">
+      <div class="sync-chip"><div class="dot ok"></div>Gmail</div>
+      <div class="sync-chip"><div class="dot ok"></div>Cal</div>
+      <div class="sync-chip"><div class="dot ok"></div>Basecamp</div>
+      <div class="sync-chip"><div class="dot stale"></div>Drive</div>
+      <div class="sync-ts">synced 14h ago</div>
+    </div>
+  </header>
+
+  <!-- PRIORITY: LZ — Jessica -->
+  <section class="zone-px">
+    <div class="px-eye">Priority Thread &mdash; Lucas Zanotto</div>
+    <div class="px-hed">
+      Follow up with <em>Jessica</em> on the sales plan.
+    </div>
+    <div class="px-rail">
+      <span class="px-tag fire">5 days stale</span>
+      <div class="px-sep"></div>
+      <span class="px-tag">LZ Project</span>
+      <div class="px-sep"></div>
+      <span class="px-tag">Sales &middot; Curatorial</span>
+      <div class="px-sep"></div>
+      <span class="px-tag">Action required today</span>
+    </div>
+  </section>
+
+  <!-- GRID: Today / Tomorrow / Week -->
+  <section class="zone-gz">
+
+    <!-- COL 1: TODAY -->
+    <div class="col">
+      <div class="col-hd">Today <span>Sun 30 Mar</span></div>
+
+      <div class="sec">
+        <div class="sec-lbl">Threads</div>
+        <div class="dr">
+          <span class="dr-name hi">LZ &mdash; Jessica</span>
+          <span class="dr-note hi">sales plan</span>
+          <span class="dr-age hi">5d</span>
+        </div>
+        <div class="dr">
+          <span class="dr-name">PUNKS &mdash; Justin Aversano</span>
+          <span class="dr-note">waiting on reply</span>
+          <span class="dr-age hi">2d</span>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-lbl">Overdue &mdash; 22 items</div>
+        <div class="overdue-summary">
+          <div class="overdue-row">
+            <span class="overdue-proj">LZ</span>
+            <span class="overdue-count">19 overdue</span>
+            <span class="overdue-meta">25d to opening</span>
+          </div>
+          <div class="overdue-row">
+            <span class="overdue-proj">PUNKS</span>
+            <span class="overdue-count">3 overdue</span>
+            <span class="overdue-meta">67d to opening</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-lbl">Calendar</div>
+        <div class="dr">
+          <span class="dr-name nil">No events today</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 2: TOMORROW -->
+    <div class="col">
+      <div class="col-hd">Tomorrow <span>Mon 31 Mar</span></div>
+
+      <div class="sec">
+        <div class="sec-lbl">Calendar &mdash; 6 events</div>
+        <div class="tmr-list">
+          <div class="tmr-item"><span class="tmr-item-time">14:00</span>Eterno Strategy</div>
+          <div class="tmr-item"><span class="tmr-item-time">15:20</span>B2C Comms</div>
+          <div class="tmr-item"><span class="tmr-item-time">16:00</span>Zaf</div>
+          <div class="tmr-item"><span class="tmr-item-time">17:00</span>Piv</div>
+          <div class="tmr-item"><span class="tmr-item-time">18:00</span>Darko</div>
+          <div class="tmr-item"><span class="tmr-item-time">20:30</span>Coldie</div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-lbl">Deadlines</div>
+        <div class="dr">
+          <span class="dr-name hi">Artwork list first draft</span>
+          <span class="dr-note">Vik</span>
+          <span class="dr-age hi">Thu 4</span>
+        </div>
+        <div class="dr">
+          <span class="dr-name hi">Artist statement</span>
+          <span class="dr-note">Vik</span>
+          <span class="dr-age hi">Sun 5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COL 3: THIS WEEK -->
+    <div class="col">
+      <div class="col-hd">This Week <span>31 Mar &ndash; 5 Apr</span></div>
+
+      <div class="sec">
+        <div class="wk-row">
+          <span class="wk-day">Mon 31</span>
+          <span class="wk-n">6</span>
+          <span class="wk-ev">Heavy day &mdash;</span>
+        </div>
+        <div class="wk-detail">
+          <span class="wk-detail-item">14:00 &ndash; Eterno Strategy</span>
+          <span class="wk-detail-item">15:20 &ndash; B2C Comms</span>
+          <span class="wk-detail-item">16:00 &ndash; Zaf</span>
+          <span class="wk-detail-item">17:00 &ndash; Piv</span>
+          <span class="wk-detail-item">18:00 &ndash; Darko</span>
+          <span class="wk-detail-item">20:30 &ndash; Coldie</span>
+        </div>
+        <div class="wk-row">
+          <span class="wk-day">Tue 1</span>
+          <span class="wk-n">2</span>
+          <span class="wk-ev">&mdash;</span>
+        </div>
+        <div class="wk-row">
+          <span class="wk-day">Wed 2</span>
+          <span class="wk-n z">0</span>
+          <span class="wk-ev z">clear</span>
+        </div>
+        <div class="wk-row">
+          <span class="wk-day">Thu 3</span>
+          <span class="wk-n">1</span>
+          <span class="wk-ev">+ deadline: Artwork list</span>
+        </div>
+        <div class="wk-row">
+          <span class="wk-day">Fri 4</span>
+          <span class="wk-n z">0</span>
+          <span class="wk-ev">deadline: Artwork list due</span>
+        </div>
+        <div class="wk-row">
+          <span class="wk-day">Sat 5</span>
+          <span class="wk-n z">0</span>
+          <span class="wk-ev">deadline: Artist statement</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER: Milestones + Overnight -->
+  <footer class="zone-ft">
+
+    <div>
+      <div class="ft-lbl">Milestones</div>
+      <div class="milestones">
+        <div class="ms">
+          <span class="ms-proj">LZ</span>
+          <span class="ms-date">Apr 24</span>
+          <span class="ms-cd">25d</span>
+        </div>
+        <div class="ms">
+          <span class="ms-proj">PUNKS</span>
+          <span class="ms-date">Jun 5</span>
+          <span class="ms-cd">67d</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="ft-lbl">Overnight &mdash; Quiet night</div>
+      <div class="on-row">
+        <span class="on-proj">LZ</span>
+        <span class="on-sum">No new messages overnight</span>
+      </div>
+      <div class="on-row">
+        <span class="on-proj">PUNKS</span>
+        <span class="on-sum">No new messages overnight</span>
+      </div>
+      <div class="on-row">
+        <span class="on-proj">0009.eth</span>
+        <span class="on-sum">No new messages overnight</span>
+      </div>
+      <div class="on-row">
+        <span class="on-proj">Mystery Box</span>
+        <span class="on-sum">No new messages overnight</span>
+      </div>
+    </div>
+
+  </footer>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!--  BELOW THE FOLD — OPTIONAL DEPTH                               -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+
+<div class="btf">
+  <div class="btf-lbl">Expanded Detail &mdash; Below The Fold</div>
+
+  <div class="btf-grid">
+
+    <!-- Threads -->
+    <div>
+      <div class="btf-col-hd">Threads</div>
+
+      <div class="btf-entry">
+        <div class="btf-title hi">LZ &mdash; Jessica / Sales Plan</div>
+        <div class="btf-meta">5 days since last message &middot; Action required</div>
+        <div class="btf-tags">
+          <span class="btf-tag hi">overdue</span>
+          <span class="btf-tag">lucas zanotto</span>
+          <span class="btf-tag">sales</span>
+        </div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title">PUNKS &mdash; Justin Aversano</div>
+        <div class="btf-meta">Waiting on reply &middot; 2 days stale</div>
+        <div class="btf-tags">
+          <span class="btf-tag">punks 2026</span>
+          <span class="btf-tag">artist</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Week Ahead -->
+    <div>
+      <div class="btf-col-hd">Week Ahead</div>
+
+      <div class="btf-entry">
+        <div class="btf-title">Monday 31 March &mdash; 6 events</div>
+        <div class="btf-meta">14:00 Eterno Strategy &middot; 15:20 B2C Comms &middot; 16:00 Zaf<br>17:00 Piv &middot; 18:00 Darko &middot; 20:30 Coldie</div>
+        <div class="btf-tags">
+          <span class="btf-tag">heavy day</span>
+          <span class="btf-tag">6 events</span>
+        </div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title">Tuesday 1 April &mdash; 2 events</div>
+        <div class="btf-meta">Details pending</div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title">Thursday 3 April &mdash; 1 event + 1 deadline</div>
+        <div class="btf-meta">Artwork list first draft due (Thu Apr 4, Vik)</div>
+        <div class="btf-tags">
+          <span class="btf-tag hi">deadline</span>
+        </div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title">Friday 4 April &mdash; 1 deadline</div>
+        <div class="btf-meta">Artwork list first draft hard due</div>
+        <div class="btf-tags">
+          <span class="btf-tag hi">deadline</span>
+        </div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title">Saturday 5 April &mdash; 1 deadline</div>
+        <div class="btf-meta">Artist statement due (Vik, Sun Apr 5)</div>
+        <div class="btf-tags">
+          <span class="btf-tag hi">deadline</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Milestones + Overdue -->
+    <div>
+      <div class="btf-col-hd">Milestones &amp; Overdue</div>
+
+      <div class="btf-entry">
+        <div class="btf-title">LZ &mdash; Apr 24</div>
+        <div class="btf-meta">25 days out &middot; Lucas Zanotto opening</div>
+        <div class="btf-tags">
+          <span class="btf-tag">lucas zanotto</span>
+          <span class="btf-tag">25d</span>
+        </div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title">PUNKS &mdash; Jun 5</div>
+        <div class="btf-meta">67 days out &middot; Punks 2026 deadline</div>
+        <div class="btf-tags">
+          <span class="btf-tag">punks 2026</span>
+          <span class="btf-tag">67d</span>
+        </div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title hi">LZ &mdash; 19 overdue tasks</div>
+        <div class="btf-meta">25 days to opening &middot; Critical volume</div>
+        <div class="btf-tags">
+          <span class="btf-tag hi">19 overdue</span>
+          <span class="btf-tag">lucas zanotto</span>
+        </div>
+      </div>
+
+      <div class="btf-entry">
+        <div class="btf-title hi">PUNKS &mdash; 3 overdue tasks</div>
+        <div class="btf-meta">67 days to opening</div>
+        <div class="btf-tags">
+          <span class="btf-tag hi">3 overdue</span>
+          <span class="btf-tag">punks 2026</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

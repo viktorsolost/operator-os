@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Signal — Daily Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@300;400;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg:        #0C0C0B;
+    --primary:   #E8E4DC;
+    --secondary: #7A7670;
+    --tertiary:  #4A4640;
+    --accent:    #FF8C42;
+    --rule:      rgba(232, 228, 220, 0.08);
+    --rail:      120px;
+    --gutter:    200px;
+    --col-gap:   40px;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--primary);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* ── OUTER SHELL ── */
+  .page {
+    width: 100%;
+    padding: 0 48px 160px 48px;
+  }
+
+  /* ── THREE-COLUMN GRID ── */
+  .g {
+    display: grid;
+    grid-template-columns: var(--rail) 1fr var(--gutter);
+    column-gap: var(--col-gap);
+    width: 100%;
+    align-items: start;
+  }
+
+  .g-rail  { grid-column: 1 / 2; }
+  .g-main  { grid-column: 2 / 3; }
+  .g-right { grid-column: 3 / 4; }
+  .g-all   { grid-column: 1 / -1; }
+  .g-main-right { grid-column: 2 / -1; }
+
+  /* ── HORIZONTAL RULES ── */
+  .rule-full {
+    grid-column: 1 / -1;
+    height: 1px;
+    background: var(--rule);
+    margin: 0;
+  }
+
+  .rule-main {
+    grid-column: 2 / 3;
+    height: 1px;
+    background: var(--rule);
+    margin: 0;
+  }
+
+  /* ── SPACERS ── */
+  .sp-xl  { height: 64px; }
+  .sp-lg  { height: 48px; }
+  .sp-md  { height: 32px; }
+  .sp-sm  { height: 20px; }
+  .sp-xs  { height: 12px; }
+
+  /* ── DATE HERO ── */
+  .hero {
+    grid-column: 1 / -1;
+    padding-top: 52px;
+    padding-bottom: 4px;
+  }
+
+  .hero__date {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(64px, 9vw, 140px);
+    font-weight: 300;
+    line-height: 0.86;
+    color: var(--primary);
+    letter-spacing: -0.025em;
+    /* bleeds past left padding by rail + gap width */
+    margin-left: calc(-1 * (var(--rail) + var(--col-gap)));
+    display: block;
+  }
+
+  .hero__sub {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+    margin-left: calc(-1 * (var(--rail) + var(--col-gap)));
+  }
+
+  .hero__year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--secondary);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .hero__dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--tertiary);
+    flex-shrink: 0;
+  }
+
+  .hero__sync {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--tertiary);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-head {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding-top: 4px;
+  }
+
+  .section-head__title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 2.6vw, 36px);
+    font-weight: 300;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+  }
+
+  .section-head__sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--tertiary);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* ── RAIL LABEL ── */
+  .rail-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--tertiary);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.6;
+    padding-top: 6px;
+  }
+
+  /* ── THREADS ── */
+  .thread-item {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thread-item:last-child {
+    border-bottom: none;
+  }
+
+  /* LZ — visually LARGER */
+  .thread-item--lz {
+    padding: 32px 0 36px;
+  }
+
+  .thread-item__project {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--tertiary);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .thread-item__body {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--primary);
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+
+  .thread-item--lz .thread-item__body {
+    font-size: clamp(24px, 2.8vw, 38px);
+    font-weight: 300;
+  }
+
+  .thread-item__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .meta-dot {
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: var(--tertiary);
+    flex-shrink: 0;
+  }
+
+  .meta-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--secondary);
+  }
+
+  .meta-age {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--secondary);
+  }
+
+  .meta-age--orange {
+    color: var(--accent);
+  }
+
+  /* ── CALENDAR EMPTY ── */
+  .cal-empty {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--tertiary);
+    font-style: italic;
+    padding: 16px 0 6px;
+  }
+
+  /* ── REMINDERS ── */
+  .reminder-item {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .reminder-item:last-child {
+    border-bottom: none;
+  }
+
+  .reminder-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--tertiary);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: 32px;
+  }
+
+  .reminder-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--secondary);
+    line-height: 1.5;
+  }
+
+  /* ── OVERNIGHT ── */
+  .overnight-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--tertiary);
+    font-style: italic;
+    padding: 14px 0 4px;
+    line-height: 1.6;
+  }
+
+  /* ── RIGHT GUTTER PANEL ── */
+  .gutter-panel {
+    position: sticky;
+    top: 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .gutter-block {
+    margin-bottom: 40px;
+  }
+
+  .gutter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--tertiary);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .gutter-sync-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--tertiary);
+    line-height: 1.5;
+  }
+
+  .milestone {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .milestone:last-child {
+    border-bottom: none;
+  }
+
+  .milestone__name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--secondary);
+    margin-bottom: 3px;
+  }
+
+  .milestone__date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--tertiary);
+  }
+
+  .milestone__days {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--tertiary);
+    margin-top: 1px;
+  }
+
+  /* ── TOMORROW EVENT ── */
+  .tmrw-event {
+    padding: 20px 0 12px;
+  }
+
+  .tmrw-event__name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(17px, 2vw, 24px);
+    font-weight: 400;
+    color: var(--primary);
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .tmrw-event__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .tmrw-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--secondary);
+  }
+
+  .tmrw-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--tertiary);
+  }
+
+  /* ── WEEK GRID ── */
+  .week-wrap {
+    /* spans main + right gutter */
+    grid-column: 2 / -1;
+  }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    width: 100%;
+  }
+
+  .wd {
+    background: var(--bg);
+    padding: 18px 16px 20px;
+    min-height: 120px;
+  }
+
+  .wd--quiet {
+    opacity: 0.38;
+  }
+
+  .wd__head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--tertiary);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .wd__count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--tertiary);
+    letter-spacing: 0;
+  }
+
+  .we {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .we:last-child {
+    border-bottom: none;
+  }
+
+  .we__name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--secondary);
+    line-height: 1.4;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .we__time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--tertiary);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .wd__quiet-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--tertiary);
+  }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══════════════════════════════════════
+       DATE HERO
+  ══════════════════════════════════════ -->
+  <div class="g">
+    <div class="hero">
+      <span class="hero__date">Saturday<br>29 March</span>
+      <div class="hero__sub">
+        <span class="hero__year">2026&nbsp;&nbsp;·&nbsp;&nbsp;Daily Briefing</span>
+        <span class="hero__dot"></span>
+        <span class="hero__sync">synced 3 hours ago</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       BLOCK 1 — TODAY
+  ══════════════════════════════════════ -->
+
+  <div class="g"><div class="sp-xl g-all"></div></div>
+  <div class="g"><div class="rule-full"></div></div>
+  <div class="g"><div class="sp-lg g-all"></div></div>
+
+  <div class="g">
+    <div class="section-head">
+      <span class="section-head__title">Today</span>
+      <span class="section-head__sub">Sat 29 Mar</span>
+    </div>
+  </div>
+
+  <div class="g"><div class="sp-md g-all"></div></div>
+
+  <!-- THREADS -->
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Threads<br>Open (2)</div>
+    </div>
+
+    <div class="g-main">
+
+      <!-- LZ — LARGER -->
+      <div class="thread-item thread-item--lz">
+        <div class="thread-item__project">LZ — Lucas Zanotto</div>
+        <div class="thread-item__body">Follow up with Jessica on sales plan</div>
+        <div class="thread-item__meta">
+          <span class="meta-status">Awaiting followup</span>
+          <span class="meta-dot"></span>
+          <span class="meta-age meta-age--orange">4 days</span>
+        </div>
+      </div>
+
+      <!-- PUNKS -->
+      <div class="thread-item">
+        <div class="thread-item__project">PUNKS</div>
+        <div class="thread-item__body">Waiting on Justin Aversano to confirm artist call</div>
+        <div class="thread-item__meta">
+          <span class="meta-status">Awaiting reply</span>
+          <span class="meta-dot"></span>
+          <span class="meta-age">1 day</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT GUTTER — sticky for entire page -->
+    <div class="g-right">
+      <div class="gutter-panel">
+
+        <div class="gutter-block">
+          <div class="gutter-label">Sync Status</div>
+          <div class="gutter-sync-text">All sources<br>synced 3h ago</div>
+        </div>
+
+        <div class="gutter-block">
+          <div class="gutter-label">Milestones</div>
+          <div class="milestone">
+            <div class="milestone__name">LZ Opening</div>
+            <div class="milestone__date">Apr 24, 2026</div>
+            <div class="milestone__days">26 days</div>
+          </div>
+          <div class="milestone">
+            <div class="milestone__name">PUNKS Opening</div>
+            <div class="milestone__date">Jun 5, 2026</div>
+            <div class="milestone__days">68 days</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERDUE DEADLINES -->
+  <div class="g"><div class="sp-lg g-all"></div></div>
+  <div class="g"><div class="rule-main"></div></div>
+  <div class="g"><div class="sp-sm g-all"></div></div>
+
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Overdue<br>Deadlines (3)</div>
+    </div>
+    <div class="g-main">
+
+      <div class="thread-item thread-item--lz">
+        <div class="thread-item__project">LZ — Lucas Zanotto</div>
+        <div class="thread-item__body">Memória Descritiva</div>
+        <div class="thread-item__meta">
+          <span class="meta-status">Assigned to Viktor</span>
+          <span class="meta-dot"></span>
+          <span class="meta-age meta-age--orange">23 days overdue</span>
+        </div>
+      </div>
+
+      <div class="thread-item">
+        <div class="thread-item__project">LZ — Lucas Zanotto</div>
+        <div class="thread-item__body">Mkt & Comms plan w/ KPIs</div>
+        <div class="thread-item__meta">
+          <span class="meta-status">Assigned to David Cardoso</span>
+          <span class="meta-dot"></span>
+          <span class="meta-age meta-age--orange">12 days overdue</span>
+        </div>
+      </div>
+
+      <div class="thread-item">
+        <div class="thread-item__project">LZ — Lucas Zanotto</div>
+        <div class="thread-item__body">EXB_CARD</div>
+        <div class="thread-item__meta">
+          <span class="meta-status">Assigned to Pauline, Jessica, David, Carmen, Carolina, Viktor</span>
+          <span class="meta-dot"></span>
+          <span class="meta-age meta-age--orange">6 days overdue</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="g"><div class="sp-lg g-all"></div></div>
+  <div class="g"><div class="rule-main"></div></div>
+  <div class="g"><div class="sp-sm g-all"></div></div>
+
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Calendar</div>
+    </div>
+    <div class="g-main">
+      <div class="cal-empty">No events today.</div>
+    </div>
+  </div>
+
+  <!-- REMINDERS -->
+  <div class="g"><div class="sp-lg g-all"></div></div>
+  <div class="g"><div class="rule-main"></div></div>
+  <div class="g"><div class="sp-sm g-all"></div></div>
+
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Reminders<br>(2)</div>
+    </div>
+    <div class="g-main">
+      <div class="reminder-item">
+        <span class="reminder-type">Task</span>
+        <span class="reminder-text">Create templates/reference section in Eterno's shared Drive folder</span>
+      </div>
+      <div class="reminder-item">
+        <span class="reminder-type">Idea</span>
+        <span class="reminder-text">Bring Lev in for Phase 4 surface design</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OVERNIGHT -->
+  <div class="g"><div class="sp-lg g-all"></div></div>
+  <div class="g"><div class="rule-main"></div></div>
+  <div class="g"><div class="sp-sm g-all"></div></div>
+
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Overnight</div>
+    </div>
+    <div class="g-main">
+      <div class="overnight-note">Quiet night. No meaningful communications or updates.</div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       BLOCK 2 — TOMORROW
+  ══════════════════════════════════════ -->
+
+  <div class="g"><div class="sp-xl g-all"></div></div>
+  <div class="g"><div class="sp-xl g-all"></div></div>
+  <div class="g"><div class="rule-full"></div></div>
+  <div class="g"><div class="sp-lg g-all"></div></div>
+
+  <div class="g">
+    <div class="section-head">
+      <span class="section-head__title">Tomorrow</span>
+      <span class="section-head__sub">Sun 30 Mar</span>
+    </div>
+  </div>
+
+  <div class="g"><div class="sp-md g-all"></div></div>
+
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Calendar<br>(1)</div>
+    </div>
+    <div class="g-main">
+      <div class="tmrw-event">
+        <div class="tmrw-event__name">Eterno products</div>
+        <div class="tmrw-event__meta">
+          <span class="tmrw-time">3:00 PM</span>
+          <span class="meta-dot"></span>
+          <span class="tmrw-note">With Olga (Under Dogs)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEADLINES TOMORROW -->
+  <div class="g"><div class="sp-lg g-all"></div></div>
+  <div class="g"><div class="rule-main"></div></div>
+  <div class="g"><div class="sp-sm g-all"></div></div>
+
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Deadlines</div>
+    </div>
+    <div class="g-main">
+      <div class="thread-item">
+        <div class="thread-item__project">LZ — Lucas Zanotto</div>
+        <div class="thread-item__body">Sales Plan w/ KPIs</div>
+        <div class="thread-item__meta">
+          <span class="meta-status">Assigned to Jessica Louro</span>
+          <span class="meta-dot"></span>
+          <span class="meta-age">Due tomorrow</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════
+       BLOCK 3 — THIS WEEK
+  ══════════════════════════════════════ -->
+
+  <div class="g"><div class="sp-xl g-all"></div></div>
+  <div class="g"><div class="sp-xl g-all"></div></div>
+  <div class="g"><div class="rule-full"></div></div>
+  <div class="g"><div class="sp-lg g-all"></div></div>
+
+  <div class="g">
+    <div class="section-head">
+      <span class="section-head__title">This Week</span>
+      <span class="section-head__sub">Mon 31 Mar — Fri 4 Apr</span>
+    </div>
+  </div>
+
+  <div class="g"><div class="sp-md g-all"></div></div>
+
+  <div class="g">
+    <div class="g-rail">
+      <div class="rail-label">Calendar</div>
+    </div>
+    <div class="week-wrap">
+      <div class="week-grid">
+
+        <!-- Mon 31 — 6 events -->
+        <div class="wd">
+          <div class="wd__head">
+            Mon 31
+            <span class="wd__count">6</span>
+          </div>
+          <div class="we">
+            <span class="we__name">Eterno Strategy</span>
+            <span class="we__time">2pm</span>
+          </div>
+          <div class="we">
+            <span class="we__name">B2C Comms</span>
+            <span class="we__time">3:20pm</span>
+          </div>
+          <div class="we">
+            <span class="we__name">Zaf / PUNKS</span>
+            <span class="we__time">4pm</span>
+          </div>
+          <div class="we">
+            <span class="we__name">Piv / PUNKS</span>
+            <span class="we__time">5pm</span>
+          </div>
+          <div class="we">
+            <span class="we__name">Darko / PUNKS</span>
+            <span class="we__time">6pm</span>
+          </div>
+          <div class="we">
+            <span class="we__name">Coldie / PUNKS</span>
+            <span class="we__time">8:30pm</span>
+          </div>
+        </div>
+
+        <!-- Tue 1 — 2 events -->
+        <div class="wd">
+          <div class="wd__head">
+            Tue 1
+            <span class="wd__count">2</span>
+          </div>
+          <div class="we">
+            <span class="we__name">B2C Curatorial</span>
+            <span class="we__time">2:30pm</span>
+          </div>
+          <div class="we">
+            <span class="we__name">Pindar / PUNKS</span>
+            <span class="we__time">5:30pm</span>
+          </div>
+        </div>
+
+        <!-- Wed 2 — empty -->
+        <div class="wd wd--quiet">
+          <div class="wd__head">Wed 2</div>
+          <div class="wd__quiet-label">—</div>
+        </div>
+
+        <!-- Thu 3 — 1 event -->
+        <div class="wd">
+          <div class="wd__head">
+            Thu 3
+            <span class="wd__count">1</span>
+          </div>
+          <div class="we">
+            <span class="we__name">Claire / PUNKS</span>
+            <span class="we__time">5pm</span>
+          </div>
+        </div>
+
+        <!-- Fri 4 — empty -->
+        <div class="wd wd--quiet">
+          <div class="wd__head">Fri 4</div>
+          <div class="wd__quiet-label">—</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
