@@ -39,7 +39,7 @@ The installer asks for your identity, location, runtimes, workflow tools, and ac
 
 You declare which AI runtimes to enable. Enter as a comma-separated list. Allowed values (case-sensitive): `Codex`, `Claude`, `Gemini`, `OpenClaw`. Defaults to `Claude`.
 
-Each enabled runtime gets a bridge file written to the runtime-local config directory (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.gemini/GEMINI.md`). All bridges point into the same boot entrypoint in your vault. The boot sequence, routing policy, and model posture checks are identical regardless of which runtime you start from.
+Each enabled runtime gets a bridge file written to the runtime-local config directory (`~/.claude/CLAUDE.md`, `~/.codex/instructions.md`, `~/.gemini/GEMINI.md`). All bridges point into the same boot entrypoint in your vault. The boot sequence, routing policy, and model posture checks are identical regardless of which runtime you start from.
 
 You also set:
 - `tone_profile` — defaults to `direct`
@@ -117,7 +117,7 @@ After installation your file tree looks like:
     derived/                    # Derived views (today page, editorial, etc.)
 
 ~/.claude/CLAUDE.md         # Runtime bridge (if Claude enabled)
-~/.codex/AGENTS.md          # Runtime bridge (if Codex enabled)
+~/.codex/instructions.md          # Runtime bridge (if Codex enabled)
 ~/.gemini/GEMINI.md         # Runtime bridge (if Gemini enabled)
 ```
 
