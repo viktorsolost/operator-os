@@ -98,6 +98,7 @@ async function main() {
   console.log(`Source doctrine: ${sourceDoctrine}`);
   console.log(`Memento source:  ${mementoSource}`);
   console.log('');
+  console.log('Press Enter to accept defaults shown in [brackets].\n');
 
   // -------------------------------------------------------------------------
   // Phase 1: Identity and Location
@@ -148,12 +149,15 @@ async function main() {
     .map((r) => r.trim())
     .filter((r) => r.length > 0);
 
-  // Validate runtimes
-  for (const r of selected_runtimes) {
-    if (!ALLOWED_RUNTIMES.includes(r)) {
-      console.error(`Error: unknown runtime "${r}". Allowed: ${ALLOWED_RUNTIMES.join(', ')}`);
+  // Normalize runtime casing (codex → Codex, claude → Claude, etc.)
+  const canonicalMap = new Map(ALLOWED_RUNTIMES.map(r => [r.toLowerCase(), r]));
+  for (let i = 0; i < selected_runtimes.length; i++) {
+    const canonical = canonicalMap.get(selected_runtimes[i].toLowerCase());
+    if (!canonical) {
+      console.error(`Error: unknown runtime "${selected_runtimes[i]}". Allowed: ${ALLOWED_RUNTIMES.join(', ')}`);
       process.exit(1);
     }
+    selected_runtimes[i] = canonical;
   }
 
   if (selected_runtimes.length === 0) {

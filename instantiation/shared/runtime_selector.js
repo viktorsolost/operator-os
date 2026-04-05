@@ -31,9 +31,11 @@ function normalizeRuntimeSelection(selectedRuntimes) {
     );
   }
 
-  // Validate all entries before building output (fail fast on unknown names)
-  for (const name of selectedRuntimes) {
-    if (!ALLOWED_RUNTIMES.includes(name)) {
+  // Normalize case: match against ALLOWED_RUNTIMES case-insensitively
+  const canonicalMap = new Map(ALLOWED_RUNTIMES.map(r => [r.toLowerCase(), r]));
+  const normalized = selectedRuntimes.map(name => {
+    const canonical = canonicalMap.get(name.toLowerCase());
+    if (!canonical) {
       throw new Error(
         'normalizeRuntimeSelection: unknown runtime "' +
           name +
@@ -41,10 +43,11 @@ function normalizeRuntimeSelection(selectedRuntimes) {
           ALLOWED_RUNTIMES.join(', ')
       );
     }
-  }
+    return canonical;
+  });
 
   // Deduplicate while preserving canonical order from ALLOWED_RUNTIMES
-  const enabledSet = new Set(selectedRuntimes);
+  const enabledSet = new Set(normalized);
   const enabledList = ALLOWED_RUNTIMES.filter((r) => enabledSet.has(r));
 
   const enabled = Object.freeze(
