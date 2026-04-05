@@ -37,9 +37,9 @@ The installer asks for your identity, location, runtimes, workflow tools, and ac
 
 ### Phase 2: Runtimes and Style
 
-You declare which AI runtimes to enable. Enter as a comma-separated list. Allowed values (case-sensitive): `Codex`, `Claude`, `Gemini`, `OpenClaw`. Defaults to `Claude`.
+You declare which AI runtimes to enable. Enter as a comma-separated list. Allowed values (case-sensitive): `Codex`, `Claude`, `Gemini`. Defaults to `Claude`. (OpenClaw is deferred — it requires manual runtime-specific setup and is not part of the standard install path.)
 
-Each enabled runtime gets a bridge file written to the runtime-local config directory (`~/.claude/CLAUDE.md`, `~/.codex/instructions.md`, `~/.gemini/GEMINI.md`). All bridges point into the same boot entrypoint in your vault. The boot sequence, routing policy, and model posture checks are identical regardless of which runtime you start from.
+Each enabled runtime gets a bridge file written to your vault root (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`). All bridges point into the same boot entrypoint. The boot sequence, routing policy, and model posture checks are identical regardless of which runtime you start from. Launch any runtime from inside your vault directory so it discovers the boot files automatically.
 
 You also set:
 - `tone_profile` — defaults to `direct`
@@ -95,6 +95,9 @@ After installation your file tree looks like:
 {vault_location}/           # Your vault (operator doctrine, memory, projects)
   BOOT.md                   # System boot entrypoint
   ROUTING.md                # Operator routing rules
+  CLAUDE.md                 # Runtime bridge for Claude (if Claude enabled)
+  AGENTS.md                 # Runtime bridge for Codex (if Codex enabled)
+  GEMINI.md                 # Runtime bridge for Gemini (if Gemini enabled)
   memory.md                 # Distilled cross-session memory
   recent-context.md         # Recent session context
   operator/
@@ -115,11 +118,9 @@ After installation your file tree looks like:
     registry.json               # Project registry
     captures/                   # Raw captured data from connected sources
     derived/                    # Derived views (today page, editorial, etc.)
-
-~/.claude/CLAUDE.md         # Runtime bridge (if Claude enabled)
-~/.codex/instructions.md          # Runtime bridge (if Codex enabled)
-~/.gemini/GEMINI.md         # Runtime bridge (if Gemini enabled)
 ```
+
+All bridge files live in the vault root. No files are written to `~/.claude/`, `~/.codex/`, or `~/.gemini/`.
 
 ## Supported account types
 
@@ -135,7 +136,14 @@ Note: Gmail, Calendar, Drive, and Sheets are all handled through a single Gmail 
 
 ## Using the system
 
-Start a conversation with the operator you need:
+Navigate to your vault, then launch your runtime:
+
+```
+cd {vault_location}
+claude     # or: codex / gemini
+```
+
+The runtime discovers the boot files (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) in the current directory automatically. Then start a conversation with any operator:
 
 ```
 Hi Claudia, what should I focus on today?
@@ -157,7 +165,7 @@ The system reads your vault on boot, loads the active operator, and works from t
 
 **Pipeline data is stale**: Run a manual sync from your Memento workspace: `node pipeline/cli/run.js sync`.
 
-**Boot chain broken**: If an operator cannot find required vault files, verify the path in your runtime bridge file (`~/.claude/CLAUDE.md` or equivalent) matches your actual vault location.
+**Boot chain broken**: If an operator cannot find required vault files, verify you launched your runtime from inside the vault directory (`cd {vault_location}` then `claude` / `codex` / `gemini`).
 
 **Unknown runtime error during install**: The runtime selector rejects unknown names. Use the exact casing: `Claude`, `Codex`, `Gemini`, `OpenClaw`.
 

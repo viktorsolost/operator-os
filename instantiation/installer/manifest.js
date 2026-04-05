@@ -10,22 +10,16 @@ const { loadFileMatrix } = require('../shared/file_matrix');
 // Template source maps — surface ID → relative path under template_source_root
 // ---------------------------------------------------------------------------
 
+// bridge_claude is excluded — CLAUDE.md at vault root is handled by the
+// claude_md rewrite-template entry (rendered by source_renderer), not here.
+// OpenClaw is deferred — no bridge entries for it.
 const BRIDGE_TEMPLATE_MAP = Object.freeze({
-  bridge_codex:           'runtime-bridges/codex/instructions.md.tmpl',
-  bridge_claude:          'runtime-bridges/claude/CLAUDE.md.tmpl',
-  bridge_gemini:          'runtime-bridges/gemini/GEMINI.md.tmpl',
-  bridge_openclaw_start:  'runtime-bridges/openclaw/START_HERE.md.tmpl',
-  bridge_openclaw_agents: 'runtime-bridges/openclaw/AGENTS.md.tmpl',
+  bridge_codex:  'runtime-bridges/codex/AGENTS.md.tmpl',
+  bridge_gemini: 'runtime-bridges/gemini/GEMINI.md.tmpl',
 });
 
-const SCAFFOLD_TEMPLATE_MAP = Object.freeze({
-  config_codex_toml:        'runtime-configs/codex/config.toml.tmpl',
-  config_gemini_settings:   'runtime-configs/gemini/settings.json.tmpl',
-  config_gemini_projects:   'runtime-configs/gemini/projects.json.tmpl',
-  config_gemini_trusted:    'runtime-configs/gemini/trustedFolders.json.tmpl',
-  config_openclaw_json:     'runtime-configs/openclaw/openclaw.json.tmpl',
-  config_claude_settings:   'runtime-configs/claude/settings.json.tmpl',
-});
+// No global config scaffolds — all scaffold entries are now excluded.
+const SCAFFOLD_TEMPLATE_MAP = Object.freeze({});
 
 // Surface IDs that have a dedicated .tmpl file under template_source_root/
 const OPERATOR_TEMPLATE_MAP = Object.freeze({
@@ -38,21 +32,12 @@ const OPERATOR_TEMPLATE_MAP = Object.freeze({
 // ---------------------------------------------------------------------------
 
 const BRIDGE_PATH_KEY_MAP = Object.freeze({
-  bridge_codex:           { runtime: 'Codex',    key: 'bridge' },
-  bridge_claude:          { runtime: 'Claude',   key: 'bridge' },
-  bridge_gemini:          { runtime: 'Gemini',   key: 'bridge' },
-  bridge_openclaw_start:  { runtime: 'OpenClaw', key: 'bridgeStart' },
-  bridge_openclaw_agents: { runtime: 'OpenClaw', key: 'bridgeAgents' },
+  bridge_codex:  { runtime: 'Codex',  key: 'bridge' },
+  bridge_gemini: { runtime: 'Gemini', key: 'bridge' },
 });
 
-const SCAFFOLD_PATH_KEY_MAP = Object.freeze({
-  config_codex_toml:      { runtime: 'Codex',    key: 'config' },
-  config_gemini_settings: { runtime: 'Gemini',   key: 'settings' },
-  config_gemini_projects: { runtime: 'Gemini',   key: 'projects' },
-  config_gemini_trusted:  { runtime: 'Gemini',   key: 'trustedFolders' },
-  config_openclaw_json:   { runtime: 'OpenClaw', key: 'config' },
-  config_claude_settings: { runtime: 'Claude',   key: 'settings' },
-});
+// No scaffold path keys — scaffolds are excluded.
+const SCAFFOLD_PATH_KEY_MAP = Object.freeze({});
 
 // ---------------------------------------------------------------------------
 // Vault surface → resolved target path
