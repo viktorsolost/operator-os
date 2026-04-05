@@ -36,7 +36,12 @@ Viktor owns the source repositories. Bundled copies are refreshed manually befor
 
 ## What is allowed to diverge
 
-Nothing. The bundled substrates must be exact copies of their source. If the installer needs patched pipeline files, the patches happen during install (via `ensurePipelineWorkspace` and `verifyPipelineCompatibility`), not by modifying the bundled copy.
+The bundled substrates must track their source repositories closely. Two controlled divergences exist:
+
+1. **Owner-specific content in pipeline files** — hardcoded email addresses, User-Agent strings, and domain references in the Memento pipeline are replaced with generic equivalents in the bundled copy. The source repo may still carry Viktor-specific values for his live instance.
+2. **Vault files classified as rewrite-template** — the source vault contains "VIK OS" and Viktor-specific paths in files that get rewritten during install. The bundled copy preserves these as-is because the installer's source_renderer handles the rewrite at install time.
+
+Beyond these two cases, the bundled copy should match the source. Do not make ad-hoc edits to bundled files without documenting the divergence.
 
 ## Drift detection
 

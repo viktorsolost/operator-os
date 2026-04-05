@@ -104,7 +104,7 @@ async function basecampFetch(urlPath, token) {
   const res = await fetch(url, {
     headers: {
       'Authorization': `Bearer ${token}`,
-      'User-Agent': 'Memento Pipeline (viktor@cultural-affairs.com)',
+      'User-Agent': 'Memento Pipeline',
       'Content-Type': 'application/json',
     },
   });

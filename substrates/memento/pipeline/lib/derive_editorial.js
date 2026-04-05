@@ -727,7 +727,7 @@ ${projectList}
 
 - "Eterno" and "Eterno Gallery" refer to the gallery/venue operating all projects above. "Eterno" is NOT a project — it is the organization.
 - Calendar events named "Eterno x [Name]" are artist meetings. Match the name to an artist listed above to determine the project. For example, "Eterno x Zaf" = Zafgod = punks-2026.
-- Events organized from viktor@eternogallery.com or with attendees at cultural-affairs.com / under-dogs.net / eternogallery.com are internal team events — tag them to the project whose artists or context they match.
+- Events organized by the owner or with attendees from registered organization domains are internal team events — tag them to the project whose artists or context they match.
 
 ## Task 1: Activity Highlights
 
