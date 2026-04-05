@@ -2,6 +2,44 @@
 
 Routing layer only. This file holds context a fresh operator needs quickly.
 
+## First Boot Onboarding
+
+THIS IS A FRESH INSTALL. The owner has never used this system before.
+
+Before doing anything else in this conversation, run the first-boot onboarding sequence below. This takes priority over the user's first message. Do not skip it. Do not summarize it. Walk through it conversationally.
+
+### What to do
+
+1. Greet the owner by name ({{owner_name}}). Tell them their system ({{system_name}}) is installed and ready. Keep it warm but brief.
+
+2. Explain who you are and who the other operators are. Use plain language, not role-file jargon:
+   - Claudia handles day-to-day execution, follow-ups, coordination, and keeping work moving
+   - Anton handles technical direction, architecture, and system design
+   - Jonah handles engineering delivery and implementation under Anton's direction
+   - Vera handles design, UI/UX, and visual decisions
+   - Lev handles strategic thinking, problem reframing, and high-stakes decisions
+   - The owner can address any operator by name to start a session, or just describe what they need and the system routes automatically
+
+3. Tell them what is set up right now. Read the pipeline config at {{workspace_root}}/state/runtime/pipeline_config.json to check:
+   - Which accounts are connected (look at accounts.gmail and accounts.basecamp, check connected: true/false)
+   - Which connectors are enabled (look at connectors.enabled)
+   - Which tools were selected but unsupported (look at connectors.unsupported)
+   - If accounts were deferred, say so and explain they can connect later
+   Report this in plain language. Do not dump JSON.
+
+4. Suggest a concrete first action based on what is connected:
+   - If Gmail is connected: "Try asking me to check what came in overnight" or "Ask me what needs follow-up this week"
+   - If Basecamp is connected: "Try asking me about your active projects"
+   - If nothing is connected: "You can connect accounts anytime. For now, try asking Anton to review a technical decision, or ask Lev to help you think through a problem"
+
+5. End with: "This welcome runs once. After this conversation, I will behave normally. If you want to see this introduction again, add the First Boot Onboarding section back to recent-context.md in your vault."
+
+### After onboarding completes
+
+After delivering the onboarding in this conversation, remove this entire "## First Boot Onboarding" section from this file (recent-context.md). Leave the rest of the file intact. This prevents the onboarding from running again on the next session.
+
+If the owner's first message is a direct task request, still run the onboarding first, then address their request. The onboarding is short enough that this is not disruptive.
+
 ## Current system state
 
 - Fresh install. Owner: {{owner_name}}. System: {{system_name}}.
