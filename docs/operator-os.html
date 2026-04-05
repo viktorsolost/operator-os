@@ -215,7 +215,7 @@ Source Vault (VIK OS)           File Treatment Manifest (305 surfaces)
 </div>
 <div class="card">
   <div class="card-title">template_renderer.js</div>
-  <div class="card-body">Renders runtime bridge templates (Claude, Codex, Gemini, OpenClaw) by resolving {{placeholders}} from onboarding answers. Verifies no unresolved markers remain.<br>Deps: template_utils</div>
+  <div class="card-body">Renders runtime bridge templates (Codex, Gemini) into the vault root by resolving {{placeholders}} from onboarding answers. CLAUDE.md is handled by the source renderer. Verifies no unresolved markers remain.<br>Deps: template_utils</div>
 </div>
 <div class="card">
   <div class="card-title">source_renderer.js</div>
@@ -263,7 +263,7 @@ Source Vault (VIK OS)           File Treatment Manifest (305 surfaces)
 <h3>Shared Utilities <span class="badge badge-wired">wired</span></h3>
 <div class="card">
   <div class="card-title">runtime_selector.js</div>
-  <div class="card-body">Normalizes runtime selection across 4 runtimes (Codex, Claude, Gemini, OpenClaw). Pure utility &mdash; no state, no deps.</div>
+  <div class="card-body">Normalizes runtime selection across 3 runtimes (Codex, Claude, Gemini). OpenClaw deferred. Pure utility &mdash; no state, no deps.</div>
 </div>
 <div class="card">
   <div class="card-title">path_resolver.js</div>
@@ -409,7 +409,7 @@ Source Vault (VIK OS)           File Treatment Manifest (305 surfaces)
   <tr><td>Runtime</td><td>Node.js (CommonJS modules)</td></tr>
   <tr><td>Dependencies</td><td>Zero external &mdash; Node built-ins only (fs, path, child_process)</td></tr>
   <tr><td>Manifest</td><td>305 surfaces, frozen v1.0.0</td></tr>
-  <tr><td>Supported Runtimes</td><td>Codex, Claude, Gemini, OpenClaw</td></tr>
+  <tr><td>Supported Runtimes</td><td>Codex, Claude, Gemini (OpenClaw deferred)</td></tr>
   <tr><td>Test Framework</td><td>Custom assertion runner (no test library dependency)</td></tr>
   <tr><td>Source of Truth</td><td>VIK OS vault at ~/VIK/ObsidianVault/VIK_OS/</td></tr>
   <tr><td>Authority Docs</td><td>~/VIK/ObsidianVault/VIK_OS/initiatives/operator-system/ (8 docs)</td></tr>
@@ -584,7 +584,7 @@ Source Vault (VIK OS)           File Treatment Manifest (305 surfaces)
     <rect x="100" y="882" width="480" height="54" rx="0" fill="rgba(59,192,113,0.06)" stroke="#333" stroke-width="1.5"/>
     <rect x="112" y="892" width="40" height="16" rx="0" fill="#3BC071"/><text x="132" y="903" text-anchor="middle" fill="#0a0a0a" font-size="8" font-weight="700">LIVE</text>
     <text x="340" y="908" text-anchor="middle" fill="#e8e4df" font-size="11" font-weight="700">Runtime Bridges</text>
-    <text x="340" y="924" text-anchor="middle" fill="#7a7570" font-size="9">Codex &bull; Claude &bull; Gemini &bull; OpenClaw &mdash; all point to canonical boot</text>
+    <text x="340" y="924" text-anchor="middle" fill="#7a7570" font-size="9">Codex &bull; Claude &bull; Gemini &mdash; vault-local bridge files, all point to canonical boot</text>
   </g>
   <line x1="340" y1="936" x2="340" y2="966" stroke="#555" stroke-width="1" marker-end="url(#arrow)"/>
 
@@ -704,7 +704,7 @@ const nodes = [
   { id: 'manifest_json', label: 'file-treatment-manifest.json', group: 'data', detail: '305 surfaces with treatment, owner_phase, location, runtime gating \u2500 frozen v1.0.0' },
 
   // Shared
-  { id: 'runtime_selector', label: 'runtime_selector', group: 'shared', detail: 'Normalizes runtime selection across Codex, Claude, Gemini, OpenClaw \u2500 pure utility' },
+  { id: 'runtime_selector', label: 'runtime_selector', group: 'shared', detail: 'Normalizes runtime selection across Codex, Claude, Gemini \u2500 OpenClaw deferred' },
   { id: 'path_resolver', label: 'path_resolver', group: 'shared', detail: 'Resolves vault + runtime target paths \u2500 validates no forbidden roots' },
   { id: 'template_utils', label: 'template_utils', group: 'shared', detail: 'Placeholder resolution {{key}} and unresolved marker detection \u2500 pure utility' },
   { id: 'file_matrix', label: 'file_matrix', group: 'shared', detail: 'Loads manifest, provides filtered views by treatment, phase, runtime \u2500 central accessor' },

@@ -4,7 +4,7 @@
 
 - Node.js 18+
 - Git
-- At least one AI runtime installed: Claude Code (`claude`), Codex CLI (`codex`), Gemini CLI, or OpenClaw
+- At least one AI runtime installed: Claude Code (`claude`), Codex CLI (`codex`), or Gemini CLI
 - The `gws` CLI installed and on your PATH — only required if you plan to connect Gmail accounts
 - A Basecamp integration (Client ID + Secret from https://launchpad.37signals.com/integrations) — only required if you plan to connect Basecamp
 
@@ -167,6 +167,6 @@ The system reads your vault on boot, loads the active operator, and works from t
 
 **Boot chain broken**: If an operator cannot find required vault files, verify you launched your runtime from inside the vault directory (`cd {vault_location}` then `claude` / `codex` / `gemini`).
 
-**Unknown runtime error during install**: The runtime selector rejects unknown names. Use the exact casing: `Claude`, `Codex`, `Gemini`, `OpenClaw`.
+**Unknown runtime error during install**: The runtime selector rejects unknown names. Allowed: `Claude`, `Codex`, `Gemini` (case-insensitive).
 
 **Installer validation fails with residue errors**: This means source doctrine files contain owner-specific references that were not rewritten. Check that the reference vault argument points to the clean source template, not a previous user's live instance.

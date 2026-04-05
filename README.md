@@ -87,7 +87,7 @@ It feeds the system with the raw material needed for judgment.
 
 The system can be entered from multiple runtimes.
 
-Runtime bridge files connect tools such as Codex, Claude, Gemini, and OpenClaw into the same canonical boot and routing chain.
+Runtime bridge files connect tools such as Codex, Claude, and Gemini into the same canonical boot and routing chain. Bridge files live in the vault root and are discovered automatically when the user launches a runtime from the vault directory.
 
 Each bridge points into the same entrypoint. The boot sequence, routing policy, operator loading, and model posture checks are identical regardless of which runtime the user starts from.
 
@@ -309,8 +309,8 @@ The onboarding flow provisions the system across the key setup surfaces:
 
 - owner identity and system identity
 - install location, vault location, and workspace paths
-- selected runtimes such as Codex, Claude, Gemini, and OpenClaw
-- runtime bridge files and runtime-local configuration
+- selected runtimes: Codex, Claude, Gemini
+- vault-local runtime bridge files
 - account and connector setup boundaries
 - timezone and owner-specific operating defaults
 - fresh starter context files that let the system begin operating as a real environment from day one
@@ -371,7 +371,7 @@ You are getting a structured operator system, not a generic chatbot setup.
 
 You are getting specialist operators with defined titles, responsibility boundaries, delegation contracts, verification mandates, and formalized operating procedures.
 
-You are getting a shared routing spine, a persistent context substrate with formal data contracts, a connector-driven ingestion pipeline with manifest-based extensibility, and a runtime-agnostic boot model that works identically across Codex, Claude, Gemini, and OpenClaw.
+You are getting a shared routing spine, a persistent context substrate with formal data contracts, a connector-driven ingestion pipeline with manifest-based extensibility, and a runtime-agnostic boot model that works identically across Codex, Claude, and Gemini.
 
 You are getting a truth model that keeps source data, captured context, and reasoning artifacts in separate layers with explicit boundaries.
 
