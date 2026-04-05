@@ -396,8 +396,10 @@ async function main() {
   const bridgeCount = installerManifest.bridgeTemplates.length;
   const scaffoldCount = installerManifest.safeScaffolds.length;
 
-  const reconnectLine = connect_accounts_now !== 'now'
-    ? `\nTo connect accounts later:\n  node instantiation/onboarding/reconnect.js ${workspace_root}/state/runtime/pipeline_config.json\n`
+  const anyConnected = connectedGmail > 0 || basecampConnected;
+  const anyFailed = connect_accounts_now === 'now' && !anyConnected;
+  const reconnectLine = (connect_accounts_now !== 'now' || anyFailed)
+    ? `\nTo connect accounts${anyFailed ? ' (auth failed, you can retry)' : ' later'}:\n  node instantiation/onboarding/reconnect.js ${workspace_root}/state/runtime/pipeline_config.json\n`
     : '';
 
   console.log(`

@@ -148,7 +148,10 @@ function runSlice3Onboarding({ packet, targetInstallRoot, homeRoot, targetWorksp
     targetVaultRoot: targetInstallRoot,
     homeRoot,
     packet,
-    accountsConnected: !connections.skipped,
+    accountsConnected: !connections.skipped && (
+      (connections.gmail || []).some(a => a.connected) ||
+      (connections.basecamp && connections.basecamp.connected)
+    ),
   });
 
   return {
