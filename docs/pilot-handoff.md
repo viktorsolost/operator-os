@@ -21,7 +21,7 @@ Before you start:
 - [ ] At least one AI runtime: Claude Code (`claude`), Codex CLI (`codex`), Gemini CLI, or OpenClaw
 - [ ] Clone this repo: `git clone https://github.com/viktorsolost/operator-os.git`
 - [ ] Get a copy of the reference vault (I'll send you this separately)
-- [ ] Get a copy of Memento (I'll send you this separately)
+- [ ] Get a copy of Memento (required — I'll send you this separately. Memento is core substrate, not optional.)
 - [ ] If connecting Gmail: install the `gws` CLI (Google Workspace CLI)
 - [ ] If connecting Basecamp: create a Basecamp integration at https://launchpad.37signals.com/integrations and have your Client ID + Secret ready
 

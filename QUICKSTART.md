@@ -12,7 +12,7 @@
 
 1. This repo cloned locally
 2. A reference vault — the source doctrine files that define the system (operator files, boot chain, routing rules). The installer exits immediately if this path does not exist.
-3. A Memento workspace (optional) — the pipeline and state substrate. If not present, pipeline files are not copied and first sync will not run. This is fine for a deferred-accounts install.
+3. A Memento workspace (required) — the pipeline and state substrate. The installer exits immediately if this path does not exist. Memento is core to the system, not an optional add-on.
 
 The installer takes the reference vault and Memento as source inputs and provisions a new owner-specific instance from them.
 
@@ -21,10 +21,10 @@ The installer takes the reference vault and Memento as source inputs and provisi
 Run the interactive installer:
 
 ```
-node install.js [/path/to/reference-vault] [/path/to/memento]
+node install.js /path/to/reference-vault /path/to/memento
 ```
 
-The first argument is the path to the reference vault. The second is the path to Memento. Defaults: `~/VIK/ObsidianVault/VIK_OS` and `~/Code/Memento`.
+Both arguments are required. The first is the path to the reference vault. The second is the path to Memento. Defaults: `~/VIK/ObsidianVault/VIK_OS` and `~/Code/Memento`.
 
 The installer asks for your identity, location, runtimes, workflow tools, and accounts interactively, then provisions the full system. It runs in five phases:
 

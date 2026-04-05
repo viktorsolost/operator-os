@@ -79,7 +79,14 @@ const mementoSource = cliMementoSource || DEFAULT_MEMENTO_SOURCE;
 if (!fs.existsSync(sourceDoctrine)) {
   console.error(`Source doctrine not found at ${sourceDoctrine}.`);
   console.error('You need a copy of the reference vault files to install.');
-  console.error('Usage: node install.js /path/to/reference-vault [/path/to/memento]');
+  console.error('Usage: node install.js /path/to/reference-vault /path/to/memento');
+  process.exit(1);
+}
+
+if (!fs.existsSync(mementoSource)) {
+  console.error(`Memento source not found at ${mementoSource}.`);
+  console.error('You need a copy of the Memento workspace to install. Memento is core substrate, not optional.');
+  console.error('Usage: node install.js /path/to/reference-vault /path/to/memento');
   process.exit(1);
 }
 
