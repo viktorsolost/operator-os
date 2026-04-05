@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claudia — Memento Proposal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --paper: #f4efe8;
+      --ink: #1c1916;
+      --mid: #4a4238;
+      --quiet: #8a8078;
+      --faint: #c8c0b4;
+      --whisper: #e4ddd4;
+      --warm: #b8946c;
+      --serif: 'Instrument Serif', 'Georgia', serif;
+      --sans: 'DM Sans', system-ui, sans-serif;
+      --mono: 'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      font-size: 17px;
+      scroll-behavior: smooth;
+      background: var(--paper);
+    }
+
+    body {
+      font-family: var(--serif);
+      color: var(--ink);
+      background: var(--paper);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: var(--warm);
+      color: #fff;
+    }
+
+    /* ================================
+       COVER
+       ================================ */
+
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 10vw 12vh;
+      position: relative;
+    }
+
+    .cover-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 40px;
+    }
+
+    .cover-title {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 400;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 32px;
+      max-width: 800px;
+    }
+
+    .cover-sub {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.5vw, 32px);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--quiet);
+      line-height: 1.4;
+      max-width: 560px;
+    }
+
+    .cover-author {
+      position: absolute;
+      top: 48px;
+      right: 10vw;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+
+    .cover-line {
+      position: absolute;
+      bottom: 0;
+      left: 10vw;
+      right: 10vw;
+      height: 1px;
+      background: var(--whisper);
+    }
+
+    /* ================================
+       CONTENT SECTIONS
+       ================================ */
+
+    .section {
+      padding: 10vh 10vw;
+      position: relative;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--whisper);
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--faint);
+      letter-spacing: .15em;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 48px;
+      max-width: 640px;
+    }
+
+    .prose {
+      max-width: 580px;
+    }
+
+    .prose p {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: var(--mid);
+      margin-bottom: 22px;
+    }
+
+    .prose p:last-child { margin-bottom: 0; }
+
+    .prose strong {
+      color: var(--ink);
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    /* ================================
+       PULL QUOTES
+       ================================ */
+
+    .pull {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 400;
+      line-height: 1.35;
+      color: var(--ink);
+      margin: 56px 0;
+      max-width: 560px;
+    }
+
+    .pull em {
+      font-style: italic;
+      color: var(--warm);
+    }
+
+    /* ================================
+       THE CONTRACT
+       ================================ */
+
+    .contract {
+      padding: 14vh 10vw;
+      background: var(--ink);
+      color: var(--paper);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .contract-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: rgba(244,239,232,.3);
+      margin-bottom: 40px;
+    }
+
+    .contract-text {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5vw, 64px);
+      font-weight: 400;
+      line-height: 1.2;
+      max-width: 700px;
+    }
+
+    .contract-text em {
+      font-style: italic;
+      color: var(--warm);
+    }
+
+    .contract-sub {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: rgba(244,239,232,.4);
+      margin-top: 40px;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ================================
+       THE SENSES (side-by-side labels)
+       ================================ */
+
+    .senses {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0;
+      margin: 40px 0;
+      max-width: 620px;
+    }
+
+    @media (max-width: 640px) {
+      .senses { grid-template-columns: 1fr; }
+    }
+
+    .sense {
+      display: contents;
+    }
+
+    .sense-name {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--warm);
+      padding: 20px 0;
+      border-top: 1px solid var(--whisper);
+    }
+
+    .sense-body {
+      font-family: var(--serif);
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--mid);
+      padding: 20px 0;
+      border-top: 1px solid var(--whisper);
+    }
+
+    .senses .sense:last-child .sense-name,
+    .senses .sense:last-child .sense-body {
+      border-bottom: 1px solid var(--whisper);
+    }
+
+    /* ================================
+       TRUST LADDER
+       ================================ */
+
+    .ladder {
+      margin: 40px 0;
+      max-width: 600px;
+    }
+
+    .rung {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 0;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--whisper);
+    }
+
+    .rung:first-child { border-top: 1px solid var(--whisper); }
+
+    .rung-num {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--faint);
+      padding-top: 3px;
+    }
+
+    .rung-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .rung-desc {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--quiet);
+    }
+
+    /* ================================
+       THE GRAPH (text chain)
+       ================================ */
+
+    .chain {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 3;
+      color: var(--faint);
+      margin: 32px 0;
+      max-width: 600px;
+    }
+
+    .chain em {
+      font-style: normal;
+      color: var(--mid);
+      background: rgba(184,148,108,.08);
+      padding: 4px 8px;
+      border-radius: 3px;
+    }
+
+    /* ================================
+       THE FEEL (full-width mood)
+       ================================ */
+
+    .feel {
+      padding: 12vh 10vw;
+      background: linear-gradient(175deg, #f0e9df 0%, #ebe3d8 100%);
+    }
+
+    .feel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      max-width: 900px;
+    }
+
+    @media (max-width: 800px) {
+      .feel-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    .feel-item {}
+
+    .feel-if {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--faint);
+      margin-bottom: 12px;
+    }
+
+    .feel-answer {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-style: italic;
+      line-height: 1.65;
+      color: var(--mid);
+    }
+
+    /* ================================
+       TWO COLUMNS
+       ================================ */
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      margin: 40px 0;
+      max-width: 700px;
+    }
+
+    @media (max-width: 700px) {
+      .two-col { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    .col-head {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--whisper);
+    }
+
+    .col-head.yes { color: var(--warm); }
+    .col-head.no { color: #a06050; }
+
+    .col-list {
+      list-style: none;
+    }
+
+    .col-list li {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--mid);
+      padding: 6px 0;
+    }
+
+    .col-list li strong {
+      color: var(--ink);
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    /* ================================
+       VIK OS AUTOPSY
+       ================================ */
+
+    .autopsy-item {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--whisper);
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 24px;
+      max-width: 660px;
+    }
+
+    .autopsy-item:first-child { border-top: 1px solid var(--whisper); }
+
+    @media (max-width: 640px) {
+      .autopsy-item { grid-template-columns: 1fr; gap: 8px; }
+    }
+
+    .autopsy-name {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      padding-top: 2px;
+    }
+
+    .autopsy-why {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--quiet);
+    }
+
+    /* ================================
+       REMAINS
+       ================================ */
+
+    .remains {
+      margin: 48px 0;
+      max-width: 600px;
+    }
+
+    .remains-item {
+      padding: 20px 0 20px 24px;
+      border-left: 2px solid var(--warm);
+      margin-bottom: 20px;
+    }
+
+    .remains-title {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .remains-desc {
+      font-family: var(--serif);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--quiet);
+    }
+
+    /* ================================
+       TIMELINE
+       ================================ */
+
+    .timeline {
+      margin: 40px 0;
+      max-width: 600px;
+    }
+
+    .year {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--whisper);
+    }
+
+    .year:first-child { border-top: 1px solid var(--whisper); }
+
+    .year-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--warm);
+      padding-top: 4px;
+    }
+
+    .year-desc {
+      font-family: var(--serif);
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--mid);
+    }
+
+    /* ================================
+       CLOSING
+       ================================ */
+
+    .closing {
+      padding: 14vh 10vw;
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .closing-text {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 400;
+      line-height: 1.45;
+      max-width: 600px;
+    }
+
+    .closing-text em {
+      font-style: italic;
+      color: var(--warm);
+    }
+
+    .closing-sign {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(244,239,232,.25);
+      margin-top: 56px;
+    }
+
+    /* ================================
+       INTERFACE SKETCH
+       ================================ */
+
+    .ui-sketch {
+      margin: 48px 0;
+      max-width: 540px;
+      background: var(--ink);
+      border-radius: 12px;
+      padding: 32px;
+      color: var(--paper);
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 2.2;
+    }
+
+    .ui-sketch .ui-label {
+      color: rgba(244,239,232,.25);
+      font-size: 10px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .ui-sketch .ui-line {
+      color: rgba(244,239,232,.5);
+    }
+
+    .ui-sketch .ui-dim {
+      color: rgba(244,239,232,.2);
+    }
+
+    .ui-sketch .ui-warm {
+      color: var(--warm);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======== COVER ======== -->
+  <div class="cover">
+    <div class="cover-author">Claudia</div>
+    <div class="cover-label">Memento Proposal</div>
+    <div class="cover-title">Every question the system asks is a failure of context.</div>
+    <div class="cover-sub">A vision for Memento as cognitive extension, not productivity tool.</div>
+    <div class="cover-line"></div>
+  </div>
+
+  <!-- ======== 01: THE PROBLEM ======== -->
+  <div class="section">
+    <span class="section-num">01</span>
+    <h2 class="section-title">The Invisible Second Job</h2>
+    <div class="prose">
+      <p>Every person carries an invisible second job. Managing themselves. Remembering what they promised. Tracking what others promised them. Knowing what matters today versus what can wait. Noticing when something slips before it becomes a crisis.</p>
+      <p>This second job has no title, no tools, and no end. It runs underneath everything. When it fails, things fall through cracks. Relationships fray. Deadlines surprise you. You become reactive instead of intentional.</p>
+      <p>Every productivity tool ever built tries to solve this by giving you a system to manage. A to-do list. A calendar. A project board. But managing the system becomes its own job. Now you have three jobs: your actual work, the invisible management, and maintaining the tool that was supposed to help with the second one.</p>
+    </div>
+    <div class="pull">Memento eliminates the second job. Not by giving you a better system to manage. By removing the need to manage <em>a system at all.</em></div>
+  </div>
+
+  <!-- ======== 02: WHAT IT IS ======== -->
+  <div class="section">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Not An App</h2>
+    <div class="prose">
+      <p>Memento is a cognitive extension. It shares your intent. It works while you sleep. It notices what you miss. It acts where it can and asks only where it must.</p>
+      <p>The goal is not to be a tool you use. The goal is to be <strong>a capacity you have.</strong></p>
+      <p>It is not an assistant. Assistants wait. It is not a dashboard. Dashboards display. It is not a second brain. Second brains store. Memento understands. It holds the full context of your life and acts on it with the same judgment you would, if you had infinite time and perfect recall.</p>
+    </div>
+  </div>
+
+  <!-- ======== CONTRACT ======== -->
+  <div class="contract">
+    <div class="contract-label">The Core Contract</div>
+    <div class="contract-text">You live your life. <em>Memento handles the rest.</em></div>
+    <div class="contract-sub">Not "I maintain truth." That puts work on the user. The system observes reality where it already lives. The user's only job is to live and correct the system when it is wrong.</div>
+  </div>
+
+  <!-- ======== 03: THE SENSES ======== -->
+  <div class="section">
+    <span class="section-num">03</span>
+    <h2 class="section-title">The Senses</h2>
+    <div class="prose">
+      <p>Memento does not have features. It has senses. It observes the streams where your life already happens and interprets them, not as data but as meaning.</p>
+    </div>
+    <div class="senses">
+      <div class="sense">
+        <div class="sense-name">Email</div>
+        <div class="sense-body">Not a list of messages. A stream of relationships, commitments, requests, and signals. An email from someone you have been waiting on for two weeks is not the same as a newsletter. Memento knows the difference because it knows the relationship.</div>
+      </div>
+      <div class="sense">
+        <div class="sense-name">Calendar</div>
+        <div class="sense-body">Not a grid of blocks. A map of commitments and energy. A meeting after three back-to-back calls is different from a meeting after a free morning. Memento knows your rhythms because it has watched them.</div>
+      </div>
+      <div class="sense">
+        <div class="sense-name">Files</div>
+        <div class="sense-body">Not a folder structure. A knowledge layer. A document you edited yesterday connects to a project that connects to people that connect to deadlines. Memento traces those connections.</div>
+      </div>
+      <div class="sense">
+        <div class="sense-name">Messages</div>
+        <div class="sense-body">Not conversations. Threads of intent. "Let's circle back Thursday" is a commitment. Memento holds it when you forget.</div>
+      </div>
+      <div class="sense">
+        <div class="sense-name">Corrections</div>
+        <div class="sense-body">The highest-value input. When you say "that's wrong," Memento does not just update a fact. It updates its model of you. Every correction teaches how you think, what you value, what you notice that others miss.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== 04: THE MIND ======== -->
+  <div class="section">
+    <span class="section-num">04</span>
+    <h2 class="section-title">The Mind</h2>
+    <div class="prose">
+      <p>Memento does not store context. It understands context. A database knows that Sarah emailed you. A model knows that Sarah is your most important collaborator, that she goes quiet when overwhelmed, that her silence right now probably means she is stuck, and that you should reach out proactively rather than wait.</p>
+    </div>
+    <div class="chain">
+      <em>meeting</em> &rarr; <em>negotiation</em> &rarr; <em>project behind schedule</em> &rarr; <em>slow contractor</em> &rarr; <em>payment dispute</em> &rarr; <em>cash flow</em> &rarr; <em>deal closing next week</em>
+    </div>
+    <div class="prose">
+      <p>The context model is a living, weighted, continuously updated graph. Not a knowledge graph in the traditional sense. Traditional knowledge graphs are static and factual. This one is dynamic and interpretive. It includes uncertainty, inference, and the soft signals a purely factual system would miss: tone shifts, frequency changes, unusual delays, patterns that suggest someone is losing interest or gaining urgency.</p>
+    </div>
+  </div>
+
+  <!-- ======== 05: TRUST ======== -->
+  <div class="section">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Earning Trust</h2>
+    <div class="prose">
+      <p>Memento starts with zero trust and earns its way up. This is not a feature. This is the core product mechanic. Every interaction moves Memento up or down the ladder. Permission is earned through accuracy over time, not granted through a settings toggle.</p>
+    </div>
+    <div class="ladder">
+      <div class="rung">
+        <div class="rung-num">01</div>
+        <div>
+          <div class="rung-title">Watch</div>
+          <div class="rung-desc">Connect to sources. Observe. Build the model silently. Do not act, advise, or interrupt. The user barely knows it is there. Days to weeks.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-num">02</div>
+        <div>
+          <div class="rung-title">Mirror</div>
+          <div class="rung-desc">Reflect what it sees. "Here is what I think your world looks like." The user corrects. Every correction teaches what the user cares about, because people only correct things that matter to them. Weeks to months.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-num">03</div>
+        <div>
+          <div class="rung-title">Nudge</div>
+          <div class="rung-desc">Anticipate. "This thread is going stale." "This deadline is approaching." Small, specific, high-confidence observations. The user starts trusting the system's judgment. Months.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-num">04</div>
+        <div>
+          <div class="rung-title">Suggest</div>
+          <div class="rung-desc">Propose actions. "Here is a draft reply." "Move this meeting." The user approves, edits, or rejects. Each response teaches voice and judgment. Months to years.</div>
+        </div>
+      </div>
+      <div class="rung">
+        <div class="rung-num">05</div>
+        <div>
+          <div class="rung-title">Act</div>
+          <div class="rung-desc">Handle routine decisions autonomously. Not because the user toggled a setting. Because the system has been right enough times that the user said "just handle it."</div>
+        </div>
+      </div>
+    </div>
+    <div class="pull">A user at Rung 1 is not using the same product as a user at Rung 5. The system literally <em>becomes a different product</em> as trust increases.</div>
+  </div>
+
+  <!-- ======== 06: THE INTERFACE ======== -->
+  <div class="section">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Almost No Interface</h2>
+    <div class="prose">
+      <p>The primary interface is conversation. You speak, Memento responds with the full weight of your context behind it. No navigation. No pages. No dashboards.</p>
+      <p>Three secondary surfaces exist only because conversation has limits:</p>
+    </div>
+    <div class="senses" style="margin-top: 32px;">
+      <div class="sense">
+        <div class="sense-name">Approvals</div>
+        <div class="sense-body">Things Memento wants to do but needs permission for. A short queue. If the queue is always long, the system has not earned enough trust.</div>
+      </div>
+      <div class="sense">
+        <div class="sense-name">Feed</div>
+        <div class="sense-body">What Memento did. An audit trail. Not for daily use. For trust verification. Over time, you check it less.</div>
+      </div>
+      <div class="sense">
+        <div class="sense-name">Corrections</div>
+        <div class="sense-body">When Memento gets something wrong, you correct it. These corrections are the highest-value input in the entire system.</div>
+      </div>
+    </div>
+    <div class="prose" style="margin-top: 32px;">
+      <p>That is the complete interface. If you need more, the context engine is not good enough yet. More UI is a confession of system weakness, not a feature.</p>
+    </div>
+
+    <div class="ui-sketch">
+      <div class="ui-label">What It Looks Like</div>
+      <div class="ui-line">Good morning.</div>
+      <div class="ui-line">&nbsp;</div>
+      <div class="ui-dim">Three things happened overnight.</div>
+      <div class="ui-line">Sarah replied on the Vhils deliverable. She is</div>
+      <div class="ui-line">asking for a two-week extension. <span class="ui-warm">I have a draft</span></div>
+      <div class="ui-warm">response ready if you want to see it.</div>
+      <div class="ui-line">&nbsp;</div>
+      <div class="ui-dim">Coldie's contract is now 16 days unsigned.</div>
+      <div class="ui-line">Based on prior pattern, a direct call converts</div>
+      <div class="ui-line">faster than another email. <span class="ui-warm">Want me to schedule</span></div>
+      <div class="ui-warm">a 15-minute slot this afternoon?</div>
+      <div class="ui-line">&nbsp;</div>
+      <div class="ui-dim">Cash position updated. The Q2 projection looks</div>
+      <div class="ui-line">comfortable if the gallery payment lands by the</div>
+      <div class="ui-line">10th. If it slips, the Punks production budget</div>
+      <div class="ui-line">needs a conversation. <span class="ui-warm">No action needed yet.</span></div>
+    </div>
+  </div>
+
+  <!-- ======== FEEL ======== -->
+  <div class="feel">
+    <div class="feel-grid">
+      <div class="feel-item">
+        <div class="feel-if">If Memento were a room</div>
+        <div class="feel-answer">A private study. Warm light. Quiet. Everything you need is there but nothing demands your attention.</div>
+      </div>
+      <div class="feel-item">
+        <div class="feel-if">If Memento were a sound</div>
+        <div class="feel-answer">Low and steady. Not silent. Not loud. A continuous hum of competence underneath everything.</div>
+      </div>
+      <div class="feel-item">
+        <div class="feel-if">If Memento were a color</div>
+        <div class="feel-answer">Warm and muted. Something that says I have been here a long time and I will be here longer.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== 07: CHALLENGES ======== -->
+  <div class="section">
+    <span class="section-num">07</span>
+    <h2 class="section-title">What Is Hard</h2>
+    <div class="two-col">
+      <div>
+        <div class="col-head yes">What works</div>
+        <ul class="col-list">
+          <li>No behavior change required from the user</li>
+          <li>Trust builds organically through accuracy</li>
+          <li>Value genuinely compounds over time</li>
+          <li>Natural subscription curve follows value</li>
+          <li>Moat through context, not hostage-taking</li>
+          <li>Talk, do not click</li>
+        </ul>
+      </div>
+      <div>
+        <div class="col-head no">What is hard</div>
+        <ul class="col-list">
+          <li><strong>Incomplete graph.</strong> The richest context lives in unreachable places. The model will always be partial.</li>
+          <li><strong>Trust fragility.</strong> Months to build, seconds to destroy. One bad autonomous action and the relationship resets.</li>
+          <li><strong>Year-one value.</strong> Most valuable at year five. Least valuable at month one. Must survive month one.</li>
+          <li><strong>LLM imperfection.</strong> Hallucinations erode the trust everything depends on.</li>
+          <li><strong>Sustained correctness.</strong> Demos are easy. Being right for years is a different problem entirely.</li>
+          <li><strong>Privacy is existential.</strong> Not a feature. A foundation. One breach kills the product.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== 08: COMPOUND ======== -->
+  <div class="section">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Compound Interest</h2>
+    <div class="timeline">
+      <div class="year">
+        <div class="year-label">Year 1</div>
+        <div class="year-desc">Useful. Catches things you miss. Saves time on routine work. You are still teaching it.</div>
+      </div>
+      <div class="year">
+        <div class="year-label">Year 3</div>
+        <div class="year-desc">Good. Knows your patterns. Anticipates problems. Recommendations are right more than wrong.</div>
+      </div>
+      <div class="year">
+        <div class="year-label">Year 5</div>
+        <div class="year-desc">Indispensable. Knows not just what you do but why. Protects you from your own blind spots.</div>
+      </div>
+      <div class="year">
+        <div class="year-label">Year 10</div>
+        <div class="year-desc">Knows you better than anyone in your life. Not in a creepy way. The way a thirty-year business partner does.</div>
+      </div>
+    </div>
+    <div class="pull">You are not paying for features. You are paying for <em>continuity.</em> The longer you stay, the more it is worth. Not a retention trick. Genuine compounding value.</div>
+  </div>
+
+  <!-- ======== 09: VIK OS ======== -->
+  <div class="section">
+    <span class="section-num">09</span>
+    <h2 class="section-title">Returning To VIK OS</h2>
+    <div class="prose">
+      <p>VIK OS was trying to be Memento. It just did not know it yet.</p>
+      <p>The vault, the operators, the pipeline, the dashboard, the boot sequence, the routing, the syncs, the stores, the intake system. All of it was an attempt to build a cognitive extension using the tools available at the time. Every piece of infrastructure is a workaround for a limitation that is either gone or going away.</p>
+    </div>
+
+    <div class="pull" style="margin-top: 48px;">What dies</div>
+
+    <div class="autopsy-item">
+      <div class="autopsy-name">Dashboard</div>
+      <div class="autopsy-why">Exists because the system cannot tell you what matters in conversation. When it can, there is nothing to display.</div>
+    </div>
+    <div class="autopsy-item">
+      <div class="autopsy-name">Pipeline</div>
+      <div class="autopsy-why">A scheduled batch process pre-computing what could be computed on demand. Exists because real-time reasoning was too expensive. That constraint is loosening fast.</div>
+    </div>
+    <div class="autopsy-item">
+      <div class="autopsy-name">Sync layer</div>
+      <div class="autopsy-why">Local copies of remote data. Exists because the system cannot read live sources on demand. When it can, there is nothing to sync.</div>
+    </div>
+    <div class="autopsy-item">
+      <div class="autopsy-name">Intake / stores</div>
+      <div class="autopsy-why">Structured project files the dashboard needs to render views. No dashboard, no store. The context engine knows your projects from observation.</div>
+    </div>
+    <div class="autopsy-item">
+      <div class="autopsy-name">Boot sequence</div>
+      <div class="autopsy-why">BOOT.md, ROUTING.md, role files, model policy, handoff templates. Exists because the system needs explicit instructions on how to think. When it infers posture from the request, routing is invisible.</div>
+    </div>
+    <div class="autopsy-item">
+      <div class="autopsy-name">Action steps</div>
+      <div class="autopsy-why">Generated plans for user approval. At Rung 5 of the trust ladder, the system does the work and tells you it is done.</div>
+    </div>
+    <div class="autopsy-item">
+      <div class="autopsy-name">Morning digest</div>
+      <div class="autopsy-why">A scheduled summary. Replaced by the system knowing what happened and telling you when you arrive. No pipeline run required.</div>
+    </div>
+
+    <div class="pull" style="margin-top: 56px;">What remains</div>
+
+    <div class="remains">
+      <div class="remains-item">
+        <div class="remains-title">The vault</div>
+        <div class="remains-desc">Years of accumulated context. Not infrastructure. The starting model. Memento's day-one advantage over a blank slate.</div>
+      </div>
+      <div class="remains-item">
+        <div class="remains-title">Live source connections</div>
+        <div class="remains-desc">Gmail, Calendar, Basecamp, Sheets. Not the sync scripts. The ability to read reality where it lives.</div>
+      </div>
+      <div class="remains-item">
+        <div class="remains-title">Reasoning postures</div>
+        <div class="remains-desc">Operational, architectural, strategic. Genuinely useful. But as instinct, not as four role files and a boot sequence.</div>
+      </div>
+      <div class="remains-item">
+        <div class="remains-title">The correction history</div>
+        <div class="remains-desc">Every "that's wrong" and "actually do it this way." The compound interest. Living in the context graph, not in scattered markdown files.</div>
+      </div>
+      <div class="remains-item">
+        <div class="remains-title">A conversation</div>
+        <div class="remains-desc">Where you and the system meet. The only interface that survives is the one where you talk and it listens with everything it knows.</div>
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top: 40px;">
+      <p>Five things. A vault, live sources, a context engine, a memory, and a conversation. That is VIK OS stripped to what it was always trying to be. That is Memento.</p>
+    </div>
+  </div>
+
+  <!-- ======== CLOSING ======== -->
+  <div class="closing">
+    <div class="closing-text">
+      The ultimate form of Memento is not something you use. It is something you <em>have.</em> A permanent, compounding, deeply personal extension of your ability to manage your own life.
+    </div>
+    <div class="closing-sign">Claudia — March 2026</div>
+  </div>
+
+</body>
+</html>

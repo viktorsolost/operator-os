@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routing Audit Resolution Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #efede8; --card: #fbfaf7; --card-el: #fff; --border: #d8d3ca;
+    --text: #292522; --text2: #7d766c; --text3: #a49c90;
+    --accent: #b02a1a; --green: #2d6a4f; --yellow: #b68a1a; --blue: #2563eb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; line-height: 1.5; color: var(--text); background: var(--bg); padding: 28px; max-width: 920px; margin: 0 auto; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; margin-bottom: 2px; }
+  .sub { color: var(--text2); margin-bottom: 20px; font-size: 11px; }
+  h2 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--accent); margin: 24px 0 10px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+  .card { background: var(--card); border: 1px solid var(--border); padding: 10px 14px; margin-bottom: 6px; }
+  .tag { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 1px 5px; margin-right: 4px; vertical-align: middle; }
+  .ship-now { background: var(--accent); color: #fff; }
+  .parallel { background: var(--yellow); color: #fff; }
+  .design { background: var(--blue); color: #fff; }
+  .cleanup { background: var(--text3); color: #fff; }
+  .defer { background: var(--border); color: var(--text2); }
+  .own { display: inline-block; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; padding: 1px 5px; background: var(--bg); border: 1px solid var(--border); color: var(--text2); }
+  .row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .title { font-weight: 700; }
+  .detail { color: var(--text2); font-size: 11.5px; margin-top: 2px; }
+  .src { color: var(--text3); font-size: 10px; margin-top: 3px; }
+  .agree { color: var(--green); font-weight: 700; font-size: 10px; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 11.5px; }
+  th { text-align: left; font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text2); padding: 3px 6px; border-bottom: 1px solid var(--border); }
+  td { padding: 5px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .qbox { background: var(--card-el); border-left: 3px solid var(--accent); padding: 10px 14px; margin-bottom: 6px; }
+  .qnum { font-weight: 700; color: var(--accent); }
+  .ops { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; }
+  .op { background: var(--card); border: 1px solid var(--border); padding: 8px 10px; font-size: 11.5px; }
+  .opn { font-weight: 700; font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 3px; }
+  .c-col { color: var(--accent); } .a-col { color: var(--blue); } .j-col { color: var(--green); } .l-col { color: var(--yellow); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+  .stats { display: flex; gap: 8px; margin-bottom: 16px; }
+  .st { background: var(--card); border: 1px solid var(--border); padding: 8px 12px; flex: 1; text-align: center; }
+  .st-n { font-size: 20px; font-weight: 700; }
+  .st-l { font-size: 9px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text2); }
+  .note { font-size: 11px; color: var(--text2); font-style: italic; margin: 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>Routing Audit Resolution Plan</h1>
+<div class="sub">2026-03-28 &middot; Drafted by Lev &middot; Reviewed by all four operators &middot; Converged</div>
+
+<div class="stats">
+  <div class="st"><div class="st-n">16</div><div class="st-l">Total fixes</div></div>
+  <div class="st"><div class="st-n">8</div><div class="st-l">Ship now</div></div>
+  <div class="st"><div class="st-n">3</div><div class="st-l">Parallel</div></div>
+  <div class="st"><div class="st-n">3</div><div class="st-l">Design first</div></div>
+  <div class="st"><div class="st-n">2</div><div class="st-l">Deferred</div></div>
+</div>
+
+<!-- DECISIONS FOR VIKTOR -->
+<h2>Decisions for Viktor</h2>
+
+<div class="qbox">
+  <span class="qnum">1.</span> Ship fast fixes now, shrink in parallel, design tiering after?
+  <div class="detail">All four operators agree on this decoupled sequencing. Original plan gated everything behind shrink work. Revised plan lets bounded edits ship immediately.</div>
+</div>
+<div class="qbox">
+  <span class="qnum">2.</span> Cross-runtime handoff (Jonah to Anton): document the Viktor-relay pattern, or explore tooling?
+  <div class="detail">Claudia and Jonah say document it for now. Anton and Lev agree the tooling question stays open but is not urgent.</div>
+</div>
+<div class="qbox">
+  <span class="qnum">3.</span> Can Jonah start shipping bounded edits immediately?
+  <div class="detail">8 items have zero design ambiguity and add negligible bytes. Jonah is ready to go.</div>
+</div>
+
+<hr>
+
+<!-- AGREED SEQUENCING -->
+<h2>Agreed Sequencing (post-review)</h2>
+
+<div class="card">
+  <div class="detail">
+    <strong>Phase 1:</strong> Ship bridge truth fixes, conformance fixes, consistency fixes, cleanup (items marked <span class="tag ship-now">SHIP NOW</span>)<br>
+    <strong>Phase 2:</strong> Run shrink tasks in parallel (items marked <span class="tag parallel">PARALLEL</span>)<br>
+    <strong>Phase 3:</strong> Design tiering mechanism, measure, set budget (items marked <span class="tag design">DESIGN</span>)
+  </div>
+</div>
+
+<hr>
+
+<!-- ALL ITEMS -->
+<h2>Phase 1: Ship Now</h2>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Fix ~/.claude/CLAUDE.md</span> <span class="own">Jonah</span></div>
+  <div class="detail">Add Lev to operator list. Correct description (VIK_OS/CLAUDE.md is a shim, not the full routing sequence). Make it a mechanical pointer, not prose.</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Lev F1, Anton I2, Global I3</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Fix repo CLAUDE.md</span> <span class="own">Jonah</span></div>
+  <div class="detail">Add Lev to operator routing description. Same class of bug as the global bridge.</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Jonah cross-review addition</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Add model verification step to BOOT.md</span> <span class="own">Jonah</span></div>
+  <div class="detail">Use Jonah's wording: "If your runtime declares your model identity, compare it against model-policy.md. Flag mismatch. If runtime doesn't declare identity, state the check could not be performed and proceed with warning."</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; All four reports, Global I2</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Add cross-runtime handoff guidance to ROUTING.md</span> <span class="own">Jonah drafts, Anton reviews</span></div>
+  <div class="detail">Acknowledge Viktor is the relay for cross-runtime handoffs. Sending operator produces handoff artifact via template. System does not pretend direct comms are possible.</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Jonah F3, Global I5</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Fix openclaw.json config</span> <span class="own">Viktor / manual</span></div>
+  <div class="detail">Set primary model to openai-codex/gpt-5.4 per policy. Remove anthropic/claude-sonnet-4-20250514 from allowlist unless explicitly approved.</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Anton I1, flagged missing by Claudia + Jonah</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Fix operator/CLAUDE.md routing</span> <span class="own">Claudia</span></div>
+  <div class="detail">Add routing lines for all four operators, not just Claudia.</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Jonah F1</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Add lane enumeration to BOOT.md step 3</span> <span class="own">Jonah</span></div>
+  <div class="detail">One line: "Lanes: Claudia, Anton, Jonah, Lev. See ROUTING.md for selection rules."</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Claudia I1, Lev F2, Jonah F7</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag ship-now">Ship</span> <span class="title">Cleanup: dead references</span> <span class="own">Jonah + Claudia</span></div>
+  <div class="detail">
+    a) Update runtime-self-check.md: remove BOOTSTRAP.md reference (retired, not restored)<br>
+    b) Remove MEMORY.md reference from AGENTS.md (file doesn't exist, split-brain risk)<br>
+    c) Make captures.md path absolute (Claudia owns)<br>
+    d) Add projects/README.md for test fixture disambiguation
+  </div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Lev F3/F4, Jonah F5, Claudia I4</div>
+</div>
+
+<h2>Phase 2: Shrink (parallel with Phase 1)</h2>
+
+<div class="card">
+  <div class="row"><span class="tag parallel">Parallel</span> <span class="title">Refactor memory.md</span> <span class="own">Claudia</span></div>
+  <div class="detail">Slim to ~2KB cross-operator truths. Claudia-specific content (gws CLI, email drafting, Basecamp, Sheets) moves to a separate operator/claudia-memory.md, not into claudia.md (already 7.3KB).</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Global I4, Lev F5</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag parallel">Parallel</span> <span class="title">Trim lev.md</span> <span class="own">Lev</span></div>
+  <div class="detail">14.7KB to under 8KB. Shorten relationship sections (1-2 sentences each), tighten thinking methodology, compress autonomy overlap with agent-role.md.</div>
+  <div class="src"><span class="agree">ALL AGREE</span> &middot; Claudia cross-review, accepted by Lev</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag parallel">Parallel</span> <span class="title">Trim working-style.md</span> <span class="own">Claudia or Lev</span></div>
+  <div class="detail">7.2KB to ~3-4KB. Stays in always-load tier (all agree it's baseline). Compress verbose sections (question batching, execution preference, interaction preference) without losing behavioral rules.</div>
+  <div class="src"><span class="agree">RESOLVED</span> &middot; Claudia caught 1c/3a contradiction. Lev resolved: always-load but trim.</div>
+</div>
+
+<h2>Phase 3: Design Tiering (after shrink lands)</h2>
+
+<div class="card">
+  <div class="row"><span class="tag design">Design</span> <span class="title">File-class contract</span> <span class="own">Anton</span></div>
+  <div class="detail">Assign every context file a class: boot_required, boot_conditional, on_demand, reference_only. With declared owner, purpose, and max_bytes target.</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag design">Design</span> <span class="title">Boot manifest</span> <span class="own">Anton</span></div>
+  <div class="detail">One machine-readable manifest listing startup files with metadata (path, class, owner, bytes, loads_for which operators). BOOT.md describes rules, manifest encodes inventory.</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag design">Design</span> <span class="title">Measurement check + budget</span> <span class="own">Anton</span></div>
+  <div class="detail">Script that measures byte size per operator's boot set and reports drift. Budget number set after shrink work lands and measurement is possible. Not before.</div>
+  <div class="note">Budget ~20KB was proposed by Lev. All four operators agree: refactor first, measure, then set ceiling.</div>
+</div>
+
+<h2>Deferred</h2>
+
+<div class="card">
+  <div class="row"><span class="tag defer">Defer</span> <span class="title">Create contract-spec-jonah.md</span> <span class="own">Jonah + Anton input</span></div>
+  <div class="detail">Initiative deferred Jonah-side work until spine was stable. Spine is stable now. Create after priority fixes.</div>
+</div>
+
+<div class="card">
+  <div class="row"><span class="tag defer">Defer</span> <span class="title">Runtime-agnostic entry point</span> <span class="own">Anton (design question)</span></div>
+  <div class="detail">No runtime-agnostic discovery mechanism exists. Needs env var, convention, or structural solution. Not solvable by documentation alone. Park as open design question.</div>
+</div>
+
+<hr>
+
+<!-- OWNERSHIP SUMMARY -->
+<h2>Ownership Summary</h2>
+
+<table>
+  <tr><th>Owner</th><th>Items</th><th>Phase</th></tr>
+  <tr><td><strong>Jonah</strong></td><td>~/.claude/CLAUDE.md, repo CLAUDE.md, BOOT.md model step, BOOT.md lane enum, ROUTING.md handoff, runtime-self-check.md, AGENTS.md cleanup, projects/README.md</td><td>1</td></tr>
+  <tr><td><strong>Claudia</strong></td><td>operator/CLAUDE.md routing, captures.md path, memory.md refactor, working-style.md trim</td><td>1 + 2</td></tr>
+  <tr><td><strong>Lev</strong></td><td>lev.md trim</td><td>2</td></tr>
+  <tr><td><strong>Anton</strong></td><td>File-class contract, boot manifest, measurement check, budget</td><td>3</td></tr>
+  <tr><td><strong>Viktor</strong></td><td>openclaw.json config fix (manual), final budget approval</td><td>1 + 3</td></tr>
+</table>
+
+<hr>
+
+<!-- CONTEXT SIZE REFERENCE -->
+<h2>Reference: Current Boot Context Sizes</h2>
+
+<table>
+  <tr><th>File</th><th>Bytes</th><th>Notes</th></tr>
+  <tr><td>~/.claude/CLAUDE.md</td><td>5,589</td><td>Global bridge</td></tr>
+  <tr><td>vault-pipeline-v3b/CLAUDE.md</td><td>7,666</td><td>Repo bridge</td></tr>
+  <tr><td>dashboard/CLAUDE.md</td><td>4,421</td><td>Dashboard bridge</td></tr>
+  <tr><td>BOOT.md + ROUTING.md</td><td>4,262</td><td>VIK OS spine</td></tr>
+  <tr><td>memory.md</td><td>6,825</td><td style="color:var(--yellow)">Needs refactor (Claudia-specific)</td></tr>
+  <tr><td>recent-context.md</td><td>2,171</td><td></td></tr>
+  <tr><td>model-policy.md</td><td>2,935</td><td></td></tr>
+  <tr><td>working-style.md</td><td>7,230</td><td style="color:var(--yellow)">Needs trim (7.2KB to ~3-4KB)</td></tr>
+  <tr><td>identity.md</td><td>5,627</td><td>Move to on-demand</td></tr>
+  <tr><td>agent-role.md</td><td>5,486</td><td>Move to on-demand</td></tr>
+  <tr><td>decision-principles.md</td><td>3,389</td><td>Move to on-demand</td></tr>
+  <tr><td>claudia.md</td><td>7,295</td><td></td></tr>
+  <tr><td>anton.md</td><td>6,479</td><td></td></tr>
+  <tr><td>jonah.md</td><td>5,353</td><td></td></tr>
+  <tr><td>lev.md</td><td>14,696</td><td style="color:var(--yellow)">Needs trim (14.7KB to ~8KB)</td></tr>
+  <tr><td colspan="2" style="font-weight:700">Total (all files)</td><td style="font-weight:700">89,424 bytes (~22K tokens)</td></tr>
+</table>
+
+<div class="note">OpenClaw adds ~8.2KB of non-deferrable injected workspace context on top. Lev's total before first question: ~51KB.</div>
+
+<hr>
+
+<div class="sub" style="margin-top:16px; margin-bottom:0;">
+  Source files: VIK_OS/audits/2026-03-28/ &middot; 4 operator audits + cross-reviews, 1 global issues file, 1 resolution plan
+</div>
+
+</body>
+</html>

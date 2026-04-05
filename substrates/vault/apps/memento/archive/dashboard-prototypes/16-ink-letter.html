@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ink Letter — Daily Brief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet" />
+  <style>
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background: #FFFDF7;
+      color: #1C1917;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .letter {
+      max-width: 100%;
+      padding: 72px 8% 120px;
+    }
+
+    /* Salutation / date */
+    .salutation {
+      font-family: 'Lora', Georgia, serif;
+      font-style: italic;
+      font-size: 14px;
+      font-weight: 400;
+      color: #1C1917;
+      letter-spacing: 0.01em;
+      margin-bottom: 48px;
+    }
+
+    /* Opening — priority paragraph */
+    .opening {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #1C1917;
+      margin-bottom: 88px;
+      max-width: 74ch;
+    }
+
+    .opening strong {
+      font-weight: 700;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: 'Lora', Georgia, serif;
+      font-style: italic;
+      font-size: 13px;
+      font-weight: 400;
+      color: #1C1917;
+      opacity: 0.5;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      margin-bottom: 20px;
+    }
+
+    /* Body paragraphs */
+    .body-block {
+      margin-bottom: 88px;
+    }
+
+    .body-block p {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: #1C1917;
+      max-width: 74ch;
+      margin-bottom: 28px;
+    }
+
+    .body-block p:last-child {
+      margin-bottom: 0;
+    }
+
+    .body-block p strong {
+      font-weight: 700;
+    }
+
+    .body-block p em {
+      font-style: italic;
+    }
+
+    /* Tight list — week ahead */
+    .week-block {
+      margin-bottom: 88px;
+    }
+
+    .week-block .week-day {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 18px;
+      max-width: 74ch;
+    }
+
+    .week-block .day-name {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 13px;
+      font-style: italic;
+      font-weight: 400;
+      opacity: 0.5;
+      min-width: 72px;
+      flex-shrink: 0;
+    }
+
+    .week-block .day-detail {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.6;
+      color: #1C1917;
+    }
+
+    .week-block .day-detail strong {
+      font-weight: 600;
+    }
+
+    /* Countdowns */
+    .countdown-block {
+      margin-bottom: 88px;
+    }
+
+    .countdown-block .countdown-item {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 18px;
+      max-width: 74ch;
+    }
+
+    .countdown-block .count-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      color: #1C1917;
+      opacity: 0.45;
+      min-width: 72px;
+      flex-shrink: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .countdown-block .count-label {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: #1C1917;
+    }
+
+    /* Sign-off */
+    .signoff {
+      margin-top: 0;
+      max-width: 74ch;
+    }
+
+    .signoff .sign-name {
+      font-family: 'Lora', Georgia, serif;
+      font-style: italic;
+      font-size: 17px;
+      font-weight: 400;
+      color: #1C1917;
+      margin-bottom: 6px;
+    }
+
+    .signoff .sign-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      color: #1C1917;
+      opacity: 0.35;
+      letter-spacing: 0.01em;
+    }
+
+    /* Mobile */
+    @media (max-width: 680px) {
+      .letter {
+        padding: 48px 5% 80px;
+      }
+
+      .opening {
+        font-size: 20px;
+        margin-bottom: 64px;
+      }
+
+      .body-block {
+        margin-bottom: 64px;
+      }
+
+      .week-block {
+        margin-bottom: 64px;
+      }
+
+      .countdown-block {
+        margin-bottom: 64px;
+      }
+
+      .week-block .week-day,
+      .countdown-block .countdown-item {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .week-block .day-name,
+      .countdown-block .count-num {
+        min-width: unset;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="letter">
+
+  <!-- Salutation -->
+  <div class="salutation">Saturday, 29 March 2026</div>
+
+  <!-- Opening paragraph — priority -->
+  <p class="opening">
+    <strong>Follow up with Jessica on the Lucas Zanotto sales plan.</strong> It's been four days — the thread needs to move. This is the first thing today.
+  </p>
+
+  <!-- Pending -->
+  <div class="body-block">
+    <div class="section-label">waiting</div>
+    <p>
+      Justin Aversano still hasn't confirmed the PUNKS artist call. That's been sitting for a day. Worth a nudge if nothing comes in this morning.
+    </p>
+  </div>
+
+  <!-- Overdue deadlines -->
+  <div class="body-block">
+    <div class="section-label">overdue</div>
+    <p>
+      Three Lucas Zanotto deadlines are overdue. <strong>Memória Descritiva</strong> (assigned to you, 23 days overdue), <strong>Mkt & Comms plan w/ KPIs</strong> (David Cardoso, 12 days), and <strong>EXB_CARD</strong> (Pauline, Jessica, David, Carmen, Carolina, and you, 6 days).
+    </p>
+  </div>
+
+  <!-- Today -->
+  <div class="body-block">
+    <div class="section-label">today</div>
+    <p>
+      No events on the calendar. No meaningful overnight activity across inboxes or Basecamp. A quiet Saturday — use it.
+    </p>
+    <p>
+      <em>Reminders:</em> Bring Lev in for Phase 4 surface design. Create a templates and reference section in Eterno's shared Drive folder.
+    </p>
+  </div>
+
+  <!-- Tomorrow -->
+  <div class="body-block">
+    <div class="section-label">tomorrow</div>
+    <p>
+      Eterno products review at <strong>3pm</strong> with Olga from Under Dogs.
+    </p>
+    <p>
+      <strong>Jessica Louro's Sales Plan w/ KPIs</strong> for Lucas Zanotto is due tomorrow.
+    </p>
+  </div>
+
+  <!-- Week ahead -->
+  <div class="week-block">
+    <div class="section-label">this week</div>
+
+    <div class="week-day">
+      <span class="day-name">Monday</span>
+      <span class="day-detail"><strong>Heavy.</strong> Eterno Strategy at 2pm, B2C Comms at 3:20pm, then four PUNKS artist calls — Zafgod at 4pm, PIV at 5pm, Darko at 6pm, Coldie at 8:30pm. Six events total.</span>
+    </div>
+
+    <div class="week-day">
+      <span class="day-name">Tuesday</span>
+      <span class="day-detail">B2C Curatorial at 2:30pm. Pindar Van Arman at 5:30pm.</span>
+    </div>
+
+    <div class="week-day">
+      <span class="day-name">Wednesday</span>
+      <span class="day-detail"><em>Clear.</em></span>
+    </div>
+
+    <div class="week-day">
+      <span class="day-name">Thursday</span>
+      <span class="day-detail">Claire Silver at 5pm.</span>
+    </div>
+
+    <div class="week-day">
+      <span class="day-name">Friday</span>
+      <span class="day-detail"><em>Clear.</em></span>
+    </div>
+  </div>
+
+  <!-- Countdowns -->
+  <div class="countdown-block">
+    <div class="section-label">on the horizon</div>
+
+    <div class="countdown-item">
+      <span class="count-num">26 days</span>
+      <span class="count-label">Lucas Zanotto opening — April 24</span>
+    </div>
+
+    <div class="countdown-item">
+      <span class="count-num">68 days</span>
+      <span class="count-label">PUNKS opening — June 5</span>
+    </div>
+  </div>
+
+  <!-- Sign-off -->
+  <div class="signoff">
+    <div class="sign-name">Claudia</div>
+    <div class="sign-meta">synced 3 hours ago</div>
+  </div>
+
+</div>
+
+</body>
+</html>

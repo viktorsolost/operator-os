@@ -1,0 +1,3252 @@
+{
+  "manifest_version": "1.0",
+  "generated": "2026-04-04",
+  "schema_authority": "installer-v1-manifest-spec.md",
+  "total_files": 281,
+  "summary": {
+    "copy_core": 31,
+    "rewrite_template": 30,
+    "generate_fresh": 12,
+    "exclude": 219,
+    "pending": 0,
+    "total_files": 292
+  },
+  "files": [
+    {
+      "_section": "ROOT STARTUP FILES"
+    },
+    {
+      "path": "BOOT.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Canonical entrypoint. Contains Viktor references (lines 15-17, 32). Swap owner name and paths.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "ROUTING.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Lane selection and handoff rules. Contains Viktor references (lines 25, 51, 70-74, 97). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "CLAUDE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "supporting_authority",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Compatibility shim pointing to BOOT.md. No owner references.",
+      "authority": "IC"
+    },
+    {
+      "path": "STRUCTURE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "supporting_authority",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Structure guide. Verified zero Viktor references. Identical copy.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "memory.md",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Viktor's cross-session truths. Generate empty starter from onboarding answers.",
+      "authority": [
+        "IC",
+        "OS"
+      ]
+    },
+    {
+      "path": "recent-context.md",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Viktor's live session state. Generate install-state-only starter.",
+      "authority": [
+        "IC",
+        "OS"
+      ]
+    },
+    {
+      "_section": "OPERATOR \u2014 COPY-CORE DOCTRINE"
+    },
+    {
+      "path": "operator/context-loading-rules.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Load-class taxonomy. Contains Viktor references (lines 37, 71). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/context-placement-rules.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Where to write context. Contains Viktor reference (line 27). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/closeout-rules.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Completion logging rules. Contains Viktor reference (line 23). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/delegation-contract.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Sub-agent boundaries. Contains Viktor reference (line 24). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/model-policy.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Model assignment by lane. Contains Viktor reference (line 18). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/capabilities.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Capability truth-telling rules. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/clarification-protocol.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Operator mechanic. Contains Viktor references (lines 3, 13). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "_section": "OPERATOR \u2014 REWRITE-TEMPLATE DOCTRINE"
+    },
+    {
+      "path": "operator/CLAUDE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Routing shim says Viktor-wide. Replace with system-wide and owner-neutral refs.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/agent-role.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Autonomy and escalation rules. Minimal Viktor refs in approval language.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/working-style.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Communication discipline. References Viktor's voice. Swap owner name and tone_profile.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/decision-principles.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Tradeoff resolution. Minimal Viktor refs in decision authority language.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "_section": "OPERATOR \u2014 REWRITE-TEMPLATE ROLE FILES"
+    },
+    {
+      "path": "operator/anton.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Technical direction role. Role dynamics preserved. Swap any owner refs.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/claudia.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "COO role. References Viktor's inbox and reminders. Swap owner name.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/jonah.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "VP Engineering role. One Viktor confirmed ref. Swap owner name.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/vera.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Head of Design. Viktor Design Preferences section. Swap owner name, prefs from onboarding.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "operator/lev.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "CSO role. Multiple Viktor judgment refs. Swap owner name.",
+      "authority": [
+        "IC",
+        "GM",
+        "file_contents"
+      ]
+    },
+    {
+      "_section": "OPERATOR \u2014 GENERATE-FRESH CONTEXT"
+    },
+    {
+      "path": "operator/identity.md",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Viktor's role and responsibilities. Generate from onboarding: owner_name, primary_role, timezone, tone, business_context.",
+      "authority": [
+        "IC",
+        "OS",
+        "GM"
+      ]
+    },
+    {
+      "path": "operator/reminders.md",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Viktor's open reminders. Generate empty starter.",
+      "authority": [
+        "IC",
+        "OS"
+      ]
+    },
+    {
+      "path": "operator/claudia-memory.md",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Viktor's email voice and exhibition workflow. Generate empty starter.",
+      "authority": [
+        "IC",
+        "OS"
+      ]
+    },
+    {
+      "_section": "TEMPLATES"
+    },
+    {
+      "path": "templates/README.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template structure philosophy. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/active-project/CLAUDE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Says Viktor approves. Swap to owner approves.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/active-project/summary.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Pure template with placeholders. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/active-project/decisions.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/active-project/open-questions.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/active-project/references.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/active-project/session-log.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/intake-project/CLAUDE.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Intake template. No Viktor references found on audit.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/intake-project/summary.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/intake-project/decisions.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/intake-project/open-questions.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/intake-project/references.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/intake-project/setup-status.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Template. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/operator-handoff.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Says Viktor approval. Swap to owner approval.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/project-recipe.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Core principle. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/new-repo-technical-checklist.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Technical checklist. Verified zero Viktor references. Identical copy.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "templates/new-repo-technical-onboarding.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Mentions operators by name in Viktor-specific context. Neutralize owner refs.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "_section": "DOMAINS"
+    },
+    {
+      "path": "domains/CLAUDE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Domain organization routing. Contains Viktor reference (line 3). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "domains/exhibitions/CLAUDE.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Exhibition routing logic. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "domains/exhibitions/glossary.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "8 core exhibition terms. Generic vocabulary.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "domains/exhibitions/rules.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Mixes reusable doctrine with Viktor/Eterno operational residue including named people, Drive IDs, and production calendar IDs. Locked decision.",
+      "authority": [
+        "IC",
+        "SL",
+        "file_contents"
+      ]
+    },
+    {
+      "_section": "PROJECT TYPES"
+    },
+    {
+      "path": "project-types/CLAUDE.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Routing guidance. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "project-types/exhibition/CLAUDE.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Exhibition routing framework. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "project-types/exhibition/approval-rules.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "4 approval gates. Generic gate system. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "project-types/exhibition/lifecycle.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "9 canonical stages. Generic lifecycle. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "project-types/intake-decision-tree.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Structure is reusable but names Viktor and Claudia in approval semantics. Locked decision.",
+      "authority": [
+        "IC",
+        "SL",
+        "file_contents"
+      ]
+    },
+    {
+      "_section": "BRANDS \u2014 SYSTEM MECHANICS"
+    },
+    {
+      "path": "brands/session-wrapper.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "9-step brand activation. Contains Viktor references (lines 12-16, 35, 58, 140, 145). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "brands/runtime.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Points to session-wrapper. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "brands/operators/atlas.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Brand strategy operator. Generic role definition.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "brands/operators/helena.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Brand writing operator. Generic role definition.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "brands/registry.md",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Currently lists only Eterno. Generate empty or starter registry for new user.",
+      "authority": [
+        "IC",
+        "OS"
+      ]
+    },
+    {
+      "_section": "BRANDS \u2014 ETERNO PACK (EXCLUDE)"
+    },
+    {
+      "path": "brands/eterno/README.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's live brand content.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/registry.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno-specific brand metadata.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/approved-pack.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno brand doctrine.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/channels/instagram.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno Instagram channel doctrine.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/channels/x.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno X channel doctrine.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/identity.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno brand identity and positioning.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/metrics.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno metrics doctrine.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno open questions.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/tensions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno brand tensions.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/doctrine/voice.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Eterno voice doctrine.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/corpus/2026-04-03-eterno-x-metrics-snapshot-matched-window.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand research data.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/corpus/2026-04-03-eterno-x-metrics-snapshot.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand research data.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/corpus/2026-04-03-x-vs-instagram-comparison.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand research data.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/sources/instagram/2026-04-03-instagram-insights-screenshot-batch-001.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand source data.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/sources/internal/2026-04-03-eterno-strategy-source-map.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand source data.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/sources/x/2026-04-03-eterno-x-user-tweets-batch-001.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand source data.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/sources/x/2026-04-03-eterno-x-user-tweets-batch-002.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand source data.",
+      "authority": "IC"
+    },
+    {
+      "path": "brands/eterno/sources/x/artifacts/2026-04-03-eterno-x-user-tweets-batch-002.raw.json",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Live brand source data artifact.",
+      "authority": "IC"
+    },
+    {
+      "_section": "PROJECTS \u2014 STRUCTURAL"
+    },
+    {
+      "path": "projects/CLAUDE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Project routing rules. Contains Viktor reference (line 28). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "projects/README.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Structural governance.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "_section": "PROJECTS \u2014 VIKTOR'S LIVE PROJECTS (EXCLUDE)"
+    },
+    {
+      "path": "projects/0009eth-2026/CLAUDE.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/0009eth-2026/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/0009eth-2026/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/0009eth-2026/references.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/0009eth-2026/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/0009eth-2026/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/lucas-zanotto-2026/CLAUDE.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/lucas-zanotto-2026/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/lucas-zanotto-2026/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/lucas-zanotto-2026/references.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/lucas-zanotto-2026/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/lucas-zanotto-2026/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/references.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/calls/coldie-2026-03-31.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's project call note.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/calls/darko-2026-03-31.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's project call note.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/calls/pindar-2026-04-01.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's project call note.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/calls/piv-2026-03-31.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's project call note.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/punks-2026/calls/zafgod-2026-03-31.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's project call note.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/art-tech-platforms-research.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project research.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/partnerships-and-bookstore-gap-research-2026-04-02.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project research.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/upstairs-identity-proposal-v1.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project proposal.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/eterno-strategy-2026/data/x_analytics_eterno_2025-2026.csv",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's project analytics data.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/exhibitiq-2026/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/exhibitiq-2026/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/exhibitiq-2026/references.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/exhibitiq-2026/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/exhibitiq-2026/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/vhils-x-ledger/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/vhils-x-ledger/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/vhils-x-ledger/references.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/vhils-x-ledger/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/vhils-x-ledger/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/nfc-boldtron/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's active project.",
+      "authority": "IC"
+    },
+    {
+      "_section": "PROJECTS \u2014 TEST RESIDUE (EXCLUDE)"
+    },
+    {
+      "path": "projects/test-exhibition-001/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-exhibition-002/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-proj-history/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-proj-idempotent/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-proj-mark/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-proj-no-template/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-proj-nodeletion/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-proj-overridden/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/test-proj-registry/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Test project residue.",
+      "authority": "IC"
+    },
+    {
+      "_section": "INTAKE"
+    },
+    {
+      "path": "intake/CLAUDE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Routing rules for intake. Contains Viktor reference (line 51). Swap owner name.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "intake/atelier-sora-milan-2026/CLAUDE.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's intake project.",
+      "authority": "IC"
+    },
+    {
+      "path": "intake/atelier-sora-milan-2026/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's intake project.",
+      "authority": "IC"
+    },
+    {
+      "path": "intake/atelier-sora-milan-2026/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's intake project.",
+      "authority": "IC"
+    },
+    {
+      "path": "intake/atelier-sora-milan-2026/references.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's intake project.",
+      "authority": "IC"
+    },
+    {
+      "path": "intake/atelier-sora-milan-2026/setup-status.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's intake project.",
+      "authority": "IC"
+    },
+    {
+      "path": "intake/atelier-sora-milan-2026/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's intake project.",
+      "authority": "IC"
+    },
+    {
+      "_section": "HANDOFFS"
+    },
+    {
+      "path": "handoffs/README.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Structural governance. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "handoffs/anton-to-claudia-phase5-investigation.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor session artifact.",
+      "authority": "IC"
+    },
+    {
+      "path": "handoffs/anton-to-jonah-project-identity-cleanup.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor session artifact.",
+      "authority": "IC"
+    },
+    {
+      "path": "handoffs/claudia-to-jonah-linking-fixes.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor session artifact.",
+      "authority": "IC"
+    },
+    {
+      "_section": "APPS"
+    },
+    {
+      "path": "apps/README.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Structural governance. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "apps/memento/editorial-pass.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "References Claudia workflow, Google Sheet IDs, Viktor's pipeline specifics.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/anton-email-triage-decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/basecamp-sync-rewrite-anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/handoff-email-triage-to-anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/handoff-email-triage-to-claudia.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/memento-technical-plan.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-1-handoff-jonah.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-2-corrections-and-phase-3-handoff-jonah.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-2-handoff-jonah.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-3-handoff-jonah.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-4-anton-data-inventory.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-4-claudia-editorial-step.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-4-data-inventory.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-4-today-snapshot.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-4-vera-design-brief.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-5-handoff-jonah.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/phase-5-restart-anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/rapt-recommendation.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/plan-archive/task-5-shared-sources-proposal.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical plan archive file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/a.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/c.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/j.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/l.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/anton_brainstorm.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/claudia.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/jonah.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/lev.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical proposal file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/anton_brainstorm.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/claudia.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/jonah.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/lev.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/anton_memento_synthesis_review.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/jonah-convergence.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/lev-synthesis.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/brainstorm/synthesis/memento-synthesis-claudia.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm/synthesis HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/proposals/memento_brainstorm.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical brainstorm HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/01-newspaper-cascade.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/02-dark-signal.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/03-weight-inversion.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/04-left-rail.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/05-above-the-fold.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/06-warm-mono.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/07-editorial-split.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/08-oversized-date.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/09-tension-grid.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/10-the-memo.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/11-swiss-grid.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/12-sound-room.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/13-gallery-wall.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/14-fenda-mono.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/15-boarding-pass.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/16-ink-letter.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/17-triptych.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/18-architect.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/19-terminal.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/dashboard-prototypes/20-broadsheet.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical dashboard prototype HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708415809.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708415892.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708416059.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420834.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420855.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420859.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420877.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420881.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420898.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420911.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420934.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420943.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420947.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420950.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420965.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420986.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708420996.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421000.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421008.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421022.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421027.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421107.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421110.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421175.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421737.png",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/memento/archive/refs-ux-designing/pinterest_1145955067708421746.jpg",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical UX reference image.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/personal-operator-app-overview.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera product concept doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/product-framing.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera product doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/setup-model.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera product doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera product doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera product doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera product doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/agents/anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera agent doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/agents/claudia.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera agent doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/agents/joana.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera agent doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/pilot-users/alexandre.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera pilot user doc.",
+      "authority": "IC"
+    },
+    {
+      "path": "apps/sera/pilot-users/alexandre-interview-brief.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Sera pilot user doc.",
+      "authority": "IC"
+    },
+    {
+      "_section": "AUDITS"
+    },
+    {
+      "path": "audits/README.md",
+      "treatment": "copy-core",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Structural governance. No owner references.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "audits/2026-03-28/anton-routing-audit.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit file.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/2026-03-28/claudia-routing-audit.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit file.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/2026-03-28/global-issues.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit file.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/2026-03-28/jonah-routing-audit.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit file.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/2026-03-28/lev-routing-audit.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit file.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/2026-03-28/resolution-plan.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit file.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/2026-03-28/resolution-plan.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit HTML file.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/2026-03-28/vik-os-routing-reference.html",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical audit HTML file.",
+      "authority": "IC"
+    },
+    {
+      "_section": "INITIATIVES \u2014 OPERATOR ROUTING AND HANDOFFS (ALL EXCLUDE)"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/boot-manifest.json",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/contract-spec-anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/decisions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/phase-3-architecture-anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/review-anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/runtime-self-check.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/runtime-smoke-tests.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-routing-and-handoffs/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Historical routing initiative file.",
+      "authority": "IC"
+    },
+    {
+      "_section": "INITIATIVES \u2014 OPERATOR SYSTEM"
+    },
+    {
+      "path": "initiatives/operator-system/runtime-bridges.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "installer_v1",
+      "exclusion_type": "",
+      "reason": "Wiring diagram for runtime bridges. User needs this to understand, debug, or extend bridge setup. Locked decision 2026-04-04.",
+      "authority": [
+        "IC",
+        "SL"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/system-instantiation-contract.md",
+      "treatment": "exclude",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Master blueprint for building new instances. Builder tooling only. Locked decision 2026-04-04.",
+      "authority": [
+        "IC",
+        "SL"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/system-instantiation-generated-file-matrix.md",
+      "treatment": "exclude",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Packing list mapping onboarding inputs to files. Builder tooling only. Locked decision 2026-04-04.",
+      "authority": [
+        "IC",
+        "SL"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/system-instantiation-onboarding-schema.md",
+      "treatment": "exclude",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Questionnaire template for onboarding. Builder tooling only. Locked decision 2026-04-04.",
+      "authority": [
+        "IC",
+        "SL"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/installer-target-replication-contract.md",
+      "treatment": "exclude",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Inspection checklist for validating fresh install. Builder tooling only. Locked decision 2026-04-04.",
+      "authority": [
+        "IC",
+        "SL"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/installer-v1-manifest-spec.md",
+      "treatment": "exclude",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Classification schema for sorting files during install. Builder tooling only. Locked decision 2026-04-04.",
+      "authority": [
+        "IC",
+        "SL"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/installer-v1-manifest.json",
+      "treatment": "exclude",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "This manifest file. Build script input only.",
+      "authority": "SL"
+    },
+    {
+      "path": "initiatives/operator-system/installer-v1-full-comparison.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Human-readable comparison doc. Build-time reference only.",
+      "authority": "SL"
+    },
+    {
+      "path": "initiatives/operator-system/installer-v1-full-comparison.html",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "HTML comparison doc. Build-time reference only.",
+      "authority": "SL"
+    },
+    {
+      "path": "initiatives/operator-system/installer-v1-onboarding-phase3-tools.md",
+      "treatment": "exclude",
+      "build_time_role": "required_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Onboarding Phase 3 addendum for workflow tools. Builder tooling only.",
+      "authority": "SL"
+    },
+    {
+      "path": "initiatives/operator-system/summary.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Initiative summary.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/session-log.md",
+      "treatment": "exclude",
+      "build_time_role": "supporting_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Viktor's session decisions and approval log.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/open-questions.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Initiative working state.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/handoff-rules.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Handoff rules. Generic mechanics but duplicated by ROUTING.md and operator doctrine. Not needed as separate file.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/routing-model.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Boot sequence rule. Generic but superseded by BOOT.md and ROUTING.md.",
+      "authority": [
+        "IC",
+        "file_contents"
+      ]
+    },
+    {
+      "path": "initiatives/operator-system/team-map.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Lists Viktor's team with specific ownership domains.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/validation.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "historical_work_residue",
+      "reason": "Smoke test results from Viktor's routing changes.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/project-identity-rule.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Documents cleanup of Viktor-specific projects.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/system-instantiation-vocabulary.md",
+      "treatment": "exclude",
+      "build_time_role": "supporting_authority",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Vocabulary decision doc. Internal design reference.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/installer-v1-session-brief.md",
+      "treatment": "exclude",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "build_time_only_internal_design_doc",
+      "reason": "Installer session brief. Build-time reference only.",
+      "authority": "SL"
+    },
+    {
+      "path": "initiatives/operator-system/operators/anton.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Initiative-level operator detail. Runtime versions are in operator/ at root.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/operators/atlas.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Initiative-level operator detail. Runtime versions are in brands/operators/.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/operators/claudia.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Initiative-level operator detail.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/operators/helena.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Initiative-level operator detail.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/operators/jonah.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Initiative-level operator detail.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/operators/lev.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Initiative-level operator detail.",
+      "authority": "IC"
+    },
+    {
+      "path": "initiatives/operator-system/operators/vera.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "archive_support_file_not_needed_in_clean_instance",
+      "reason": "Initiative-level operator detail.",
+      "authority": "IC"
+    },
+    {
+      "_section": "INITIATIVES \u2014 INTERNAL DRIVE MIGRATION"
+    },
+    {
+      "path": "initiatives/internal-drive-migration/plan.md",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "owner_specific_residue",
+      "reason": "Viktor's internal drive migration plan.",
+      "authority": "IC"
+    },
+    {
+      "_section": "SYSTEM FILES"
+    },
+    {
+      "path": ".DS_Store",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "other",
+      "reason": "macOS system residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "audits/.DS_Store",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "other",
+      "reason": "macOS system residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "projects/.DS_Store",
+      "treatment": "exclude",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "do_not_ship",
+      "phase_owner": "never_copy",
+      "exclusion_type": "other",
+      "reason": "macOS system residue.",
+      "authority": "IC"
+    },
+    {
+      "path": "~/.codex/instructions.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime bridge for Codex. Template rendered with owner paths and identity during onboarding.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.claude/CLAUDE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime bridge for Claude. Template rendered with owner paths and identity during onboarding.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.gemini/GEMINI.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime bridge for Gemini. Template rendered with owner paths and identity during onboarding.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.openclaw/workspace/START_HERE.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime bridge for OpenClaw. Template rendered with owner paths and identity during onboarding.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.openclaw/workspace/AGENTS.md",
+      "treatment": "rewrite-template",
+      "build_time_role": "implementation_reference",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime bridge for OpenClaw agents. Template rendered with owner paths and identity during onboarding.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.codex/config.toml",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime config for Codex. Generated fresh from onboarding inputs.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.gemini/settings.json",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime config for Gemini. Generated fresh from onboarding inputs.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.gemini/projects.json",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime config for Gemini projects. Generated fresh from onboarding inputs.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.gemini/trustedFolders.json",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime config for Gemini trusted folders. Generated fresh from onboarding inputs.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "~/.openclaw/openclaw.json",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Runtime config for OpenClaw. Generated fresh from onboarding inputs.",
+      "authority": [
+        "IC",
+        "onboarding_schema"
+      ]
+    },
+    {
+      "path": "operator/voice.md",
+      "treatment": "generate-fresh",
+      "build_time_role": "not_needed",
+      "installed_instance_role": "ship_in_clean_instance",
+      "phase_owner": "onboarding",
+      "exclusion_type": "",
+      "reason": "Owner voice profile generated from connected comms sources during onboarding. Optional \u2014 skipped gracefully if no comms connected.",
+      "authority": [
+        "onboarding_schema"
+      ]
+    }
+  ]
+}

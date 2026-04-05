@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sound Room — Daily Brief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #FAFAFA;
+      --ink: #000000;
+      --rule: #CCCCCC;
+      --ghost: #888888;
+      --pad: clamp(24px, 4vw, 80px);
+      --sans: 'Space Grotesk', sans-serif;
+      --mono: 'Space Mono', monospace;
+      --ts: 'JetBrains Mono', monospace;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── MASTHEAD ─── */
+    .masthead {
+      padding: 28px var(--pad) 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 18px;
+    }
+
+    .masthead__wordmark {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .masthead__meta {
+      font-family: var(--ts);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--ghost);
+    }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      padding: 36px var(--pad) 32px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .page-header__eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      margin-bottom: 12px;
+    }
+
+    .page-header__date {
+      font-family: var(--sans);
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .page-header__sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--ghost);
+      margin-top: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── SECTION LABEL ROW ─── */
+    .section-label {
+      padding: 0 var(--pad);
+      height: 32px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--ink);
+      background: var(--ink);
+    }
+
+    .section-label__text {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--bg);
+    }
+
+    /* ─── BASE ROW ─── */
+    .row {
+      display: grid;
+      grid-template-columns: clamp(80px, 14vw, 160px) 1fr;
+      border-bottom: 1px solid var(--rule);
+      padding: 0 var(--pad);
+    }
+
+    .row__label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      padding: 20px 20px 20px 0;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      align-items: flex-start;
+      padding-top: 22px;
+    }
+
+    .row__body {
+      padding: 20px 0 20px 24px;
+    }
+
+    /* ─── ROW HEIGHTS ─── */
+
+    /* Tall row — urgent thread */
+    .row--tall .row__label {
+      padding-top: 32px;
+    }
+
+    .row--tall .row__body {
+      padding-top: 32px;
+      padding-bottom: 36px;
+    }
+
+    /* Short row — empty days */
+    .row--short .row__label {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    .row--short .row__body {
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    /* Medium row */
+    .row--medium .row__label {
+      padding-top: 18px;
+      padding-bottom: 18px;
+    }
+
+    .row--medium .row__body {
+      padding-top: 18px;
+      padding-bottom: 18px;
+    }
+
+    /* ─── URGENT THREAD ─── */
+    .urgent__eyebrow {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      margin-bottom: 14px;
+    }
+
+    .urgent__title {
+      font-family: var(--sans);
+      font-size: clamp(20px, 2.8vw, 28px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .urgent__detail {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .urgent__age {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      padding: 4px 10px 3px;
+    }
+
+    /* ─── NORMAL THREAD ─── */
+    .thread__title {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .thread__age {
+      font-family: var(--ts);
+      font-size: 10px;
+      color: var(--ghost);
+      margin-top: 4px;
+    }
+
+    /* ─── EMPTY STATE ─── */
+    .empty {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--ghost);
+    }
+
+    /* ─── REMINDERS ─── */
+    .reminder {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 8px;
+    }
+
+    .reminder:last-child {
+      margin-bottom: 0;
+    }
+
+    .reminder__type {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      width: 38px;
+      flex-shrink: 0;
+    }
+
+    .reminder__text {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    /* ─── TONIGHT ─── */
+    .tonight__title {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ghost);
+      font-style: italic;
+    }
+
+    /* ─── OVERDUE DETAILS/COLLAPSE ─── */
+
+    /* Tall summary row inside overdue section */
+    .overdue-summary {
+      display: grid;
+      grid-template-columns: clamp(80px, 14vw, 160px) 1fr;
+      border-bottom: 1px solid var(--rule);
+      padding: 0 var(--pad);
+    }
+
+    .overdue-summary__label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      padding: 28px 20px 28px 0;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .overdue-summary__body {
+      padding: 28px 0 28px 24px;
+    }
+
+    details.overdue-group {
+      /* No extra spacing — uses the overdue-summary grid rows */
+    }
+
+    details.overdue-group > summary {
+      list-style: none;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: clamp(80px, 14vw, 160px) 1fr;
+      border-bottom: 1px solid var(--rule);
+      padding: 0 var(--pad);
+      user-select: none;
+    }
+
+    details.overdue-group > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.overdue-group > summary .overdue-summary__label {
+      padding: 28px 20px 28px 0;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    details.overdue-group > summary .overdue-summary__body {
+      padding: 28px 0 28px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    details.overdue-group > summary:hover .overdue-summary__body {
+      background: transparent;
+    }
+
+    .overdue-project {
+      font-family: var(--sans);
+      font-size: clamp(16px, 2.2vw, 22px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+
+    .overdue-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--ink);
+      padding: 3px 8px 2px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .overdue-toggle {
+      font-family: var(--ts);
+      font-size: 10px;
+      color: var(--ghost);
+      margin-top: 8px;
+    }
+
+    details[open] .overdue-toggle::before {
+      content: "collapse ";
+    }
+
+    details:not([open]) .overdue-toggle::before {
+      content: "expand ";
+    }
+
+    /* Sub-rows inside expanded details */
+    .overdue-items {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .overdue-item {
+      display: grid;
+      grid-template-columns: clamp(80px, 14vw, 160px) 1fr;
+      padding: 0 var(--pad);
+      border-bottom: 1px dotted var(--rule);
+    }
+
+    .overdue-item:last-child {
+      border-bottom: none;
+    }
+
+    .overdue-item__label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      padding: 12px 20px 12px 0;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+    }
+
+    .overdue-item__body {
+      padding: 12px 0 12px 24px;
+    }
+
+    .overdue-item__title {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .overdue-item__meta {
+      font-family: var(--ts);
+      font-size: 9px;
+      color: var(--ghost);
+      margin-top: 2px;
+    }
+
+    /* ─── TOMORROW ROW ─── */
+    .tomorrow__event-time {
+      font-family: var(--ts);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ghost);
+      margin-bottom: 4px;
+    }
+
+    .tomorrow__event-title {
+      font-family: var(--sans);
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .tomorrow__context {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ghost);
+      margin-top: 4px;
+    }
+
+    /* ─── WEEK ROWS ─── */
+
+    /* Monday — tall, 6 events */
+    .week-day--heavy .row__body {
+      padding-top: 24px;
+      padding-bottom: 28px;
+    }
+
+    .week-day--heavy .row__label {
+      padding-top: 24px;
+    }
+
+    .week-day__name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .week-day__date {
+      font-family: var(--ts);
+      font-size: 10px;
+      color: var(--ghost);
+      margin-top: 2px;
+    }
+
+    .week-day__count {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      margin-top: 6px;
+    }
+
+    .week-day__count--heavy {
+      color: var(--ink);
+    }
+
+    /* Event list for heavy days */
+    .event-list {
+      list-style: none;
+      margin-top: 2px;
+    }
+
+    .event-list__item {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .event-list__item:last-child {
+      border-bottom: none;
+    }
+
+    .event-list__time {
+      font-family: var(--ts);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--ghost);
+      width: 44px;
+      flex-shrink: 0;
+    }
+
+    .event-list__title {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .event-list__tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* Medium day event summary */
+    .day-summary {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    .day-deadline {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      margin-top: 6px;
+    }
+
+    /* Empty day */
+    .day-empty {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--ghost);
+    }
+
+    /* ─── MILESTONES ─── */
+    .milestones {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .milestone {
+      padding: 22px 0;
+    }
+
+    .milestone:first-child {
+      padding-right: 32px;
+      border-right: 1px solid var(--rule);
+    }
+
+    .milestone:last-child {
+      padding-left: 32px;
+    }
+
+    .milestone__project {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ghost);
+      margin-bottom: 6px;
+    }
+
+    .milestone__name {
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .milestone__date {
+      font-family: var(--ts);
+      font-size: 11px;
+      color: var(--ghost);
+    }
+
+    .milestone__countdown {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 6px;
+    }
+
+    /* ─── SYNC FOOTER ─── */
+    .footer {
+      padding: 16px var(--pad);
+      border-top: 2px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer__label {
+      font-family: var(--ts);
+      font-size: 10px;
+      color: var(--ghost);
+      letter-spacing: 0.04em;
+    }
+
+    .footer__status {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ghost);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 640px) {
+      .row {
+        grid-template-columns: 72px 1fr;
+      }
+
+      details.overdue-group > summary {
+        grid-template-columns: 72px 1fr;
+      }
+
+      .overdue-item {
+        grid-template-columns: 72px 1fr;
+      }
+
+      .milestones {
+        grid-template-columns: 1fr;
+      }
+
+      .milestone:first-child {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .milestone:last-child {
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── MASTHEAD ─── -->
+<div class="masthead">
+  <div class="masthead__wordmark">Memento &mdash; Sound Room</div>
+  <div class="masthead__meta">SYNC 14H AGO</div>
+</div>
+
+<!-- ─── PAGE HEADER ─── -->
+<div class="page-header">
+  <div class="page-header__eyebrow">Daily Briefing</div>
+  <div class="page-header__date">Sunday, 30 March</div>
+  <div class="page-header__sub">2 threads open &middot; 22 overdue &middot; 6 events tomorrow &middot; 2 deadlines this week &middot; LZ deadline in 25 days</div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION: TODAY
+═══════════════════════════════════ -->
+<div class="section-label">
+  <span class="section-label__text">Today &mdash; Sun 30 Mar</span>
+</div>
+
+<!-- TALL ROW: LZ / Jessica — urgent, 5 days -->
+<div class="row row--tall">
+  <div class="row__label">LZ</div>
+  <div class="row__body">
+    <div class="urgent__eyebrow">Open Thread &middot; Awaiting Response</div>
+    <div class="urgent__title">Follow up with Jessica<br>on sales plan</div>
+    <div class="urgent__detail">Lucas Zanotto. Curatorial thread. Sales plan review is blocked pending Jessica's response. Critical — opening is 25 days out.</div>
+    <div class="urgent__age">5 days overdue</div>
+  </div>
+</div>
+
+<!-- Normal row: PUNKS -->
+<div class="row">
+  <div class="row__label">PUNKS</div>
+  <div class="row__body">
+    <div class="thread__title">Waiting on Justin Aversano</div>
+    <div class="thread__age">2d open</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION: OVERDUE
+═══════════════════════════════════ -->
+<div class="section-label">
+  <span class="section-label__text">Overdue &mdash; 22 Items</span>
+</div>
+
+<!-- LUCAS ZANOTTO — 19 OVERDUE (collapsible) -->
+<details class="overdue-group">
+  <summary>
+    <div class="overdue-summary__label">
+      <span>LZ</span>
+    </div>
+    <div class="overdue-summary__body">
+      <div class="overdue-project">LUCAS ZANOTTO</div>
+      <div class="overdue-count">19 OVERDUE</div>
+      <div class="overdue-toggle"></div>
+    </div>
+  </summary>
+  <div class="overdue-items">
+    <div class="overdue-item">
+      <div class="overdue-item__label">Viktor</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Memória Descritiva</div>
+        <div class="overdue-item__meta">23 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">David C.</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Mkt &amp; Comms plan w/ KPIs</div>
+        <div class="overdue-item__meta">12 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Team</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">EXB_CARD</div>
+        <div class="overdue-item__meta">Pauline, Jessica, David, Carmen, Carolina, Viktor &middot; 6 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Jessica</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Sales plan review</div>
+        <div class="overdue-item__meta">5 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Pauline</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Press release draft v2</div>
+        <div class="overdue-item__meta">4 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Viktor</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Artwork list final</div>
+        <div class="overdue-item__meta">3 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Carmen</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Shipping estimates</div>
+        <div class="overdue-item__meta">3 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Carolina</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Venue layout confirmation</div>
+        <div class="overdue-item__meta">2 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">David C.</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Social content calendar</div>
+        <div class="overdue-item__meta">2 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Viktor</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Collector outreach list</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Jessica</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Pricing tiers confirmation</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Pauline</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Media partner list</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Viktor</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Artist bio final</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Carmen</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Insurance documentation</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Carolina</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Catering briefing</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">David C.</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Newsletter draft</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Viktor</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Catalogue intro text</div>
+        <div class="overdue-item__meta">Today</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Jessica</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">VIP invitee final list</div>
+        <div class="overdue-item__meta">Today</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Pauline</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Exhibition copy proofread</div>
+        <div class="overdue-item__meta">Today</div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- PUNKS — 3 OVERDUE (collapsible) -->
+<details class="overdue-group">
+  <summary>
+    <div class="overdue-summary__label">
+      <span>PUNKS</span>
+    </div>
+    <div class="overdue-summary__body">
+      <div class="overdue-project">PUNKS</div>
+      <div class="overdue-count">3 OVERDUE</div>
+      <div class="overdue-toggle"></div>
+    </div>
+  </summary>
+  <div class="overdue-items">
+    <div class="overdue-item">
+      <div class="overdue-item__label">Viktor</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Project brief v2 to Justin</div>
+        <div class="overdue-item__meta">4 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Justin</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Contract review &amp; sign</div>
+        <div class="overdue-item__meta">2 days overdue</div>
+      </div>
+    </div>
+    <div class="overdue-item">
+      <div class="overdue-item__label">Viktor</div>
+      <div class="overdue-item__body">
+        <div class="overdue-item__title">Community announcement draft</div>
+        <div class="overdue-item__meta">1 day overdue</div>
+      </div>
+    </div>
+  </div>
+</details>
+
+<!-- Short row: Calendar -->
+<div class="row row--short">
+  <div class="row__label">Calendar</div>
+  <div class="row__body">
+    <div class="empty">No events today.</div>
+  </div>
+</div>
+
+<!-- Short row: Reminders -->
+<div class="row row--short">
+  <div class="row__label">Reminders</div>
+  <div class="row__body">
+    <div class="empty">Nothing due today.</div>
+  </div>
+</div>
+
+<!-- Short row: Overnight -->
+<div class="row row--short">
+  <div class="row__label">Overnight</div>
+  <div class="row__body">
+    <div class="tonight__title">Quiet night. No meaningful communications.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION: TOMORROW
+═══════════════════════════════════ -->
+<div class="section-label">
+  <span class="section-label__text">Tomorrow &mdash; Mon 31 Mar</span>
+</div>
+
+<!-- Deadlines row -->
+<div class="row row--medium">
+  <div class="row__label">DUE</div>
+  <div class="row__body">
+    <div class="reminder">
+      <span class="reminder__type">LZ</span>
+      <span class="reminder__text">Artwork list — due Apr 4</span>
+    </div>
+    <div class="reminder">
+      <span class="reminder__type">LZ</span>
+      <span class="reminder__text">Artist statement — due Apr 5</span>
+    </div>
+  </div>
+</div>
+
+<!-- Monday — TALL (6 events) -->
+<div class="row week-day--heavy">
+  <div class="row__label">
+    <div>
+      <div class="week-day__name">Calendar</div>
+      <div class="week-day__count week-day__count--heavy">6 events</div>
+    </div>
+  </div>
+  <div class="row__body">
+    <ul class="event-list">
+      <li class="event-list__item">
+        <span class="event-list__time">09:00</span>
+        <span class="event-list__title">Team standup</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">10:30</span>
+        <span class="event-list__title">Zafgod call</span>
+        <span class="event-list__tag">PUNKS</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">12:00</span>
+        <span class="event-list__title">LZ gallery sync</span>
+        <span class="event-list__tag">LZ</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">14:00</span>
+        <span class="event-list__title">Lev check-in</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">16:00</span>
+        <span class="event-list__title">Basecamp review</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">18:00</span>
+        <span class="event-list__title">Eterno board</span>
+        <span class="event-list__tag">Eterno</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION: THIS WEEK
+═══════════════════════════════════ -->
+<div class="section-label">
+  <span class="section-label__text">This Week &mdash; Mon 31 &ndash; Sat 5 Apr</span>
+</div>
+
+<!-- Monday — TALL (6 events) -->
+<div class="row week-day--heavy">
+  <div class="row__label">
+    <div>
+      <div class="week-day__name">Monday</div>
+      <div class="week-day__date">31 Mar</div>
+      <div class="week-day__count week-day__count--heavy">6 events</div>
+    </div>
+  </div>
+  <div class="row__body">
+    <ul class="event-list">
+      <li class="event-list__item">
+        <span class="event-list__time">09:00</span>
+        <span class="event-list__title">Team standup</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">10:30</span>
+        <span class="event-list__title">Zafgod call</span>
+        <span class="event-list__tag">PUNKS</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">12:00</span>
+        <span class="event-list__title">LZ gallery sync</span>
+        <span class="event-list__tag">LZ</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">14:00</span>
+        <span class="event-list__title">Lev check-in</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">16:00</span>
+        <span class="event-list__title">Basecamp review</span>
+      </li>
+      <li class="event-list__item">
+        <span class="event-list__time">18:00</span>
+        <span class="event-list__title">Eterno board</span>
+        <span class="event-list__tag">Eterno</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Tuesday — medium (2 events) -->
+<div class="row row--medium">
+  <div class="row__label">
+    <div>
+      <div class="week-day__name">Tuesday</div>
+      <div class="week-day__date">1 Apr</div>
+      <div class="week-day__count week-day__count--heavy">2 events</div>
+    </div>
+  </div>
+  <div class="row__body">
+    <div class="day-summary">2 events scheduled</div>
+  </div>
+</div>
+
+<!-- Wednesday — short (empty) -->
+<div class="row row--short">
+  <div class="row__label">
+    <div>
+      <div class="week-day__name">Wednesday</div>
+      <div class="week-day__date">2 Apr</div>
+    </div>
+  </div>
+  <div class="row__body">
+    <div class="day-empty">&mdash;</div>
+  </div>
+</div>
+
+<!-- Thursday — medium (1 event + deadline) -->
+<div class="row row--medium">
+  <div class="row__label">
+    <div>
+      <div class="week-day__name">Thursday</div>
+      <div class="week-day__date">3 Apr</div>
+      <div class="week-day__count week-day__count--heavy">1 event</div>
+    </div>
+  </div>
+  <div class="row__body">
+    <div class="day-summary">1 event scheduled</div>
+    <div class="day-deadline">Deadline approaching: Artwork list Sat 4</div>
+  </div>
+</div>
+
+<!-- Friday — short (deadline only) -->
+<div class="row row--short">
+  <div class="row__label">
+    <div>
+      <div class="week-day__name">Friday</div>
+      <div class="week-day__date">4 Apr</div>
+    </div>
+  </div>
+  <div class="row__body">
+    <div class="day-deadline">LZ — Artwork list due</div>
+  </div>
+</div>
+
+<!-- Saturday — short (deadline only) -->
+<div class="row row--short">
+  <div class="row__label">
+    <div>
+      <div class="week-day__name">Saturday</div>
+      <div class="week-day__date">5 Apr</div>
+    </div>
+  </div>
+  <div class="row__body">
+    <div class="day-deadline">LZ — Artist statement due</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SECTION: MILESTONES
+═══════════════════════════════════ -->
+<div class="section-label">
+  <span class="section-label__text">Milestones</span>
+</div>
+
+<div style="padding: 0 var(--pad); border-bottom: 1px solid var(--rule);">
+  <div class="milestones">
+    <div class="milestone">
+      <div class="milestone__project">LZ &mdash; Lucas Zanotto</div>
+      <div class="milestone__name">Opening deadline</div>
+      <div class="milestone__date">24 April 2026</div>
+      <div class="milestone__countdown">25 days</div>
+    </div>
+    <div class="milestone">
+      <div class="milestone__project">PUNKS</div>
+      <div class="milestone__name">Launch target</div>
+      <div class="milestone__date">5 June 2026</div>
+      <div class="milestone__countdown">67 days</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<div class="footer">
+  <div class="footer__label">Memento &middot; Claudia &middot; Sunday 30 March 2026</div>
+  <div class="footer__status">Last sync: 14h ago</div>
+</div>
+
+</body>
+</html>

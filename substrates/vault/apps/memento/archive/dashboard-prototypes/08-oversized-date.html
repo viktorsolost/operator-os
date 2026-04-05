@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>29 — Saturday, March 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg: #F8F6F1;
+    --ink: #1A1A1A;
+    --secondary: #6B6860;
+    --label: #9B9790;
+    --orange: #E05A2B;
+    --ghost: rgba(26, 26, 26, 0.06);
+    --rule: rgba(26, 26, 26, 0.07);
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─────────────────────────────────────────────
+     GHOST DATE — the identity
+  ───────────────────────────────────────────── */
+
+  .ghost-date-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .ghost-date {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(300px, 40vw, 600px);
+    font-weight: 200;
+    line-height: 0.78;
+    color: var(--ink);
+    opacity: 0.06;
+    display: block;
+    /* Bleed left, clip at top */
+    margin-left: -0.025em;
+    margin-top: -0.04em;
+    letter-spacing: -0.02em;
+    user-select: none;
+  }
+
+  /* ─────────────────────────────────────────────
+     PAGE SHELL
+  ───────────────────────────────────────────── */
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 44px 80px;
+  }
+
+  /* ─────────────────────────────────────────────
+     HEADER — date identity, day/month labels
+  ───────────────────────────────────────────── */
+
+  .header {
+    position: relative;
+    /* Height should match roughly where the ghost "29" top-of-digit sits before content */
+    padding-top: clamp(18px, 2.8vw, 40px);
+    padding-bottom: clamp(28px, 4vw, 60px);
+  }
+
+  /* SATURDAY — sits just above where the number starts */
+  .header-day {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.24em;
+    color: var(--secondary);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: clamp(8px, 1.4vw, 20px);
+  }
+
+  /* Spacer — the ghost number occupies this vertical real estate */
+  .header-spacer {
+    height: clamp(130px, 18vw, 260px);
+  }
+
+  /* MARCH 2026 — sits below the base of the digit */
+  .header-bottom {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .header-month {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.24em;
+    color: var(--label);
+    text-transform: uppercase;
+  }
+
+  .header-sync {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--label);
+    text-transform: uppercase;
+  }
+
+  /* ─────────────────────────────────────────────
+     RULE
+  ───────────────────────────────────────────── */
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--rule);
+    margin-bottom: clamp(28px, 4vw, 52px);
+  }
+
+  /* ─────────────────────────────────────────────
+     CONTENT GRID
+  ───────────────────────────────────────────── */
+
+  .grid {
+    display: grid;
+    grid-template-columns: 55fr 45fr;
+    column-gap: 52px;
+  }
+
+  /* ─────────────────────────────────────────────
+     SECTION PRIMITIVES
+  ───────────────────────────────────────────── */
+
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 16px;
+  }
+
+  /* ─────────────────────────────────────────────
+     THREADS
+  ───────────────────────────────────────────── */
+
+  /* Jessica / LZ — the hero item */
+  .thread-hero {
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thread-hero-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    display: block;
+  }
+
+  .thread-hero-sub {
+    margin-top: 5px;
+    font-size: 11px;
+    color: var(--secondary);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-age {
+    color: var(--orange);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-label {
+    color: var(--label);
+  }
+
+  /* Standard thread row */
+  .thread-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thread-row:last-child {
+    border-bottom: none;
+  }
+
+  .tr-project {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    min-width: 52px;
+  }
+
+  .tr-status {
+    font-size: 12px;
+    color: var(--secondary);
+    flex: 1;
+    letter-spacing: 0.02em;
+  }
+
+  .tr-age {
+    font-size: 11px;
+    color: var(--label);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─────────────────────────────────────────────
+     CALENDAR
+  ───────────────────────────────────────────── */
+
+  .empty {
+    font-size: 12px;
+    color: var(--label);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─────────────────────────────────────────────
+     REMINDERS
+  ───────────────────────────────────────────── */
+
+  .reminder-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .reminder-row:last-child {
+    border-bottom: none;
+  }
+
+  .rem-marker {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .rem-marker.task {
+    background: var(--ink);
+  }
+
+  .rem-marker.idea {
+    background: transparent;
+    border: 1.5px solid var(--secondary);
+  }
+
+  .rem-name {
+    font-size: 13px;
+    color: var(--ink);
+    flex: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .rem-type {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: var(--label);
+    text-transform: uppercase;
+  }
+
+  /* ─────────────────────────────────────────────
+     RIGHT COL — Overnight, Tomorrow, Milestones
+  ───────────────────────────────────────────── */
+
+  /* Overnight */
+  .overnight-text {
+    font-size: 13px;
+    color: var(--secondary);
+    line-height: 1.65;
+    letter-spacing: 0.02em;
+  }
+
+  /* Tomorrow */
+  .tomorrow-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .tomorrow-row:last-child {
+    border-bottom: none;
+  }
+
+  .tm-time {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--label);
+    min-width: 34px;
+  }
+
+  .tm-title {
+    font-size: 13px;
+    color: var(--ink);
+    flex: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .tm-context {
+    font-size: 11px;
+    color: var(--secondary);
+    letter-spacing: 0.04em;
+  }
+
+  /* Milestones */
+  .milestone-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .milestone-row:last-child {
+    border-bottom: none;
+  }
+
+  .ms-name {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    min-width: 52px;
+  }
+
+  .ms-date {
+    font-size: 12px;
+    color: var(--secondary);
+    flex: 1;
+    letter-spacing: 0.04em;
+  }
+
+  .ms-days {
+    font-size: 12px;
+    color: var(--label);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─────────────────────────────────────────────
+     WEEK BAR — full width, pinned below grid
+  ───────────────────────────────────────────── */
+
+  .week-block {
+    margin-top: 8px;
+    padding-top: 32px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .week-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    column-gap: 4px;
+    margin-top: 4px;
+  }
+
+  .day-col {
+    display: flex;
+    flex-direction: column;
+    padding-top: 12px;
+    border-top: 1.5px solid var(--rule);
+  }
+
+  /* Monday gets the heavy treatment */
+  .day-col.heavy {
+    border-top-color: var(--ink);
+    border-top-width: 2px;
+  }
+
+  .day-col.is-today {
+    border-top-color: var(--orange);
+    border-top-width: 1.5px;
+  }
+
+  .wk-letter {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 7px;
+  }
+
+  .day-col.is-today .wk-letter {
+    color: var(--orange);
+  }
+
+  .wk-count {
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--label);
+  }
+
+  .day-col.heavy .wk-count {
+    font-size: 42px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.05em;
+  }
+
+  .day-col.is-today .wk-count {
+    /* keep label color — today is empty */
+    color: var(--label);
+  }
+
+  /* Small event lines under Monday count */
+  .wk-events {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .wk-ev {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--secondary);
+    text-transform: uppercase;
+    line-height: 1.5;
+  }
+
+  /* ─────────────────────────────────────────────
+     RESPONSIVE
+  ───────────────────────────────────────────── */
+
+  @media (max-width: 720px) {
+    .page {
+      padding: 0 22px 60px;
+    }
+
+    .ghost-date {
+      font-size: clamp(180px, 56vw, 300px);
+    }
+
+    .header-spacer {
+      height: clamp(80px, 24vw, 160px);
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .col-right {
+      border-top: 1px solid var(--rule);
+      padding-top: 32px;
+    }
+
+    .week-row {
+      grid-template-columns: repeat(6, 1fr);
+      column-gap: 2px;
+    }
+
+    .day-col.heavy .wk-count {
+      font-size: 32px;
+    }
+
+    .wk-count {
+      font-size: 24px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- GHOST DATE — fixed, full bleed, identity layer -->
+<div class="ghost-date-wrap">
+  <span class="ghost-date">29</span>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <span class="header-day">Saturday</span>
+
+    <!-- This empty space is where the ghost "29" visually lives -->
+    <div class="header-spacer"></div>
+
+    <div class="header-bottom">
+      <span class="header-month">March 2026</span>
+      <span class="header-sync">Sync 3h ago</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CONTENT GRID -->
+  <div class="grid">
+
+    <!-- LEFT: Threads / Calendar / Reminders -->
+    <div class="col-left">
+
+      <div class="section">
+        <span class="section-label">Threads</span>
+
+        <!-- Hero: Jessica / LZ -->
+        <div class="thread-hero">
+          <span class="thread-hero-name">Follow up with Jessica<br>on LZ sales plan</span>
+          <div class="thread-hero-sub">
+            <span class="hero-age">4d unanswered</span>
+            <span class="hero-label">Lucas Zanotto</span>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="thread-row">
+          <span class="tr-project">PUNKS</span>
+          <span class="tr-status">Waiting on Justin Aversano</span>
+          <span class="tr-age">1d</span>
+        </div>
+
+      </div>
+
+      <div class="section">
+        <span class="section-label">Overdue Deadlines</span>
+
+        <div class="thread-row">
+          <span class="tr-project">LZ</span>
+          <span class="tr-status">Memória Descritiva</span>
+          <span class="tr-age">23d</span>
+        </div>
+        <div class="thread-row">
+          <span class="tr-project">LZ</span>
+          <span class="tr-status">Mkt & Comms plan w/ KPIs — David Cardoso</span>
+          <span class="tr-age">12d</span>
+        </div>
+        <div class="thread-row">
+          <span class="tr-project">LZ</span>
+          <span class="tr-status">EXB_CARD — Pauline/Jessica/David/Carmen/Carolina/Viktor</span>
+          <span class="tr-age">6d</span>
+        </div>
+
+      </div>
+
+      <div class="section">
+        <span class="section-label">Today</span>
+        <span class="empty">No events scheduled</span>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Reminders</span>
+        <div class="reminder-row">
+          <div class="rem-marker task"></div>
+          <span class="rem-name">Templates section</span>
+          <span class="rem-type">Task</span>
+        </div>
+        <div class="reminder-row">
+          <div class="rem-marker idea"></div>
+          <span class="rem-name">Lev Phase 4</span>
+          <span class="rem-type">Idea</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: Overnight / Tomorrow / Milestones -->
+    <div class="col-right">
+
+      <div class="section">
+        <span class="section-label">Overnight</span>
+        <p class="overnight-text">Quiet night.<br>No meaningful communications.</p>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Tomorrow — Sun 30</span>
+        <div class="tomorrow-row">
+          <span class="tm-time">due</span>
+          <span class="tm-title">LZ — Sales Plan w/ KPIs</span>
+          <span class="tm-context">Jessica Louro</span>
+        </div>
+        <div class="tomorrow-row">
+          <span class="tm-time">3pm</span>
+          <span class="tm-title">Eterno products</span>
+          <span class="tm-context">w/ Olga, Under Dogs</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-label">Milestones</span>
+        <div class="milestone-row">
+          <span class="ms-name">LZ</span>
+          <span class="ms-date">Apr 24</span>
+          <span class="ms-days">26d</span>
+        </div>
+        <div class="milestone-row">
+          <span class="ms-name">PUNKS</span>
+          <span class="ms-date">Jun 5</span>
+          <span class="ms-days">68d</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- WEEK ROW — full width below grid -->
+  <div class="week-block">
+    <span class="section-label">Week ahead</span>
+    <div class="week-row">
+
+      <!-- Monday — heavy, 6 items -->
+      <div class="day-col heavy">
+        <span class="wk-letter">Mon 31</span>
+        <span class="wk-count">6</span>
+        <div class="wk-events">
+          <span class="wk-ev">Zafgod 4pm</span>
+          <span class="wk-ev">+ 5 more</span>
+        </div>
+      </div>
+
+      <div class="day-col">
+        <span class="wk-letter">Tue</span>
+        <span class="wk-count">2</span>
+      </div>
+
+      <div class="day-col">
+        <span class="wk-letter">Wed</span>
+        <span class="wk-count">0</span>
+      </div>
+
+      <div class="day-col">
+        <span class="wk-letter">Thu</span>
+        <span class="wk-count">1</span>
+      </div>
+
+      <div class="day-col">
+        <span class="wk-letter">Fri</span>
+        <span class="wk-count">0</span>
+      </div>
+
+      <div class="day-col is-today">
+        <span class="wk-letter">Sat</span>
+        <span class="wk-count">0</span>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

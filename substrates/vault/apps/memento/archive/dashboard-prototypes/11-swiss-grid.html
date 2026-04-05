@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIK OS — Daily Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg: #FFFFFF;
+    --ink: #000000;
+    --rule: #E0E0E0;
+    --mute: #999999;
+    --accent: #FF6600;
+    --font-content: 'Inter', sans-serif;
+    --font-label: 'JetBrains Mono', monospace;
+    --num-size: clamp(80px, 10vw, 160px);
+    --gutter: clamp(24px, 4vw, 64px);
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-content);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER BAR ───────────────────────────── */
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 20px var(--gutter) 18px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .header-brand {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .header-meta {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--mute);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SECTION WRAPPER ──────────────────────── */
+  .section {
+    border-bottom: 1px solid var(--rule);
+    padding: 0 var(--gutter);
+  }
+
+  .section:last-child {
+    border-bottom: none;
+  }
+
+  /* ── SECTION ANCHOR ROW ───────────────────── */
+  .section-anchor {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    gap: 0 clamp(16px, 2.5vw, 40px);
+    padding-top: clamp(32px, 4vw, 56px);
+    padding-bottom: clamp(28px, 3.5vw, 48px);
+  }
+
+  .block-num {
+    font-family: var(--font-content);
+    font-size: var(--num-size);
+    font-weight: 200;
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    user-select: none;
+    margin-top: 0.06em; /* optical top-align with section label */
+  }
+
+  .section-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-top: 6px;
+  }
+
+  .section-label {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-variant: small-caps;
+    color: var(--mute);
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: var(--font-content);
+    font-size: clamp(22px, 3vw, 38px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  /* ── TWO-COLUMN BODY ──────────────────────── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    padding-bottom: clamp(32px, 4vw, 56px);
+  }
+
+  .col {
+    padding-top: clamp(20px, 2.5vw, 32px);
+  }
+
+  .col + .col {
+    padding-left: clamp(24px, 3vw, 48px);
+    border-left: 1px solid var(--rule);
+  }
+
+  /* ── SINGLE-COL BODY ──────────────────────── */
+  .single-col {
+    border-top: 1px solid var(--rule);
+    padding-top: clamp(20px, 2.5vw, 32px);
+    padding-bottom: clamp(32px, 4vw, 56px);
+  }
+
+  /* ── LABELS ───────────────────────────────── */
+  .label {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  /* ── THREAD ROWS ──────────────────────────── */
+  .thread-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .thread-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .thread-row:last-child {
+    border-bottom: none;
+  }
+
+  /* Jessica 5d thread — larger */
+  .thread-row.featured {
+    grid-template-columns: 1fr auto;
+    padding: 18px 0;
+  }
+
+  .thread-name {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 4px;
+  }
+
+  .thread-action {
+    font-family: var(--font-content);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .thread-row.featured .thread-action {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+
+  .thread-age {
+    font-family: var(--font-label);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mute);
+    white-space: nowrap;
+  }
+
+  .thread-row.featured .thread-age {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ── OVERDUE COLLAPSIBLE ──────────────────── */
+  .overdue-label {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .overdue-count {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  details.overdue-group {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  details.overdue-group:last-child {
+    border-bottom: none;
+  }
+
+  details.overdue-group > summary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 16px;
+    padding: 13px 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  details.overdue-group > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details.overdue-group > summary::marker {
+    display: none;
+  }
+
+  .summary-left {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .summary-project {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  .summary-label {
+    font-family: var(--font-content);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .summary-count {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+  }
+
+  .summary-chevron {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--mute);
+    letter-spacing: 0.08em;
+    transition: transform 0.15s ease;
+  }
+
+  details.overdue-group[open] .summary-chevron {
+    transform: rotate(90deg);
+  }
+
+  .overdue-items {
+    padding: 0 0 6px 0;
+  }
+
+  .overdue-sub-group {
+    margin-bottom: 10px;
+  }
+
+  .overdue-sub-label {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute);
+    padding: 8px 0 6px;
+    border-bottom: 1px solid var(--rule);
+    display: block;
+  }
+
+  .overdue-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: 16px;
+    padding: 9px 0 9px 12px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .overdue-item:last-child {
+    border-bottom: none;
+  }
+
+  .overdue-item-text {
+    font-family: var(--font-content);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .overdue-item-age {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  /* ── PILL / INLINE ITEMS ──────────────────── */
+  .inline-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .inline-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .inline-row:last-child {
+    border-bottom: none;
+  }
+
+  .inline-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--ink);
+    flex-shrink: 0;
+    margin-bottom: 2px;
+  }
+
+  .inline-text {
+    font-family: var(--font-content);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .inline-tag {
+    font-family: var(--font-label);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* ── WEEK ROWS ────────────────────────────── */
+  .week-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .week-row {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    align-items: start;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .week-row:last-child {
+    border-bottom: none;
+  }
+
+  .week-day {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--mute);
+    padding-top: 2px;
+  }
+
+  .week-events {
+    font-family: var(--font-content);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .week-count {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--mute);
+    white-space: nowrap;
+    padding-top: 3px;
+  }
+
+  .week-count.accent {
+    color: var(--accent);
+  }
+
+  .week-events .sub {
+    font-size: 13px;
+    color: var(--mute);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ── MILESTONE ROW ────────────────────────── */
+  .milestone-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .milestone-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: baseline;
+    gap: 24px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .milestone-row:last-child {
+    border-bottom: none;
+  }
+
+  .milestone-name {
+    font-family: var(--font-content);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .milestone-date {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--mute);
+    letter-spacing: 0.06em;
+  }
+
+  .milestone-days {
+    font-family: var(--font-label);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── TOMORROW CONTENT ─────────────────────── */
+  .tomorrow-block {
+    padding: clamp(20px, 2.5vw, 32px) 0 clamp(32px, 4vw, 56px);
+  }
+
+  .event-item {
+    display: flex;
+    align-items: baseline;
+    gap: clamp(12px, 2vw, 24px);
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .event-item:first-child {
+    border-top: 1px solid var(--rule);
+  }
+
+  .event-time {
+    font-family: var(--font-label);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--mute);
+    letter-spacing: 0.06em;
+    width: 52px;
+    flex-shrink: 0;
+  }
+
+  .event-title {
+    font-family: var(--font-content);
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--ink);
+    flex: 1;
+  }
+
+  .event-with {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  /* ── SYNC FOOTER ──────────────────────────── */
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px var(--gutter);
+    border-top: 1px solid var(--rule);
+  }
+
+  .footer-sync {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--mute);
+    letter-spacing: 0.04em;
+  }
+
+  .footer-date {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  /* ── QUIET STATE ──────────────────────────── */
+  .quiet {
+    font-family: var(--font-label);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mute);
+    padding: 14px 0;
+  }
+
+  /* ── RESPONSIVE ───────────────────────────── */
+  @media (max-width: 680px) {
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+
+    .col + .col {
+      padding-left: 0;
+      border-left: none;
+      border-top: 1px solid var(--rule);
+    }
+
+    .week-row {
+      grid-template-columns: 48px 1fr auto;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ── HEADER ──────────────────────────────────── -->
+<header class="header">
+  <span class="header-brand">VIK OS — Daily Brief</span>
+  <span class="header-meta">SUN 30 MAR 2026 &nbsp;·&nbsp; SYNC 14H AGO</span>
+</header>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 01 TODAY                                        -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section">
+
+  <div class="section-anchor">
+    <div class="block-num">01</div>
+    <div class="section-right">
+      <span class="section-label">Today</span>
+      <h2 class="section-title">Sunday 30 March</h2>
+    </div>
+  </div>
+
+  <div class="two-col">
+
+    <!-- LEFT: threads + overdue + reminders -->
+    <div class="col">
+      <span class="label">Threads</span>
+      <div class="thread-list">
+
+        <!-- Jessica — featured / larger -->
+        <div class="thread-row featured">
+          <div>
+            <div class="thread-name">LZ</div>
+            <div class="thread-action">Follow up with Jessica on sales plan</div>
+          </div>
+          <div class="thread-age">5d</div>
+        </div>
+
+        <div class="thread-row">
+          <div>
+            <div class="thread-name">PUNKS</div>
+            <div class="thread-action">Waiting on Justin Aversano</div>
+          </div>
+          <div class="thread-age">2d</div>
+        </div>
+
+      </div>
+
+      <div style="display: flex; align-items: baseline; gap: 10px; margin-top: 28px; margin-bottom: 12px;">
+        <span class="label" style="margin-top: 0; margin-bottom: 0;">Overdue</span>
+        <span style="font-family: var(--font-label); font-size: 11px; font-weight: 600; color: var(--accent); letter-spacing: 0.08em;">22 items</span>
+      </div>
+
+      <div>
+
+        <!-- LZ group -->
+        <details class="overdue-group">
+          <summary>
+            <div class="summary-left">
+              <span class="summary-project">LZ</span>
+              <span class="summary-label">19 overdue</span>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span class="summary-count">19</span>
+              <span class="summary-chevron">▶</span>
+            </div>
+          </summary>
+          <div class="overdue-items">
+
+            <span class="overdue-sub-label">Most critical &nbsp;·&nbsp; 3 items, 27d</span>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Memória Descritiva</span>
+              <span class="overdue-item-age">27d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Exhibition catalogue text</span>
+              <span class="overdue-item-age">27d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Press release final draft</span>
+              <span class="overdue-item-age">27d</span>
+            </div>
+
+            <span class="overdue-sub-label" style="margin-top: 8px; display: block;">Contract chain &nbsp;·&nbsp; 6 items, 16–20d</span>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Contract review — Lisbon venue</span>
+              <span class="overdue-item-age">20d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Insurance rider confirmation</span>
+              <span class="overdue-item-age">19d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Shipping manifest sign-off</span>
+              <span class="overdue-item-age">18d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Loan agreement — piece 7</span>
+              <span class="overdue-item-age">17d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Framing spec approval</span>
+              <span class="overdue-item-age">17d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Customs paperwork</span>
+              <span class="overdue-item-age">16d</span>
+            </div>
+
+            <span class="overdue-sub-label" style="margin-top: 8px; display: block;">Comms &nbsp;·&nbsp; 5 items, 6–22d</span>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Reply to collector inquiry — Rui</span>
+              <span class="overdue-item-age">22d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Mkt & Comms plan w/ KPIs</span>
+              <span class="overdue-item-age">15d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">EXB_CARD copy</span>
+              <span class="overdue-item-age">10d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Social caption batch</span>
+              <span class="overdue-item-age">8d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Newsletter segment</span>
+              <span class="overdue-item-age">6d</span>
+            </div>
+
+            <span class="overdue-sub-label" style="margin-top: 8px; display: block;">Other &nbsp;·&nbsp; 5 items, 10–26d</span>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Budget reconciliation</span>
+              <span class="overdue-item-age">26d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Venue floor plan review</span>
+              <span class="overdue-item-age">21d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Print proofs sign-off</span>
+              <span class="overdue-item-age">14d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Lighting brief to vendor</span>
+              <span class="overdue-item-age">12d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Invite list final</span>
+              <span class="overdue-item-age">10d</span>
+            </div>
+
+          </div>
+        </details>
+
+        <!-- PUNKS group -->
+        <details class="overdue-group">
+          <summary>
+            <div class="summary-left">
+              <span class="summary-project">PUNKS</span>
+              <span class="summary-label">3 overdue</span>
+            </div>
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span class="summary-count">3</span>
+              <span class="summary-chevron">▶</span>
+            </div>
+          </summary>
+          <div class="overdue-items">
+            <div class="overdue-item">
+              <span class="overdue-item-text">Confirm edition size with Justin</span>
+              <span class="overdue-item-age">9d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Smart contract audit review</span>
+              <span class="overdue-item-age">6d</span>
+            </div>
+            <div class="overdue-item">
+              <span class="overdue-item-text">Pricing deck update</span>
+              <span class="overdue-item-age">3d</span>
+            </div>
+          </div>
+        </details>
+
+      </div>
+
+      <span class="label" style="margin-top: 28px;">Reminders</span>
+      <div class="inline-items">
+        <div class="inline-row">
+          <div class="inline-dot"></div>
+          <span class="inline-text">Templates section</span>
+          <span class="inline-tag">Task</span>
+        </div>
+        <div class="inline-row">
+          <div class="inline-dot"></div>
+          <span class="inline-text">Lev Phase 4</span>
+          <span class="inline-tag">Idea</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: calendar + overnight -->
+    <div class="col">
+      <span class="label">Calendar</span>
+      <div class="inline-items">
+        <div class="inline-row">
+          <span class="quiet">No events today</span>
+        </div>
+      </div>
+
+      <span class="label" style="margin-top: 28px;">Overnight</span>
+      <div class="inline-items">
+        <div class="inline-row">
+          <span class="quiet">Quiet night</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 02 TOMORROW                                     -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section">
+
+  <div class="section-anchor">
+    <div class="block-num">02</div>
+    <div class="section-right">
+      <span class="section-label">Tomorrow</span>
+      <h2 class="section-title">Monday 31 March</h2>
+    </div>
+  </div>
+
+  <div class="tomorrow-block">
+    <span class="label">Deadlines</span>
+    <div class="thread-list" style="margin-bottom: 28px;">
+      <div class="thread-row">
+        <div>
+          <div class="thread-name">LZ</div>
+          <div class="thread-action">Artwork list</div>
+        </div>
+        <div class="thread-age">Due Apr 4 · Vik</div>
+      </div>
+      <div class="thread-row">
+        <div>
+          <div class="thread-name">LZ</div>
+          <div class="thread-action">Artist statement</div>
+        </div>
+        <div class="thread-age">Due Apr 5 · Vik</div>
+      </div>
+    </div>
+
+    <span class="label">Calendar — 6 events</span>
+    <div class="event-item">
+      <span class="event-time">09:00</span>
+      <span class="event-title">Team standup</span>
+      <span class="event-with">All</span>
+    </div>
+    <div class="event-item">
+      <span class="event-time">10:30</span>
+      <span class="event-title">LZ production review</span>
+      <span class="event-with">Claudia</span>
+    </div>
+    <div class="event-item">
+      <span class="event-time">12:00</span>
+      <span class="event-title">Lunch — collector check-in</span>
+      <span class="event-with">Rui</span>
+    </div>
+    <div class="event-item">
+      <span class="event-time">14:00</span>
+      <span class="event-title">PUNKS call</span>
+      <span class="event-with">Justin</span>
+    </div>
+    <div class="event-item">
+      <span class="event-time">16:00</span>
+      <span class="event-title">Eterno products sync</span>
+      <span class="event-with">Olga — Under Dogs</span>
+    </div>
+    <div class="event-item">
+      <span class="event-time">18:30</span>
+      <span class="event-title">Gallery walkthrough</span>
+      <span class="event-with">Vhils team</span>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 03 THIS WEEK                                    -->
+<!-- ══════════════════════════════════════════════ -->
+<section class="section">
+
+  <div class="section-anchor">
+    <div class="block-num">03</div>
+    <div class="section-right">
+      <span class="section-label">This Week</span>
+      <h2 class="section-title">Mon 31 Mar — Sat 5 Apr</h2>
+    </div>
+  </div>
+
+  <div class="two-col">
+
+    <!-- LEFT: week days -->
+    <div class="col">
+      <span class="label">Schedule</span>
+      <div class="week-list">
+
+        <div class="week-row">
+          <span class="week-day">Mon 31</span>
+          <span class="week-events">6 events</span>
+          <span class="week-count accent">6</span>
+        </div>
+
+        <div class="week-row">
+          <span class="week-day">Tue 1</span>
+          <span class="week-events">2 events</span>
+          <span class="week-count">2</span>
+        </div>
+
+        <div class="week-row">
+          <span class="week-day">Wed 2</span>
+          <span class="week-events" style="color: var(--mute);">Nothing</span>
+          <span class="week-count">—</span>
+        </div>
+
+        <div class="week-row">
+          <span class="week-day">Thu 3</span>
+          <span class="week-events">1 event
+            <span class="sub">+ deadline</span>
+          </span>
+          <span class="week-count">1</span>
+        </div>
+
+        <div class="week-row">
+          <span class="week-day">Fri 4</span>
+          <span class="week-events" style="color: var(--mute);">Deadline
+            <span class="sub">Artwork list · Vik</span>
+          </span>
+          <span class="week-count" style="color: var(--accent);">DL</span>
+        </div>
+
+        <div class="week-row">
+          <span class="week-day">Sat 5</span>
+          <span class="week-events" style="color: var(--mute);">Deadline
+            <span class="sub">Artist statement · Vik</span>
+          </span>
+          <span class="week-count" style="color: var(--accent);">DL</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: milestones -->
+    <div class="col">
+      <span class="label">Milestones</span>
+      <div class="milestone-list">
+
+        <div class="milestone-row">
+          <span class="milestone-name">Lucas Zanotto</span>
+          <span class="milestone-date">APR 24</span>
+          <span class="milestone-days">25d</span>
+        </div>
+
+        <div class="milestone-row">
+          <span class="milestone-name">PUNKS</span>
+          <span class="milestone-date">JUN 5</span>
+          <span class="milestone-days">67d</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ── FOOTER ───────────────────────────────────── -->
+<footer class="footer">
+  <span class="footer-sync">Last sync &nbsp;14h ago</span>
+  <span class="footer-date">VIK OS · 2026</span>
+</footer>
+
+</body>
+</html>

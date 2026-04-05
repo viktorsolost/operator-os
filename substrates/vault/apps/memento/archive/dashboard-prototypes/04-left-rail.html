@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIK OS — Daily Brief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --rail-bg: #F0EDE6;
+      --main-bg: #F7F5F0;
+      --text: #1A1A1A;
+      --secondary: #6B6860;
+      --rail-text: #4A4640;
+      --rail-label: #8A8278;
+      --orange: #E05A2B;
+      --hairline: #D8D4CC;
+      --hairline-light: #E8E4DC;
+      --rail-width: 224px;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--main-bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────── */
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─── LEFT RAIL ───────────────────────────────────── */
+
+    .rail {
+      width: var(--rail-width);
+      min-width: var(--rail-width);
+      background: var(--rail-bg);
+      border-right: 1px solid var(--hairline);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    /* DATE BLOCK */
+    .rail-date {
+      padding: 28px 22px 24px;
+      border-bottom: 1px solid var(--hairline);
+      flex-shrink: 0;
+    }
+
+    .rail-date-day {
+      font-family: var(--mono);
+      font-size: 72px;
+      font-weight: 300;
+      color: var(--rail-text);
+      line-height: 0.9;
+      letter-spacing: -3px;
+      margin-bottom: 10px;
+    }
+
+    .rail-date-dow {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rail-text);
+      margin-bottom: 2px;
+    }
+
+    .rail-date-month {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--rail-label);
+    }
+
+    .rail-date-week {
+      margin-top: 10px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rail-label);
+      opacity: 0.55;
+    }
+
+    /* NAV */
+    .rail-nav {
+      padding: 10px 0;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .rail-nav-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 22px;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      color: var(--rail-label);
+      transition: color 0.12s;
+      gap: 0;
+    }
+
+    .rail-nav-item:hover {
+      color: var(--rail-text);
+    }
+
+    .rail-nav-item.active {
+      color: var(--rail-text);
+    }
+
+    .rail-nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 14px;
+      width: 2px;
+      background: var(--orange);
+    }
+
+    .rail-nav-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      flex: 1;
+    }
+
+    .rail-nav-count {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--rail-label);
+      opacity: 0.6;
+      letter-spacing: 0.04em;
+    }
+
+    /* MILESTONES */
+    .rail-milestones {
+      padding: 18px 22px 16px;
+      border-bottom: 1px solid var(--hairline);
+      flex-shrink: 0;
+    }
+
+    .rail-block-label {
+      font-family: var(--mono);
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rail-label);
+      opacity: 0.55;
+      margin-bottom: 12px;
+    }
+
+    .rail-milestone {
+      margin-bottom: 12px;
+    }
+
+    .rail-milestone:last-child {
+      margin-bottom: 0;
+    }
+
+    .rail-milestone-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+
+    .rail-milestone-name {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--rail-text);
+      letter-spacing: 0.06em;
+    }
+
+    .rail-milestone-days {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--rail-label);
+      letter-spacing: 0.04em;
+    }
+
+    .rail-milestone-date {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--rail-label);
+      opacity: 0.6;
+      margin-bottom: 5px;
+    }
+
+    .rail-milestone-bar {
+      height: 2px;
+      background: var(--hairline);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+
+    .rail-milestone-fill {
+      height: 100%;
+      border-radius: 1px;
+      background: var(--rail-text);
+      opacity: 0.3;
+    }
+
+    .rail-milestone-fill.urgent {
+      background: var(--orange);
+      opacity: 0.7;
+    }
+
+    /* SYNC */
+    .rail-sync {
+      padding: 14px 22px;
+      margin-top: auto;
+      border-top: 1px solid var(--hairline);
+      flex-shrink: 0;
+    }
+
+    .rail-sync-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 2px 0;
+    }
+
+    .sync-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #5BAD7A;
+      flex-shrink: 0;
+    }
+
+    .sync-dot.stale {
+      background: var(--rail-label);
+      opacity: 0.35;
+    }
+
+    .rail-sync-text {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--rail-label);
+      letter-spacing: 0.03em;
+    }
+
+    .rail-sync-age {
+      margin-left: auto;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--rail-label);
+      opacity: 0.5;
+    }
+
+    /* ─── MAIN ────────────────────────────────────────── */
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      overflow-y: auto;
+      padding: 52px 68px 100px;
+    }
+
+    /* ─── SECTION ─────────────────────────────────────── */
+
+    .section {
+      scroll-margin-top: 24px;
+    }
+
+    .section + .section {
+      margin-top: 64px;
+    }
+
+    .section-header {
+      margin-bottom: 0;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      opacity: 0.5;
+      margin-bottom: 4px;
+    }
+
+    .section-rule {
+      height: 1px;
+      background: var(--hairline);
+      margin-bottom: 0;
+    }
+
+    /* ─── HEADLINE THREAD ────────────────────────────── */
+
+    .headline {
+      padding: 30px 0 28px;
+      border-bottom: 1px solid var(--hairline);
+    }
+
+    .headline-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 13px;
+    }
+
+    .headline-pip {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+    }
+
+    .headline-tag {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .headline-tag-sep {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--secondary);
+      opacity: 0.3;
+    }
+
+    .headline-tag-muted {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      opacity: 0.5;
+    }
+
+    .headline-title {
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+      max-width: 580px;
+    }
+
+    .headline-title strong {
+      font-weight: 600;
+    }
+
+    .headline-body {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--secondary);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 14px;
+    }
+
+    .headline-footer {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .headline-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--secondary);
+      letter-spacing: 0.04em;
+    }
+
+    .headline-age {
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--orange);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── SUBSECTION ─────────────────────────────────── */
+
+    .sub {
+      margin-top: 30px;
+    }
+
+    .sub-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      opacity: 0.45;
+      margin-bottom: 1px;
+    }
+
+    .sub-rule {
+      height: 1px;
+      background: var(--hairline);
+      margin-bottom: 0;
+    }
+
+    /* ─── THREADS ──────────────────────────────────────── */
+
+    .thread-list {
+      margin-top: 0;
+    }
+
+    .thread-row {
+      display: grid;
+      grid-template-columns: 18px 1fr auto;
+      align-items: baseline;
+      gap: 0 14px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--hairline-light);
+    }
+
+    .thread-row:last-child {
+      border-bottom: none;
+    }
+
+    .thread-idx {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--secondary);
+      opacity: 0.35;
+      text-align: right;
+    }
+
+    .thread-body {}
+
+    .thread-who {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .thread-what {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--secondary);
+    }
+
+    .thread-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      flex-shrink: 0;
+    }
+
+    .thread-age {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--secondary);
+      letter-spacing: 0.04em;
+    }
+
+    .thread-project {
+      font-family: var(--mono);
+      font-size: 8.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rail-label);
+      opacity: 0.7;
+    }
+
+    /* ─── REMINDERS ──────────────────────────────────── */
+
+    .reminder-list {}
+
+    .reminder-row {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--hairline-light);
+    }
+
+    .reminder-row:last-child {
+      border-bottom: none;
+    }
+
+    .reminder-kind {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--rail-label);
+      width: 34px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .reminder-text {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    /* ─── CALENDAR ───────────────────────────────────── */
+
+    .cal-empty {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--secondary);
+      padding: 12px 0;
+      letter-spacing: 0.04em;
+      opacity: 0.45;
+      font-style: italic;
+    }
+
+    /* ─── TOMORROW ───────────────────────────────────── */
+
+    .tomorrow-event {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      align-items: baseline;
+      gap: 0 16px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--hairline-light);
+    }
+
+    .tomorrow-event:last-child {
+      border-bottom: none;
+    }
+
+    .tomorrow-time {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--secondary);
+      letter-spacing: 0.04em;
+    }
+
+    .tomorrow-name {
+      font-size: 13px;
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .tomorrow-note {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--secondary);
+      opacity: 0.5;
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── OVERNIGHT ──────────────────────────────────── */
+
+    .overnight-line {
+      font-size: 12px;
+      color: var(--secondary);
+      padding: 10px 0;
+      font-style: italic;
+      opacity: 0.7;
+      border-bottom: 1px solid var(--hairline-light);
+    }
+
+    .overnight-line:last-child {
+      border-bottom: none;
+    }
+
+    /* ─── WEEK TABLE ─────────────────────────────────── */
+
+    .week-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .week-table tbody tr {
+      border-bottom: 1px solid var(--hairline-light);
+    }
+
+    .week-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .week-table td {
+      padding: 11px 0;
+      vertical-align: top;
+    }
+
+    .wk-day {
+      width: 72px;
+      padding-right: 20px !important;
+    }
+
+    .wk-date {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: -0.5px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .wk-name {
+      font-family: var(--mono);
+      font-size: 8.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      opacity: 0.5;
+    }
+
+    .wk-events {
+      vertical-align: middle;
+    }
+
+    .wk-tag {
+      display: inline;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .wk-sep {
+      display: inline;
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--secondary);
+      opacity: 0.25;
+      margin: 0 5px;
+    }
+
+    .wk-empty {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--secondary);
+      opacity: 0.28;
+      letter-spacing: 0.06em;
+    }
+
+    .wk-count {
+      width: 28px;
+      text-align: right;
+      vertical-align: middle;
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--text);
+      opacity: 0.18;
+      letter-spacing: -0.5px;
+    }
+
+    /* ─── MOBILE ─────────────────────────────────────── */
+
+    @media (max-width: 768px) {
+      .layout {
+        flex-direction: column;
+      }
+
+      .rail {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--hairline);
+        overflow-x: auto;
+        overflow-y: visible;
+        gap: 0;
+      }
+
+      .rail-date {
+        padding: 10px 18px;
+        border-bottom: none;
+        border-right: 1px solid var(--hairline);
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .rail-date-day {
+        font-size: 30px;
+        letter-spacing: -1.5px;
+        margin-bottom: 0;
+      }
+
+      .rail-date-dow {
+        font-size: 9px;
+      }
+
+      .rail-date-month,
+      .rail-date-week {
+        display: none;
+      }
+
+      .rail-nav {
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+        border-bottom: none;
+        border-right: 1px solid var(--hairline);
+      }
+
+      .rail-nav-item {
+        padding: 12px 14px;
+        white-space: nowrap;
+      }
+
+      .rail-nav-item.active::before {
+        width: 100%;
+        height: 2px;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transform: none;
+      }
+
+      .rail-nav-count {
+        display: none;
+      }
+
+      .rail-milestones,
+      .rail-sync {
+        display: none;
+      }
+
+      .main {
+        padding: 28px 20px 72px;
+      }
+
+      .headline-title {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ─── LEFT RAIL ─────────────────────────────────── -->
+  <aside class="rail">
+
+    <div class="rail-date">
+      <div class="rail-date-day">29</div>
+      <div class="rail-date-dow">Saturday</div>
+      <div class="rail-date-month">March 2026</div>
+      <div class="rail-date-week">Week 13</div>
+    </div>
+
+    <nav class="rail-nav">
+      <a class="rail-nav-item active" href="#today">
+        <span class="rail-nav-label">Today</span>
+        <span class="rail-nav-count">2t</span>
+      </a>
+      <a class="rail-nav-item" href="#tomorrow">
+        <span class="rail-nav-label">Tomorrow</span>
+        <span class="rail-nav-count">1e</span>
+      </a>
+      <a class="rail-nav-item" href="#week">
+        <span class="rail-nav-label">Week</span>
+        <span class="rail-nav-count">9e</span>
+      </a>
+    </nav>
+
+    <div class="rail-milestones">
+      <div class="rail-block-label">Milestones</div>
+
+      <div class="rail-milestone">
+        <div class="rail-milestone-head">
+          <span class="rail-milestone-name">LZ Show</span>
+          <span class="rail-milestone-days">26d</span>
+        </div>
+        <div class="rail-milestone-date">Apr 24</div>
+        <div class="rail-milestone-bar">
+          <div class="rail-milestone-fill urgent" style="width: 74%"></div>
+        </div>
+      </div>
+
+      <div class="rail-milestone">
+        <div class="rail-milestone-head">
+          <span class="rail-milestone-name">Punks</span>
+          <span class="rail-milestone-days">68d</span>
+        </div>
+        <div class="rail-milestone-date">Jun 5</div>
+        <div class="rail-milestone-bar">
+          <div class="rail-milestone-fill" style="width: 31%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rail-sync">
+      <div class="rail-block-label" style="margin-bottom:8px;">Sync · 3h ago</div>
+      <div class="rail-sync-row">
+        <div class="sync-dot"></div>
+        <span class="rail-sync-text">Gmail</span>
+        <span class="rail-sync-age">3h</span>
+      </div>
+      <div class="rail-sync-row">
+        <div class="sync-dot"></div>
+        <span class="rail-sync-text">Basecamp</span>
+        <span class="rail-sync-age">3h</span>
+      </div>
+      <div class="rail-sync-row">
+        <div class="sync-dot stale"></div>
+        <span class="rail-sync-text">Calendar</span>
+        <span class="rail-sync-age">3h</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ─── MAIN CONTENT ──────────────────────────────── -->
+  <main class="main">
+
+    <!-- ══ TODAY ══════════════════════════════════════════ -->
+    <section class="section" id="today">
+
+      <div class="section-header">
+        <div class="section-label">Today — Sat 29 Mar</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <!-- HEADLINE THREAD -->
+      <div class="headline">
+        <div class="headline-eyebrow">
+          <div class="headline-pip"></div>
+          <span class="headline-tag">Open · 4d</span>
+          <span class="headline-tag-sep">—</span>
+          <span class="headline-tag-muted">LZ Project · Jessica</span>
+        </div>
+        <div class="headline-title">
+          <strong>Follow up with Jessica</strong> on sales plan
+        </div>
+        <div class="headline-body">
+          Thread open four days with no close. Sales plan discussion stalled pending your response. Decision needed before end of weekend — this is the week's critical open item.
+        </div>
+        <div class="headline-footer">
+          <span class="headline-age">4d open</span>
+          <span class="headline-meta">Lucas Zanotto</span>
+          <span class="headline-meta">Sales plan</span>
+        </div>
+      </div>
+
+      <!-- THREADS -->
+      <div class="sub">
+        <div class="sub-label">Threads</div>
+        <div class="sub-rule"></div>
+        <div class="thread-list">
+
+          <div class="thread-row">
+            <span class="thread-idx">01</span>
+            <div class="thread-body">
+              <div class="thread-who">Lucas Zanotto</div>
+              <div class="thread-what">Follow up with Jessica on sales plan</div>
+            </div>
+            <div class="thread-right">
+              <span class="thread-age">4d</span>
+              <span class="thread-project">LZ</span>
+            </div>
+          </div>
+
+          <div class="thread-row">
+            <span class="thread-idx">02</span>
+            <div class="thread-body">
+              <div class="thread-who">Punks 2026</div>
+              <div class="thread-what">Waiting on Justin Aversano</div>
+            </div>
+            <div class="thread-right">
+              <span class="thread-age">1d</span>
+              <span class="thread-project">PUNKS</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- OVERDUE DEADLINES -->
+      <div class="sub">
+        <div class="sub-label">Overdue Deadlines</div>
+        <div class="sub-rule"></div>
+        <div class="thread-list">
+
+          <div class="thread-row">
+            <span class="thread-idx">01</span>
+            <div class="thread-body">
+              <div class="thread-who">LZ — Memória Descritiva</div>
+              <div class="thread-what">Viktor</div>
+            </div>
+            <div class="thread-right">
+              <span class="thread-age">23d</span>
+              <span class="thread-project">LZ</span>
+            </div>
+          </div>
+
+          <div class="thread-row">
+            <span class="thread-idx">02</span>
+            <div class="thread-body">
+              <div class="thread-who">LZ — Mkt & Comms plan w/ KPIs</div>
+              <div class="thread-what">David Cardoso</div>
+            </div>
+            <div class="thread-right">
+              <span class="thread-age">12d</span>
+              <span class="thread-project">LZ</span>
+            </div>
+          </div>
+
+          <div class="thread-row">
+            <span class="thread-idx">03</span>
+            <div class="thread-body">
+              <div class="thread-who">LZ — EXB_CARD</div>
+              <div class="thread-what">Pauline, Jessica, David, Carmen, Carolina, Viktor</div>
+            </div>
+            <div class="thread-right">
+              <span class="thread-age">6d</span>
+              <span class="thread-project">LZ</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- REMINDERS -->
+      <div class="sub">
+        <div class="sub-label">Reminders</div>
+        <div class="sub-rule"></div>
+        <div class="reminder-list">
+
+          <div class="reminder-row">
+            <span class="reminder-kind">Task</span>
+            <span class="reminder-text">Templates section</span>
+          </div>
+
+          <div class="reminder-row">
+            <span class="reminder-kind">Idea</span>
+            <span class="reminder-text">Lev Phase 4</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="sub">
+        <div class="sub-label">Calendar</div>
+        <div class="sub-rule"></div>
+        <div class="cal-empty">No events today.</div>
+      </div>
+
+      <!-- OVERNIGHT -->
+      <div class="sub">
+        <div class="sub-label">Overnight</div>
+        <div class="sub-rule"></div>
+        <div class="overnight-line">Quiet night. No meaningful communications.</div>
+      </div>
+
+    </section>
+
+    <!-- ══ TOMORROW ════════════════════════════════════════ -->
+    <section class="section" id="tomorrow">
+
+      <div class="section-header">
+        <div class="section-label">Tomorrow — Sun 30 Mar</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <div class="tomorrow-event">
+        <span class="tomorrow-time">15:00</span>
+        <span class="tomorrow-name">Eterno products with Olga</span>
+        <span class="tomorrow-note">Under Dogs</span>
+      </div>
+
+      <!-- DEADLINES IN TOMORROW -->
+      <div class="sub">
+        <div class="sub-label">Deadlines in Tomorrow</div>
+        <div class="sub-rule"></div>
+        <div class="thread-list">
+
+          <div class="thread-row">
+            <span class="thread-idx">01</span>
+            <div class="thread-body">
+              <div class="thread-who">LZ — Sales Plan w/ KPIs</div>
+              <div class="thread-what">Jessica Louro</div>
+            </div>
+            <div class="thread-right">
+              <span class="thread-age">Due</span>
+              <span class="thread-project">LZ</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ══ THIS WEEK ═══════════════════════════════════════ -->
+    <section class="section" id="week">
+
+      <div class="section-header">
+        <div class="section-label">This Week — 30 Mar – 5 Apr</div>
+        <div class="section-rule"></div>
+      </div>
+
+      <table class="week-table">
+        <tbody>
+
+          <tr>
+            <td class="wk-day">
+              <span class="wk-date">31</span>
+              <span class="wk-name">Mon</span>
+            </td>
+            <td class="wk-events">
+              <span class="wk-tag">Strategy 2pm</span><span class="wk-sep">·</span><span class="wk-tag">B2C 3:20pm</span><span class="wk-sep">·</span><span class="wk-tag">Zaf 4pm</span><span class="wk-sep">·</span><span class="wk-tag">Piv 5pm</span><span class="wk-sep">·</span><span class="wk-tag">Darko 6pm</span><span class="wk-sep">·</span><span class="wk-tag">Coldie 8:30pm</span>
+            </td>
+            <td class="wk-count">6</td>
+          </tr>
+
+          <tr>
+            <td class="wk-day">
+              <span class="wk-date">1</span>
+              <span class="wk-name">Tue</span>
+            </td>
+            <td class="wk-events">
+              <span class="wk-tag">Curatorial 2:30pm</span><span class="wk-sep">·</span><span class="wk-tag">Pindar 5:30pm</span>
+            </td>
+            <td class="wk-count">2</td>
+          </tr>
+
+          <tr>
+            <td class="wk-day">
+              <span class="wk-date">2</span>
+              <span class="wk-name">Wed</span>
+            </td>
+            <td class="wk-events">
+              <span class="wk-empty">—</span>
+            </td>
+            <td class="wk-count"></td>
+          </tr>
+
+          <tr>
+            <td class="wk-day">
+              <span class="wk-date">3</span>
+              <span class="wk-name">Thu</span>
+            </td>
+            <td class="wk-events">
+              <span class="wk-tag">Claire 5pm</span>
+            </td>
+            <td class="wk-count">1</td>
+          </tr>
+
+          <tr>
+            <td class="wk-day">
+              <span class="wk-date">4</span>
+              <span class="wk-name">Fri</span>
+            </td>
+            <td class="wk-events">
+              <span class="wk-empty">—</span>
+            </td>
+            <td class="wk-count"></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const navLinks = document.querySelectorAll('.rail-nav-item');
+  const mainEl = document.querySelector('.main');
+  const sections = ['today', 'tomorrow', 'week'];
+
+  // Smooth scroll
+  navLinks.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').replace('#', '');
+      const target = document.getElementById(id);
+      if (target) {
+        mainEl.scrollTo({ top: target.offsetTop - 24, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Active tracking
+  function updateActive() {
+    const scroll = mainEl.scrollTop + 48;
+    let current = sections[0];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.offsetTop <= scroll) current = id;
+    });
+    navLinks.forEach(link => {
+      const id = link.getAttribute('href').replace('#', '');
+      link.classList.toggle('active', id === current);
+    });
+  }
+
+  mainEl.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+</script>
+
+</body>
+</html>

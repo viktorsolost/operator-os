@@ -67,8 +67,8 @@ const args = process.argv.slice(2);
 const cliSourceDoctrine = args[0] ? expandHome(args[0]) : null;
 const cliMementoSource = args[1] ? expandHome(args[1]) : null;
 
-const DEFAULT_SOURCE_DOCTRINE = expandHome('~/VIK/ObsidianVault/VIK_OS');
-const DEFAULT_MEMENTO_SOURCE = expandHome('~/Code/Memento');
+const DEFAULT_SOURCE_DOCTRINE = path.resolve(__dirname, 'substrates', 'vault');
+const DEFAULT_MEMENTO_SOURCE = path.resolve(__dirname, 'substrates', 'memento');
 
 const sourceDoctrine = cliSourceDoctrine || DEFAULT_SOURCE_DOCTRINE;
 const mementoSource = cliMementoSource || DEFAULT_MEMENTO_SOURCE;

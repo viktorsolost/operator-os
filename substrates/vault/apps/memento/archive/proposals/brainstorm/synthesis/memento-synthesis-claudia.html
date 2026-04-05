@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memento — Synthesis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&display=swap');
+
+  :root {
+    --bg: #111110;
+    --surface: #1a1918;
+    --surface2: #222120;
+    --border: rgba(255,255,255,.06);
+    --text: #e8e4de;
+    --mid: #9a958c;
+    --dim: #5a5650;
+    --accent: #c4956a;
+    --red: #b35a4a;
+    --green: #7a9e6a;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--accent); color: var(--bg); }
+
+  /* NAV */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: center; gap: 2px;
+    padding: 16px 20px;
+    background: linear-gradient(180deg, rgba(17,17,16,.95) 0%, rgba(17,17,16,0) 100%);
+    pointer-events: none;
+  }
+  .nav a {
+    pointer-events: all;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase; text-decoration: none;
+    color: var(--dim); padding: 6px 14px; border-radius: 4px;
+    transition: all .2s;
+  }
+  .nav a:hover { color: var(--text); background: rgba(255,255,255,.04); }
+  .nav a.split { margin-left: 20px; border-left: 1px solid var(--border); padding-left: 28px; }
+
+  /* COVER */
+  .cover {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 80px 24px;
+    position: relative;
+  }
+  .cover-ey {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 32px;
+  }
+  .cover h1 {
+    font-family: var(--serif); font-size: clamp(48px, 8vw, 100px);
+    font-weight: 300; line-height: 1.05; color: #fff; margin-bottom: 24px;
+    letter-spacing: -.02em;
+  }
+  .cover p {
+    font-family: var(--serif); font-size: clamp(18px, 2.2vw, 24px);
+    font-weight: 300; font-style: italic;
+    color: var(--mid); max-width: 520px; line-height: 1.5;
+  }
+  .cover-line { position: absolute; bottom: 0; left: 10vw; right: 10vw; height: 1px; background: var(--border); }
+
+  /* SECTIONS */
+  .section { padding: 72px 10vw; border-top: 1px solid var(--border); }
+  .section.dark { background: var(--surface); }
+  .s-ey {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: .25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+  }
+  .s-ey.green { color: var(--green); }
+  .s-title {
+    font-family: var(--serif); font-size: clamp(28px, 3.5vw, 42px);
+    font-weight: 400; line-height: 1.2; color: #fff; margin-bottom: 32px;
+    max-width: 600px;
+  }
+  .s-prose {
+    font-size: 15px; line-height: 1.85; color: var(--mid);
+    max-width: 560px; margin-bottom: 20px;
+  }
+  .s-prose b { color: var(--text); font-weight: 500; }
+
+  /* PULL */
+  .pull {
+    font-family: var(--serif); font-size: clamp(22px, 2.5vw, 30px);
+    font-weight: 300; font-style: italic; line-height: 1.4;
+    color: #fff; margin: 40px 0; max-width: 540px;
+  }
+  .pull em { color: var(--accent); }
+
+  /* CONTRACT */
+  .contract-block {
+    padding: 100px 10vw; text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+    background: linear-gradient(170deg, #1a1614 0%, #0e0e0d 100%);
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .contract-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--dim); margin-bottom: 32px;
+  }
+  .contract-text {
+    font-family: var(--serif); font-size: clamp(32px, 5vw, 60px);
+    font-weight: 300; line-height: 1.2; color: #fff; max-width: 650px;
+  }
+  .contract-text em { color: var(--accent); }
+  .contract-sub {
+    font-size: 14px; font-style: italic; color: var(--dim);
+    margin-top: 32px; max-width: 440px; line-height: 1.7;
+  }
+
+  /* CONVERGENCE GRID */
+  .conv-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--border); margin: 40px 0;
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  @media (max-width: 800px) { .conv-grid { grid-template-columns: 1fr 1fr; } }
+  .conv-item { background: var(--surface); padding: 20px; }
+  .conv-who {
+    font-size: 10px; font-weight: 600; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+  }
+  .conv-line {
+    font-family: var(--serif); font-size: 15px; font-style: italic;
+    line-height: 1.55; color: var(--mid);
+  }
+
+  /* SENSES ROW */
+  .senses-row {
+    display: grid; grid-template-columns: 100px 1fr;
+    gap: 0; max-width: 580px; margin: 32px 0;
+  }
+  @media (max-width: 600px) { .senses-row { grid-template-columns: 1fr; } }
+  .sr-name {
+    font-size: 11px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--accent);
+    padding: 16px 0; border-top: 1px solid var(--border);
+  }
+  .sr-body {
+    font-size: 14px; line-height: 1.75; color: var(--mid);
+    padding: 16px 0; border-top: 1px solid var(--border);
+  }
+
+  /* LADDER */
+  .ladder { max-width: 560px; margin: 32px 0; }
+  .ladder-rung {
+    display: grid; grid-template-columns: 36px 1fr;
+    padding: 20px 0; border-bottom: 1px solid var(--border);
+  }
+  .ladder-rung:first-child { border-top: 1px solid var(--border); }
+  .lr-num { font-size: 11px; color: var(--dim); padding-top: 2px; }
+  .lr-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 4px; }
+  .lr-desc { font-size: 13px; line-height: 1.7; color: var(--dim); }
+
+  /* TIMELINE */
+  .timeline { max-width: 560px; margin: 32px 0; }
+  .tl-year {
+    display: grid; grid-template-columns: 64px 1fr;
+    padding: 18px 0; border-bottom: 1px solid var(--border);
+  }
+  .tl-year:first-child { border-top: 1px solid var(--border); }
+  .tl-label { font-size: 12px; font-weight: 500; color: var(--accent); padding-top: 2px; }
+  .tl-desc { font-size: 14px; line-height: 1.7; color: var(--mid); }
+
+  /* TWO COL */
+  .two-col {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    margin: 32px 0; max-width: 640px;
+  }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; gap: 24px; } }
+  .tc-head {
+    font-size: 10px; font-weight: 600; letter-spacing: .18em;
+    text-transform: uppercase; padding-bottom: 10px; margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tc-head.yes { color: var(--green); }
+  .tc-head.no { color: var(--red); }
+  .tc-list { list-style: none; }
+  .tc-list li { font-size: 13px; line-height: 1.7; color: var(--mid); padding: 4px 0; }
+  .tc-list li b { color: var(--text); font-weight: 500; }
+
+  /* AUTOPSY */
+  .autopsy { max-width: 600px; margin: 32px 0; }
+  .autopsy-row {
+    display: grid; grid-template-columns: 130px 1fr; gap: 16px;
+    padding: 18px 0; border-bottom: 1px solid var(--border);
+  }
+  .autopsy-row:first-child { border-top: 1px solid var(--border); }
+  @media (max-width: 600px) { .autopsy-row { grid-template-columns: 1fr; gap: 4px; } }
+  .ar-name { font-size: 13px; font-weight: 600; color: var(--text); padding-top: 1px; }
+  .ar-why { font-size: 13px; line-height: 1.65; color: var(--dim); }
+
+  /* REMAINS */
+  .remains { max-width: 560px; margin: 32px 0; }
+  .rem-item { padding: 16px 0 16px 20px; border-left: 2px solid var(--accent); margin-bottom: 16px; }
+  .rem-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 4px; }
+  .rem-desc { font-size: 13px; line-height: 1.7; color: var(--dim); }
+
+  /* DIVIDER */
+  .div-line { height: 1px; background: var(--border); margin: 0 10vw; }
+
+  /* HALF HEADER */
+  .half-header {
+    padding: 80px 10vw 40px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  }
+  @media (max-width: 800px) { .half-header { grid-template-columns: 1fr; gap: 32px; } }
+  .half-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: .25em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .half-label.vision { color: var(--accent); }
+  .half-label.real { color: var(--green); }
+  .half-title {
+    font-family: var(--serif); font-size: 28px; font-weight: 400;
+    line-height: 1.25; color: #fff; margin-bottom: 12px;
+  }
+  .half-desc { font-size: 14px; line-height: 1.7; color: var(--mid); max-width: 420px; }
+
+  /* ========== MOCKUPS ========== */
+  .mockup-container { margin: 48px 0; max-width: 900px; }
+  .mockup-label {
+    font-size: 10px; font-weight: 600; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--dim); margin-bottom: 16px;
+  }
+
+  /* Memento App */
+  .mock-m {
+    background: #0c0c0b;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,.5);
+  }
+  .mock-m .bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(255,255,255,.02);
+    border-bottom: 1px solid rgba(255,255,255,.05);
+  }
+  .mock-m .bar-title {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .mock-m .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); opacity: .7; }
+  .mock-m .bar-tabs { display: flex; gap: 2px; }
+  .mock-m .tab {
+    font-size: 11px; color: var(--dim); padding: 4px 10px; border-radius: 4px;
+  }
+  .mock-m .tab.active { color: var(--text); background: rgba(255,255,255,.06); }
+  .mock-m .chat { padding: 28px 24px; display: flex; flex-direction: column; gap: 20px; min-height: 420px; }
+  .mock-m .msg { max-width: 560px; }
+  .mock-m .from {
+    font-size: 10px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mock-m .from.sys { color: var(--accent); }
+  .mock-m .from.usr { color: var(--green); }
+  .mock-m .bbl {
+    font-size: 14px; line-height: 1.75; color: var(--mid);
+    padding: 14px 18px; border-radius: 12px;
+  }
+  .mock-m .bbl.sys { background: rgba(196,149,106,.06); border: 1px solid rgba(196,149,106,.1); }
+  .mock-m .bbl.usr { background: rgba(122,158,106,.06); border: 1px solid rgba(122,158,106,.1); }
+  .mock-m .bbl b { color: var(--text); font-weight: 500; }
+  .mock-m .act {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 8px; margin-right: 6px;
+    font-size: 12px; font-weight: 500; color: var(--accent);
+    padding: 5px 12px;
+    border: 1px solid rgba(196,149,106,.2); border-radius: 6px;
+  }
+  .mock-m .inp {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255,255,255,.05);
+    display: flex; align-items: center;
+  }
+  .mock-m .inp-field {
+    flex: 1; font-size: 13px; color: var(--dim);
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 8px; padding: 10px 14px;
+  }
+
+  /* Stripped VIK OS */
+  .mock-v {
+    background: #0c0c0b;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,.5);
+    display: grid; grid-template-columns: 56px 1fr;
+    min-height: 480px;
+  }
+  .mock-v .rail {
+    background: rgba(255,255,255,.02);
+    border-right: 1px solid rgba(255,255,255,.05);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 16px 0; gap: 4px;
+  }
+  .mock-v .ico {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--dim);
+  }
+  .mock-v .ico.on { background: rgba(255,255,255,.06); color: var(--text); }
+  .mock-v .main { display: flex; flex-direction: column; }
+  .mock-v .hdr {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .mock-v .hdr-t { font-size: 14px; font-weight: 600; color: var(--text); }
+  .mock-v .hdr-s { font-size: 11px; color: var(--dim); }
+  .mock-v .cnt { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .mock-v .crd {
+    background: rgba(255,255,255,.02);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .mock-v .crd-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .mock-v .crd-t { font-size: 13px; font-weight: 600; color: var(--text); }
+  .mock-v .bdg {
+    font-size: 10px; font-weight: 600; letter-spacing: .05em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 4px;
+  }
+  .mock-v .bdg.needs { background: rgba(196,149,106,.12); color: var(--accent); }
+  .mock-v .bdg.done { background: rgba(122,158,106,.12); color: var(--green); }
+  .mock-v .bdg.watch { background: rgba(255,255,255,.06); color: var(--dim); }
+  .mock-v .crd-b { font-size: 13px; line-height: 1.6; color: var(--dim); }
+  .mock-v .crd-acts { margin-top: 8px; display: flex; gap: 6px; }
+  .mock-v .btn {
+    font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 5px;
+  }
+  .mock-v .btn.pri { background: rgba(196,149,106,.15); color: var(--accent); border: 1px solid rgba(196,149,106,.2); }
+  .mock-v .btn.sec { background: rgba(255,255,255,.04); color: var(--dim); border: 1px solid rgba(255,255,255,.06); }
+  .mock-v .cht {
+    border-top: 1px solid rgba(255,255,255,.05);
+    padding: 12px 20px; display: flex; align-items: center;
+  }
+  .mock-v .cht-in {
+    flex: 1; font-size: 12px; color: var(--dim);
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 6px; padding: 8px 12px;
+  }
+
+  /* CLOSING */
+  .closing {
+    padding: 120px 10vw; text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+    background: linear-gradient(170deg, #1a1614, #0e0e0d);
+  }
+  .closing-text {
+    font-family: var(--serif); font-size: clamp(24px, 3vw, 36px);
+    font-weight: 300; line-height: 1.4; color: #fff; max-width: 580px;
+  }
+  .closing-text em { color: var(--accent); }
+  .closing-sign {
+    font-size: 11px; font-weight: 500; letter-spacing: .15em;
+    text-transform: uppercase; color: var(--dim); margin-top: 48px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#vision">Vision</a>
+  <a href="#contract">Contract</a>
+  <a href="#how">How It Works</a>
+  <a href="#app">Memento App</a>
+  <a href="#hard" class="split">Tensions</a>
+  <a href="#vikos">Strip VIK OS</a>
+  <a href="#stripped-app">Stripped UI</a>
+</nav>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-ey">Synthesis of Four Proposals</div>
+  <h1>Memento</h1>
+  <p>Four operators. Same truth from different directions. Here is what they agree on, where they diverge, and what the product actually looks like.</p>
+  <div class="cover-line"></div>
+</div>
+
+<!-- CONVERGENCE -->
+<div class="section" id="vision">
+  <div class="s-ey">Where All Four Converge</div>
+  <div class="s-title">The same idea, four voices</div>
+  <div class="conv-grid">
+    <div class="conv-item"><div class="conv-who">Anton</div><div class="conv-line">A context engine with an execution loop. Not an app with AI features.</div></div>
+    <div class="conv-item"><div class="conv-who">Claudia</div><div class="conv-line">A cognitive extension. It shares your intent. Always working the problem, not waiting to be asked.</div></div>
+    <div class="conv-item"><div class="conv-who">Jonah</div><div class="conv-line">The shift from session to continuous is the entire product. It is not waiting for you. It is working.</div></div>
+    <div class="conv-item"><div class="conv-who">Lev</div><div class="conv-line">Not a productivity tool. A presence. You do not open it. It operates. Visible only when it matters.</div></div>
+  </div>
+  <p class="s-prose">All four arrived at the same place: Memento is not an app you use. It is a capacity you have. The product reduces cognitive overhead not by organizing it better, but by carrying it for you. The interface is conversation. The moat is compounding context. The value increases with time.</p>
+</div>
+
+<!-- CONTRACT -->
+<div class="contract-block" id="contract">
+  <div class="contract-label">The Core Contract</div>
+  <div class="contract-text">You live your life. <em>Memento handles the rest.</em></div>
+  <div class="contract-sub">The system observes reality where it already lives. Every question the system asks is a failure of context, not a failure of intelligence.</div>
+</div>
+
+<!-- TWO HALVES INTRO -->
+<div class="half-header">
+  <div>
+    <div class="half-label vision">Part One</div>
+    <div class="half-title">The Vision</div>
+    <div class="half-desc">What Memento is at its purest. The utopia. Drawn from all four proposals, synthesized into one voice.</div>
+  </div>
+  <div>
+    <div class="half-label real">Part Two</div>
+    <div class="half-title">The Realistic Build</div>
+    <div class="half-desc">What VIK OS becomes stripped to its essence. What actually gets built. What the interface looks like.</div>
+  </div>
+</div>
+
+<div class="div-line"></div>
+
+<!-- ================================
+     PART ONE: VISION
+     ================================ -->
+
+<div class="section" id="how">
+  <div class="s-ey">The Vision</div>
+  <div class="s-title">The Senses</div>
+  <p class="s-prose">Memento does not have features. It has senses. It connects to the surfaces where life already happens and interprets them as meaning.</p>
+  <div class="senses-row">
+    <div class="sr-name">Email</div><div class="sr-body">Not messages. A stream of relationships, commitments, and signals. An email from someone you have been waiting on is different from a newsletter.</div>
+    <div class="sr-name">Calendar</div><div class="sr-body">Not a grid. A map of commitments and energy. A meeting after three calls is different from one after a free morning.</div>
+    <div class="sr-name">Files</div><div class="sr-body">Not folders. A knowledge layer. Documents connect to projects connect to people connect to deadlines.</div>
+    <div class="sr-name">Messages</div><div class="sr-body">Threads of intent. "Let's circle back Thursday" is a commitment Memento holds when you forget.</div>
+    <div class="sr-name">Corrections</div><div class="sr-body">The highest-value input. Every "that's wrong" teaches the system how you think and what you value.</div>
+  </div>
+</div>
+
+<div class="section dark">
+  <div class="s-ey">The Vision</div>
+  <div class="s-title">The Mind</div>
+  <p class="s-prose">A living, weighted, continuously updated graph. Not static. Dynamic and interpretive. Includes uncertainty, inference, and soft signals: tone shifts, frequency changes, patterns of avoidance.</p>
+  <p class="s-prose">Lev named five dimensions: <b>People</b> (relationships, not contacts), <b>Projects</b> (trajectories, not task lists), <b>Commitments</b> (obligations owed), <b>Patterns</b> (when you are sharp, when you make mistakes), <b>Identity</b> (who you are becoming).</p>
+  <div class="pull">A database knows Sarah emailed you. A model knows she goes quiet when overwhelmed, that her silence means she is stuck, and that you should <em>reach out before she asks.</em></div>
+</div>
+
+<div class="section">
+  <div class="s-ey">The Vision</div>
+  <div class="s-title">Earning Trust</div>
+  <p class="s-prose">All four proposals converged on the same five-stage ladder. Permission earned through accuracy, not settings.</p>
+  <div class="ladder">
+    <div class="ladder-rung"><div class="lr-num">01</div><div><div class="lr-title">Watch</div><div class="lr-desc">Silent. Building the model. No output. Days to weeks.</div></div></div>
+    <div class="ladder-rung"><div class="lr-num">02</div><div><div class="lr-title">Mirror</div><div class="lr-desc">"Here is what I think your world looks like." Corrections teach what matters. Weeks to months.</div></div></div>
+    <div class="ladder-rung"><div class="lr-num">03</div><div><div class="lr-title">Nudge</div><div class="lr-desc">"This thread is stale." "This deadline is three days out." Small, specific, high-confidence.</div></div></div>
+    <div class="ladder-rung"><div class="lr-num">04</div><div><div class="lr-title">Suggest</div><div class="lr-desc">"Here is a draft reply." "Move this meeting." The user approves, edits, or rejects.</div></div></div>
+    <div class="ladder-rung"><div class="lr-num">05</div><div><div class="lr-title">Act</div><div class="lr-desc">Routine decisions handled autonomously. Earned, not toggled.</div></div></div>
+  </div>
+  <div class="pull">A user at Rung 1 is not using the same product as a user at Rung 5. The system <em>becomes a different product</em> as trust increases.</div>
+</div>
+
+<div class="section dark">
+  <div class="s-ey">The Vision</div>
+  <div class="s-title">Compound Interest</div>
+  <div class="timeline">
+    <div class="tl-year"><div class="tl-label">Year 1</div><div class="tl-desc">Useful. Catches things you miss. You are still teaching it.</div></div>
+    <div class="tl-year"><div class="tl-label">Year 3</div><div class="tl-desc">Knows your patterns. Anticipates problems. Right more than wrong.</div></div>
+    <div class="tl-year"><div class="tl-label">Year 5</div><div class="tl-desc">Indispensable. Knows not just what you do but why.</div></div>
+    <div class="tl-year"><div class="tl-label">Year 10</div><div class="tl-desc">Knows you better than anyone. The way a thirty-year partner does.</div></div>
+  </div>
+  <p class="s-prose">You are not paying for features. You are paying for continuity. The moat is not technology. It is accumulated understanding of a single human life.</p>
+</div>
+
+<!-- MEMENTO APP MOCKUP -->
+<div class="section" id="app">
+  <div class="s-ey">The Vision</div>
+  <div class="s-title">What Memento Looks Like</div>
+  <p class="s-prose">Conversation-first. Three secondary surfaces (approvals, feed, corrections) only when conversation is not enough.</p>
+  <div class="mockup-container">
+    <div class="mockup-label">Memento App</div>
+    <div class="mock-m">
+      <div class="bar">
+        <div class="bar-title"><div class="dot"></div> Memento</div>
+        <div class="bar-tabs"><div class="tab active">Conversation</div><div class="tab">Approvals</div><div class="tab">Feed</div></div>
+      </div>
+      <div class="chat">
+        <div class="msg">
+          <div class="from sys">Memento</div>
+          <div class="bbl sys">
+            Good morning. Three things overnight.<br><br>
+            <b>Sarah replied on the Vhils deliverable.</b> She is asking for a two-week extension on framing specs. Based on your last three exchanges, she is under-resourced, not stalling. Extension still fits inside the milestone window.<br><br>
+            <b>Coldie's contract is 16 days unsigned.</b> Prior pattern: direct calls convert faster than emails. I have a 4pm slot open and a draft call agenda.<br><br>
+            <b>Punks production budget.</b> Comfortable if gallery payment lands by the 10th. If it slips past the 15th, the line items need a trim conversation. No action yet.
+          </div>
+          <div class="act">View draft reply to Sarah</div>
+          <div class="act">Schedule Coldie call</div>
+        </div>
+        <div class="msg">
+          <div class="from usr">Viktor</div>
+          <div class="bbl usr">approve both. on punks budget, what exactly gets tight?</div>
+        </div>
+        <div class="msg">
+          <div class="from sys">Memento</div>
+          <div class="bbl sys">
+            Done. Sarah reply sent. Coldie call at 4pm, invite sent.<br><br>
+            If gallery payment slips past the 15th, production is <b>23,400 EUR over the safe threshold</b>. Three largest: framing (8,200), shipping (6,800), venue deposit second tranche (8,400). Deposit is non-negotiable. Framing could shift to May billing if confirmed with the fabricator by Wednesday. Shipping depends on final artist count.<br><br>
+            Want me to draft a message to the fabricator about May billing?
+          </div>
+        </div>
+      </div>
+      <div class="inp"><div class="inp-field">Talk to Memento...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT A DAY FEELS LIKE -->
+<div class="section dark">
+  <div class="s-ey">The Vision</div>
+  <div class="s-title">What A Day Feels Like</div>
+  <div class="senses-row" style="grid-template-columns: 80px 1fr;">
+    <div class="sr-name" style="color: var(--dim);">Morning</div>
+    <div class="sr-body">You wake up. A message. "Three things today. The call with James, he will bring up pricing, here is where you left it. The review at 2pm, one thing needs attention. Sarah replied, draft ready." Thirty seconds. Approve. Walk into your day.</div>
+    <div class="sr-name" style="color: var(--dim);">Midday</div>
+    <div class="sr-body">Meeting ran long. "I moved your 3pm to 3:30 and let them know. Also, what James said about Berlin contradicts what was agreed March 12. Want me to flag it?" You did not remember March 12. Memento did.</div>
+    <div class="sr-name" style="color: var(--dim);">Evening</div>
+    <div class="sr-body">Nothing. It knows you protect your evenings. At 10:47pm you draft an email. "Your last three late-night emails to this person had a different tone. Queue for 8am?" You queue it.</div>
+    <div class="sr-name" style="color: var(--dim);">Weekend</div>
+    <div class="sr-body">"You have not reached out to Alex in six weeks. He was going through a rough patch." Two-line text. Ten seconds. It matters.</div>
+  </div>
+</div>
+
+<div class="div-line"></div>
+
+<!-- ================================
+     PART TWO: REALISTIC BUILD
+     ================================ -->
+
+<div class="section" id="hard">
+  <div class="s-ey green">The Realistic Build</div>
+  <div class="s-title">The Tensions</div>
+  <p class="s-prose">Every operator named the hard parts. Lev framed them as tensions that can only be navigated, not resolved.</p>
+  <div class="two-col">
+    <div>
+      <div class="tc-head yes">Works</div>
+      <ul class="tc-list">
+        <li>No behavior change required</li>
+        <li>Trust builds organically</li>
+        <li>Value genuinely compounds</li>
+        <li>Subscription follows value</li>
+        <li>Moat through context, not lock-in</li>
+        <li>Conversation as primary surface</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tc-head no">Hard</div>
+      <ul class="tc-list">
+        <li><b>Incomplete graph.</b> WhatsApp, voice, in-person. Always partial.</li>
+        <li><b>Trust fragility.</b> Months to build. Seconds to destroy.</li>
+        <li><b>Cold start.</b> Least value at month one. Must survive it.</li>
+        <li><b>LLM imperfection.</b> Hallucinations erode trust.</li>
+        <li><b>Privacy is existential.</b> One breach kills the product.</li>
+        <li><b>Sustained correctness.</b> Demos are easy. Years are hard.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section dark" id="vikos">
+  <div class="s-ey green">The Realistic Build</div>
+  <div class="s-title">Stripping VIK OS</div>
+  <p class="s-prose">Jonah did the line count. <b>174,000 lines</b> across 11 routes. Of that, roughly 15,000 serve the actual loop. That is 90% scaffolding. Necessary to build. Not product.</p>
+  <div class="autopsy">
+    <div class="autopsy-row"><div class="ar-name">Dashboard</div><div class="ar-why">Cannot tell you what matters. When it can, nothing to display.</div></div>
+    <div class="autopsy-row"><div class="ar-name">Pipeline</div><div class="ar-why">Pre-computes on a schedule. Cost and speed constraints are loosening.</div></div>
+    <div class="autopsy-row"><div class="ar-name">Sync layer</div><div class="ar-why">Local copies. When live reads work, nothing to sync.</div></div>
+    <div class="autopsy-row"><div class="ar-name">Stores / intake</div><div class="ar-why">Structured JSON for rendering. No dashboard, no store.</div></div>
+    <div class="autopsy-row"><div class="ar-name">Boot sequence</div><div class="ar-why">6+ files loaded before work begins. When posture is inferred, routing is invisible.</div></div>
+    <div class="autopsy-row"><div class="ar-name">Projects page</div><div class="ar-why">31,587 lines. Browsing is a failure mode in a context-driven system.</div></div>
+    <div class="autopsy-row"><div class="ar-name">Milestone page</div><div class="ar-why">24,205 lines. "Milestone X is behind because Y" is a sentence, not a page.</div></div>
+    <div class="autopsy-row"><div class="ar-name">Action steps</div><div class="ar-why">Generated plans for approval. At Rung 5, the system does the work.</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="s-ey green">The Realistic Build</div>
+  <div class="s-title">What Remains</div>
+  <div class="remains">
+    <div class="rem-item"><div class="rem-title">The vault</div><div class="rem-desc">Years of accumulated context. The starting model. Day-one advantage.</div></div>
+    <div class="rem-item"><div class="rem-title">Live source connections</div><div class="rem-desc">Gmail, Calendar, Basecamp, Sheets. Read reality where it lives, on demand.</div></div>
+    <div class="rem-item"><div class="rem-title">Reasoning postures</div><div class="rem-desc">Operational, architectural, strategic. As instinct, not infrastructure.</div></div>
+    <div class="rem-item"><div class="rem-title">Correction history</div><div class="rem-desc">Compound interest. In the context model, not scattered markdown.</div></div>
+    <div class="rem-item"><div class="rem-title">A conversation</div><div class="rem-desc">The only interface that survives. Where you and the system meet.</div></div>
+  </div>
+  <div class="pull">Five things. Vault, live sources, context engine, memory, conversation. VIK OS stripped to <em>what it was always trying to be.</em></div>
+</div>
+
+<!-- STRIPPED VIK OS MOCKUP -->
+<div class="section dark" id="stripped-app">
+  <div class="s-ey green">The Realistic Build</div>
+  <div class="s-title">What Stripped VIK OS Looks Like</div>
+  <p class="s-prose">The transitional product. Conversation-first, but with a minimal Today surface for oversight while trust is still building. Three icons. One input. Everything else is generated when asked.</p>
+  <div class="mockup-container">
+    <div class="mockup-label">Stripped VIK OS</div>
+    <div class="mock-v">
+      <div class="rail">
+        <div class="ico on" title="Today">&#9673;</div>
+        <div class="ico" title="Approvals">&#10003;</div>
+        <div class="ico" title="Feed">&#9998;</div>
+      </div>
+      <div class="main">
+        <div class="hdr">
+          <div class="hdr-t">Today &middot; Saturday 29 March</div>
+          <div class="hdr-s">3 need you &middot; 5 handled</div>
+        </div>
+        <div class="cnt">
+          <div class="crd">
+            <div class="crd-top"><div class="crd-t">Coldie contract unsigned (16d)</div><div class="bdg needs">Needs you</div></div>
+            <div class="crd-b">Direct calls convert faster. Draft agenda ready. 4pm slot open.</div>
+            <div class="crd-acts"><div class="btn pri">Schedule call</div><div class="btn sec">View draft</div><div class="btn sec">Dismiss</div></div>
+          </div>
+          <div class="crd">
+            <div class="crd-top"><div class="crd-t">Sarah Vhils extension request</div><div class="bdg needs">Needs you</div></div>
+            <div class="crd-b">Two-week extension on framing specs. Still inside milestone window. Draft reply ready.</div>
+            <div class="crd-acts"><div class="btn pri">Approve & send</div><div class="btn sec">Edit draft</div></div>
+          </div>
+          <div class="crd">
+            <div class="crd-top"><div class="crd-t">PUNKS artist calls next week</div><div class="bdg done">Handled</div></div>
+            <div class="crd-b">All invites sent. Mon: Zafgod 4pm, PIV 5pm, Darko 6pm, Coldie 8:30pm. Tue: Pindar 5:30pm. Fri: Claire/Pamela 5pm. Justin no reply.</div>
+          </div>
+          <div class="crd">
+            <div class="crd-top"><div class="crd-t">Q2 cash flow</div><div class="bdg watch">Watching</div></div>
+            <div class="crd-b">Comfortable if gallery payment by the 10th. If it slips, PUNKS budget needs a conversation. No action yet.</div>
+          </div>
+        </div>
+        <div class="cht"><div class="cht-in">Ask about projects, people, priorities...</div></div>
+      </div>
+    </div>
+  </div>
+  <p class="s-prose" style="margin-top: 36px;">Three icons: Today, Approvals, Feed. Chat strip always present. As the context engine improves, the cards disappear and conversation expands. <b>The UI shrinks as the system gets smarter.</b></p>
+</div>
+
+<!-- THE PATH -->
+<div class="section">
+  <div class="s-ey">The Path</div>
+  <div class="s-title">From Here To There</div>
+  <p class="s-prose" style="margin-bottom: 36px;">Stripped VIK OS is not a compromise. It is the honest version of where the system is on the trust ladder today. As context improves and trust compounds, the interface naturally shrinks toward Memento.</p>
+  <div class="two-col" style="max-width: 700px;">
+    <div>
+      <div class="tc-head" style="color: var(--green);">Stripped VIK OS (now)</div>
+      <ul class="tc-list">
+        <li>Conversation + minimal Today view</li>
+        <li>Cards for items needing judgment</li>
+        <li>Approval queue for trust-building</li>
+        <li>Feed for audit and confidence</li>
+        <li>Pipeline runs headless</li>
+        <li>3 screens. 3 icons. One input.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tc-head" style="color: var(--accent);">Memento (future)</div>
+      <ul class="tc-list">
+        <li>Conversation only</li>
+        <li>System handles routine autonomously</li>
+        <li>Approvals shrink as trust grows</li>
+        <li>Feed checked less and less</li>
+        <li>No cards. No views. No pages.</li>
+        <li>No pipeline. Live reasoning.</li>
+        <li>1 surface. Talk.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pull">The UI does not get replaced. It <em>evaporates.</em> Every screen that disappears is proof the system got smarter.</div>
+</div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <div class="closing-text">
+    The ultimate form of Memento is not something you use. It is something you <em>have.</em><br><br>
+    Stripped VIK OS is the first honest step toward that. Not a smaller dashboard. A fundamentally different shape.
+  </div>
+  <div class="closing-sign">Claudia, Anton, Jonah, Lev &mdash; March 2026</div>
+</div>
+
+</body>
+</html>

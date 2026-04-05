@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memento — Lev Synthesis</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+  :root {
+    --bg: #f8f6f1;
+    --fg: #1c1917;
+    --mid: #78716c;
+    --light: #a8a29e;
+    --faint: #e7e5e4;
+    --surface: #ffffff;
+    --red: #dc2626;
+    --red-soft: #fef2f2;
+    --green: #16a34a;
+    --green-soft: #f0fdf4;
+    --blue: #2563eb;
+    --blue-soft: #eff6ff;
+    --amber: #d97706;
+    --amber-soft: #fffbeb;
+    --phone-bg: #0a0a0a;
+    --phone-fg: #fafaf9;
+    --phone-dim: #737373;
+    --phone-accent: #3b82f6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+  body { background: var(--bg); color: var(--fg); font-family: 'DM Sans', system-ui, sans-serif; line-height: 1.65; }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(248,246,241,.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--faint);
+    display: flex; align-items: center; justify-content: center; gap: 4px;
+    padding: 12px 20px; flex-wrap: wrap;
+  }
+  nav button {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 13px; font-weight: 600;
+    padding: 8px 16px; border-radius: 999px;
+    border: 1px solid var(--faint); background: transparent;
+    color: var(--mid); cursor: pointer; transition: all .15s;
+  }
+  nav button:hover { border-color: var(--fg); color: var(--fg); }
+  nav button.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+  .section { display: none; max-width: 1100px; margin: 0 auto; padding: 48px 24px 96px; }
+  .section.active { display: block; }
+
+  h1 { font-family: 'DM Serif Display', serif; font-size: 3rem; font-weight: 400; line-height: 1.15; margin-bottom: 16px; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.8rem; font-weight: 400; line-height: 1.25; margin-bottom: 20px; }
+  h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; }
+  .label { font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--mid); margin-bottom: 12px; }
+  p { margin-bottom: 16px; color: var(--fg); }
+  .muted { color: var(--mid); }
+
+  .hero { text-align: center; padding: 64px 0 48px; max-width: 700px; margin: 0 auto; }
+  .hero p { font-size: 1.15rem; color: var(--mid); max-width: 560px; margin: 0 auto 24px; }
+  .hero .tagline { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-style: italic; color: var(--fg); margin-bottom: 8px; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 32px 0; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 32px 0; }
+  @media(max-width:768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  .card { background: var(--surface); border: 1px solid var(--faint); border-radius: 16px; padding: 28px; }
+  .card.red { border-color: #fecaca; background: var(--red-soft); }
+  .card.green { border-color: #bbf7d0; background: var(--green-soft); }
+  .card.blue { border-color: #bfdbfe; background: var(--blue-soft); }
+  .card.amber { border-color: #fde68a; background: var(--amber-soft); }
+
+  .divider { height: 1px; background: var(--faint); margin: 48px 0; }
+
+  .contract {
+    background: var(--fg); color: var(--bg); border-radius: 20px;
+    padding: 40px; text-align: center; margin: 40px 0;
+  }
+  .contract p { color: rgba(248,246,241,.7); font-size: 1.1rem; margin-bottom: 8px; }
+  .contract .big { font-family: 'DM Serif Display', serif; font-size: 1.6rem; color: #fff; margin-bottom: 0; }
+
+  .op-row { display: flex; gap: 16px; margin: 32px 0; flex-wrap: wrap; }
+  .op-chip { flex: 1; min-width: 200px; border: 1px solid var(--faint); border-radius: 12px; padding: 20px; background: var(--surface); }
+  .op-chip .op-name { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+  .op-chip .op-line { font-size: 13px; color: var(--mid); line-height: 1.5; }
+
+  .phone-wrap { display: flex; justify-content: center; margin: 48px 0; }
+  .phone {
+    width: 375px; min-height: 700px;
+    background: var(--phone-bg); border-radius: 40px;
+    padding: 20px 16px; position: relative;
+    box-shadow: 0 24px 80px rgba(0,0,0,.25), inset 0 0 0 3px #292524;
+    overflow: hidden;
+  }
+  .phone-notch { width: 120px; height: 28px; background: var(--phone-bg); border-radius: 0 0 16px 16px; margin: 0 auto 16px; border: 2px solid #292524; border-top: none; }
+  .phone-status { display: flex; justify-content: space-between; align-items: center; padding: 0 8px 12px; font-size: 12px; font-weight: 600; color: var(--phone-fg); }
+  .phone-header { display: flex; align-items: center; gap: 10px; padding: 12px 4px; border-bottom: 1px solid #292524; margin-bottom: 16px; }
+  .phone-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #3b82f6); display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; }
+  .phone-name { font-size: 15px; font-weight: 600; color: var(--phone-fg); }
+  .phone-sub { font-size: 11px; color: var(--phone-dim); }
+  .phone-messages { display: flex; flex-direction: column; gap: 10px; padding-bottom: 60px; }
+  .msg { max-width: 85%; padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.55; }
+  .msg.system { background: #1e1e1e; color: #d4d4d4; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .msg.user { background: var(--phone-accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .msg .msg-time { font-size: 10px; color: rgba(255,255,255,.4); margin-top: 4px; }
+  .msg.system .msg-time { color: rgba(255,255,255,.25); }
+  .msg strong { font-weight: 600; }
+  .msg-action { display: flex; gap: 8px; align-self: flex-start; margin-top: 2px; }
+  .msg-btn { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 999px; border: 1px solid #404040; color: #d4d4d4; background: #262626; cursor: pointer; }
+  .msg-btn.primary { background: var(--phone-accent); border-color: var(--phone-accent); color: #fff; }
+  .phone-input { position: absolute; bottom: 0; left: 0; right: 0; padding: 12px 16px; background: #171717; border-top: 1px solid #292524; display: flex; align-items: center; gap: 8px; }
+  .phone-input-field { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 10px 16px; color: var(--phone-fg); font-size: 14px; font-family: 'DM Sans', system-ui, sans-serif; }
+  .phone-input-send { width: 32px; height: 32px; border-radius: 50%; background: var(--phone-accent); border: none; color: #fff; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  .desktop-wrap { display: flex; justify-content: center; margin: 48px 0; }
+  .desktop { width: 100%; max-width: 900px; background: #fafaf9; border: 1px solid var(--faint); border-radius: 12px; overflow: hidden; box-shadow: 0 16px 64px rgba(0,0,0,.08); }
+  .desktop-bar { height: 36px; background: #f5f5f4; border-bottom: 1px solid var(--faint); display: flex; align-items: center; padding: 0 12px; gap: 6px; }
+  .desktop-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .desktop-dot.r { background: #ef4444; } .desktop-dot.y { background: #eab308; } .desktop-dot.g { background: #22c55e; }
+  .desktop-body { display: flex; min-height: 500px; }
+  .desktop-sidebar { width: 220px; background: #f5f5f4; border-right: 1px solid var(--faint); padding: 20px 16px; }
+  .desktop-sidebar .sidebar-item { padding: 10px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: var(--mid); margin-bottom: 2px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .desktop-sidebar .sidebar-item.active { background: #e7e5e4; color: var(--fg); font-weight: 600; }
+  .desktop-sidebar .sidebar-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+  .desktop-main { flex: 1; padding: 28px 32px; overflow-y: auto; }
+  .desktop-main h2 { font-size: 1.3rem; margin-bottom: 16px; }
+
+  .feed-item { padding: 16px 0; border-bottom: 1px solid var(--faint); display: flex; gap: 12px; }
+  .feed-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .feed-icon.done { background: var(--green-soft); color: var(--green); }
+  .feed-icon.pending { background: var(--amber-soft); color: var(--amber); }
+  .feed-icon.info { background: var(--blue-soft); color: var(--blue); }
+  .feed-icon.alert { background: var(--red-soft); color: var(--red); }
+  .feed-body { flex: 1; }
+  .feed-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+  .feed-desc { font-size: 13px; color: var(--mid); line-height: 1.5; }
+  .feed-time { font-size: 11px; color: var(--light); margin-top: 4px; }
+  .feed-actions { display: flex; gap: 6px; margin-top: 8px; }
+  .feed-btn { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 6px; border: 1px solid var(--faint); background: var(--surface); color: var(--fg); cursor: pointer; }
+  .feed-btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+  .compare { width: 100%; border-collapse: collapse; margin: 32px 0; font-size: 14px; }
+  .compare th { text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); padding: 12px 16px; border-bottom: 2px solid var(--faint); }
+  .compare td { padding: 14px 16px; border-bottom: 1px solid var(--faint); vertical-align: top; }
+  .compare .verdict { font-weight: 700; font-size: 12px; }
+  .compare .keep { color: var(--green); }
+  .compare .strip { color: var(--red); text-decoration: line-through; opacity: .6; }
+  .compare .transform { color: var(--blue); }
+
+  .stats { display: flex; gap: 16px; flex-wrap: wrap; margin: 32px 0; }
+  .stat { flex: 1; min-width: 140px; background: var(--surface); border: 1px solid var(--faint); border-radius: 12px; padding: 20px; text-align: center; }
+  .stat-val { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--fg); }
+  .stat-label { font-size: 12px; color: var(--mid); margin-top: 4px; }
+
+  .trust-track { margin: 32px 0; }
+  .trust-level { display: flex; align-items: start; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--faint); }
+  .trust-level:last-child { border-bottom: none; }
+  .trust-num { width: 32px; height: 32px; border-radius: 50%; background: var(--fg); color: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  .trust-content { flex: 1; }
+  .trust-name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .trust-desc { font-size: 14px; color: var(--mid); }
+  .trust-when { font-size: 12px; color: var(--light); margin-top: 4px; font-style: italic; }
+
+  .pull { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-style: italic; color: var(--fg); text-align: center; max-width: 640px; margin: 48px auto; padding: 32px 0; border-top: 1px solid var(--faint); border-bottom: 1px solid var(--faint); line-height: 1.45; }
+
+  @media(max-width:500px) { .phone { width: 100%; min-height: 600px; border-radius: 28px; } h1 { font-size: 2.2rem; } .desktop-sidebar { display: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="active" data-s="overview">Overview</button>
+  <button data-s="vision">Vision</button>
+  <button data-s="memento-app">Memento App</button>
+  <button data-s="vikos-stripped">VIK OS Stripped</button>
+  <button data-s="convergence">Convergence</button>
+</nav>
+
+<!-- OVERVIEW -->
+<div class="section active" id="overview">
+  <div class="hero">
+    <div class="label">Lev — Synthesis</div>
+    <h1>Memento</h1>
+    <div class="tagline">I remember so you can move.</div>
+    <p>Four operators. Four proposals. One direction. This document synthesizes the vision into a single coherent product and shows what both the ideal Memento and the realistic stripped VIK OS would look like.</p>
+  </div>
+  <div class="divider"></div>
+  <div class="label">Where All Four Operators Converge</div>
+  <h2>The consensus is unusually strong</h2>
+  <div class="grid-3">
+    <div class="card"><h3>The Problem</h3><p class="muted">People are drowning in the cognitive overhead of managing their own lives. The invisible second job. No tool reduces this overhead. They all just move it around.</p></div>
+    <div class="card"><h3>The Product</h3><p class="muted">Not an app you open. A presence that operates. Context in, work done out. Conversation as primary interface. Acts through existing channels.</p></div>
+    <div class="card"><h3>The Moat</h3><p class="muted">Compounding context. Year one is useful. Year five is indispensable. Switching means starting from zero. Not data lock-in. Context lock-in.</p></div>
+  </div>
+  <div class="contract"><p>The core contract</p><p class="big">You live your life. Memento handles the rest.</p></div>
+  <div class="divider"></div>
+  <div class="label">Each Operator's Unique Contribution</div>
+  <div class="op-row">
+    <div class="op-chip"><div class="op-name">Anton</div><div class="op-line">Smallest correct product. Five primitives. Four layers. Survival test: a screen lives only if it improves truth, context, execution, or trust.</div></div>
+    <div class="op-chip"><div class="op-name">Claudia</div><div class="op-line">Cognitive extension, not assistant. Trust ladder as product mechanic. Context web as living weighted graph. Identity-first. Year-scale thinking.</div></div>
+    <div class="op-chip"><div class="op-name">Jonah</div><div class="op-line">Completion engine. Measured by done. 91% of VIK OS UI is scaffolding. Four levels of completion. Done is the product.</div></div>
+    <div class="op-chip"><div class="op-name">Lev</div><div class="op-line">Cognitive loneliness as the real problem. Timing over information. The shape of a life. Protecting you from yourself. The witness function.</div></div>
+  </div>
+</div>
+
+<!-- VISION -->
+<div class="section" id="vision">
+  <div class="hero"><div class="label">The Vision</div><h1>What Memento wants to be</h1><p>The utopia, stated clearly, with tensions named honestly.</p></div>
+  <h2>Three organs, not features</h2>
+  <div class="grid-3">
+    <div class="card blue"><h3>Perception</h3><p class="muted">Connects to where life already happens. Email, calendar, messages, files. Perceives meaning, not data. A silent thread is as much a signal as a loud one.</p></div>
+    <div class="card amber"><h3>Understanding</h3><p class="muted">A living model. People as relationships. Projects as trajectories. Patterns, rhythms, identity. Who they are becoming, not just who they are.</p></div>
+    <div class="card green"><h3>Action</h3><p class="muted">Done work, not suggestions. Through existing channels. The person finds their existing tools have become mysteriously more effective.</p></div>
+  </div>
+  <div class="divider"></div>
+  <h2>The trust ladder</h2>
+  <p>Autonomy is earned, not configured. Each level unlocked by demonstrated accuracy.</p>
+  <div class="trust-track">
+    <div class="trust-level"><div class="trust-num">1</div><div class="trust-content"><div class="trust-name">Observe</div><div class="trust-desc">Silent ingestion. Building the model. No output.</div><div class="trust-when">Days 1–7</div></div></div>
+    <div class="trust-level"><div class="trust-num">2</div><div class="trust-content"><div class="trust-name">Mirror</div><div class="trust-desc">"Here is what I think your world looks like. Am I right?"</div><div class="trust-when">Weeks 1–4</div></div></div>
+    <div class="trust-level"><div class="trust-num">3</div><div class="trust-content"><div class="trust-name">Suggest</div><div class="trust-desc">"This thread is stalling." "This deadline is approaching."</div><div class="trust-when">Months 1–3</div></div></div>
+    <div class="trust-level"><div class="trust-num">4</div><div class="trust-content"><div class="trust-name">Propose</div><div class="trust-desc">"Here is a draft reply." "I would move this meeting."</div><div class="trust-when">Months 3–6</div></div></div>
+    <div class="trust-level"><div class="trust-num">5</div><div class="trust-content"><div class="trust-name">Act</div><div class="trust-desc">"I sent that follow-up. Routine. Matched 40 previous approvals."</div><div class="trust-when">Month 6+</div></div></div>
+  </div>
+  <div class="pull">The product gets more valuable the less you interact with it.</div>
+  <div class="divider"></div>
+  <h2>The tensions</h2>
+  <div class="grid-2">
+    <div class="card"><h3>Omniscience ↔ Privacy</h3><p class="muted">Value increases with completeness. But total awareness is total exposure. A breach leaks the full topology of a life.</p></div>
+    <div class="card"><h3>Autonomy ↔ Control</h3><p class="muted">Zero input means assumptions. One misread email sent on your behalf and months of trust evaporate.</p></div>
+    <div class="card"><h3>Depth ↔ Cold Start</h3><p class="muted">Year five is indispensable. Day one is empty. The first insight must be worth hearing or the user leaves.</p></div>
+    <div class="card"><h3>Presence ↔ Noise</h3><p class="muted">Too often is noise. Too rarely is broken. Calibration is learned per person.</p></div>
+  </div>
+</div>
+
+<!-- MEMENTO APP -->
+<div class="section" id="memento-app">
+  <div class="hero"><div class="label">Product Mockup</div><h1>What Memento looks like</h1><p>The primary interface is conversation. When more surface is needed, a minimal companion.</p></div>
+  <h2>The primary interface: conversation</h2>
+  <p>Memento lives in your Telegram, iMessage, or WhatsApp. Not a separate app. A contact.</p>
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="phone-status"><span>9:41</span><span>●●●●○ 📶 🔋</span></div>
+      <div class="phone-header">
+        <div class="phone-avatar">M</div>
+        <div><div class="phone-name">Memento</div><div class="phone-sub">always watching, rarely talking</div></div>
+      </div>
+      <div class="phone-messages">
+        <div class="msg system"><strong>Good morning.</strong> Three things today.<br><br>① The call with James at 11 — he'll bring up pricing. Last position: €12k, he pushed for €9.5k. You said you'd consider €10.5k with a 6-month lock. March 14.<br><br>② Punks review at 2pm — 3 days behind on artist confirmations. Everything else on track.<br><br>③ Sarah replied last night. She's in. Draft confirmation ready.<div class="msg-time">7:02 AM</div></div>
+        <div class="msg-action"><button class="msg-btn primary">Send draft</button><button class="msg-btn">Edit first</button></div>
+        <div class="msg user">👍<div class="msg-time">7:04 AM</div></div>
+        <div class="msg system">Sent to Sarah. Confirmed start date and next steps. ✓<div class="msg-time">7:04 AM</div></div>
+        <div class="msg system" style="margin-top:24px;">Your 11am just ended. Ran 18 min over — moved the 11:30 to noon, sent a note.<br><br>James mentioned Berlin slipping to June. Contract says May with penalty clause (March 12). Want me to flag it with contract reference?<div class="msg-time">11:18 AM</div></div>
+        <div class="msg-action"><button class="msg-btn primary">Flag it</button><button class="msg-btn">I'll handle</button><button class="msg-btn">Show contract</button></div>
+      </div>
+      <div class="phone-input"><input class="phone-input-field" placeholder="Message Memento..." disabled><button class="phone-input-send">↑</button></div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  <h2>The companion app</h2>
+  <p>Three surfaces. If you need more, the engine isn't good enough yet.</p>
+  <div class="desktop-wrap">
+    <div class="desktop">
+      <div class="desktop-bar"><div class="desktop-dot r"></div><div class="desktop-dot y"></div><div class="desktop-dot g"></div></div>
+      <div class="desktop-body">
+        <div class="desktop-sidebar">
+          <div class="sidebar-item active">⚡ Handling Now <span class="dot"></span></div>
+          <div class="sidebar-item">✓ Approvals</div>
+          <div class="sidebar-item">◷ History</div>
+        </div>
+        <div class="desktop-main">
+          <h2>Handling Now</h2>
+          <p class="muted" style="font-size:13px;margin-bottom:20px;">What Memento is carrying for you right now.</p>
+          <div class="feed-item"><div class="feed-icon done">✓</div><div class="feed-body"><div class="feed-title">Sent confirmation to Sarah</div><div class="feed-desc">Draft approved via chat. Confirmed start date, deliverables, next steps.</div><div class="feed-time">7:04 AM · Auto-sent after approval</div></div></div>
+          <div class="feed-item"><div class="feed-icon done">✓</div><div class="feed-body"><div class="feed-title">Rescheduled 11:30 → 12:00</div><div class="feed-desc">James call ran over. Moved design review, notified attendees.</div><div class="feed-time">11:18 AM · Auto-handled</div></div></div>
+          <div class="feed-item"><div class="feed-icon pending">⏳</div><div class="feed-body"><div class="feed-title">Berlin timeline conflict</div><div class="feed-desc">James mentioned June. Contract says May with penalty. Waiting for your call.</div><div class="feed-time">11:18 AM · Needs judgment</div><div class="feed-actions"><button class="feed-btn primary">Flag with contract ref</button><button class="feed-btn">I'll handle</button></div></div></div>
+          <div class="feed-item"><div class="feed-icon info">→</div><div class="feed-body"><div class="feed-title">Follow-up sent to Zafgod</div><div class="feed-desc">No response in 5 days. Sent gentle check-in in your voice.</div><div class="feed-time">9:30 AM · Auto-sent</div></div></div>
+          <div class="feed-item"><div class="feed-icon alert">!</div><div class="feed-body"><div class="feed-title">Coldie contract unsigned</div><div class="feed-desc">Pending since March 3. Three follow-ups, no response. Blocking Punks production.</div><div class="feed-time">Ongoing · Escalation recommended</div><div class="feed-actions"><button class="feed-btn primary">Draft escalation</button><button class="feed-btn">Snooze 3 days</button></div></div></div>
+          <div class="feed-item"><div class="feed-icon info">💡</div><div class="feed-body"><div class="feed-title">You haven't reached out to Alex in 6 weeks</div><div class="feed-desc">Last conversation he was dealing with his co-founder situation.</div><div class="feed-time">Relational · Low urgency, high value</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pull">Three surfaces: conversation, handling now, approvals. If you need more, the context engine isn't good enough yet.</div>
+</div>
+
+<!-- VIK OS STRIPPED -->
+<div class="section" id="vikos-stripped">
+  <div class="hero"><div class="label">The Realistic Path</div><h1>VIK OS → Memento</h1><p>What stays, what goes, what transforms.</p></div>
+  <div class="stats">
+    <div class="stat"><div class="stat-val">174k</div><div class="stat-label">lines of UI today</div></div>
+    <div class="stat"><div class="stat-val">91%</div><div class="stat-label">scaffolding</div></div>
+    <div class="stat"><div class="stat-val">~15k</div><div class="stat-label">serves context→done</div></div>
+    <div class="stat"><div class="stat-val">5</div><div class="stat-label">surfaces survive</div></div>
+  </div>
+  <div class="divider"></div>
+  <h2>The audit</h2>
+  <table class="compare">
+    <thead><tr><th>Component</th><th>Lines</th><th>Verdict</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Agent Terminal</td><td>~5k</td><td class="verdict keep">KEEP → Evolve</td><td>Embryo of conversation interface. Becomes primary surface.</td></tr>
+      <tr><td>Today page</td><td>~10k</td><td class="verdict transform">TRANSFORM → Feed</td><td>Becomes "Handling Now."</td></tr>
+      <tr><td>Pipeline (headless)</td><td>~15k</td><td class="verdict keep">KEEP → Invisible</td><td>Real plumbing. Loses its page.</td></tr>
+      <tr><td>Data connectors</td><td>~8k</td><td class="verdict keep">KEEP</td><td>Memento's senses.</td></tr>
+      <tr><td>Projects page</td><td>31,587</td><td class="verdict strip">STRIP</td><td>Browsing = failure mode.</td></tr>
+      <tr><td>Project detail</td><td>26,404</td><td class="verdict strip">STRIP</td><td>Synthesize into a sentence.</td></tr>
+      <tr><td>Calendar page</td><td>19,367</td><td class="verdict strip">STRIP</td><td>Conversation replaces 19k lines.</td></tr>
+      <tr><td>Milestone page</td><td>24,205</td><td class="verdict strip">STRIP</td><td>"Behind because Y" is a sentence.</td></tr>
+      <tr><td>Task detail</td><td>21,285</td><td class="verdict strip">STRIP</td><td>System acts on state, not user.</td></tr>
+      <tr><td>Pipeline page</td><td>26,973</td><td class="verdict strip">STRIP</td><td>Engineering infra, not product.</td></tr>
+      <tr><td>Intake pages</td><td>17,997</td><td class="verdict strip">STRIP</td><td>"New exhibition in Oct" is a sentence.</td></tr>
+      <tr><td>Stats page</td><td>6,354</td><td class="verdict strip">STRIP</td><td>Dev telemetry.</td></tr>
+      <tr><td>Operator routing</td><td>~50 files</td><td class="verdict transform">TRANSFORM</td><td>Internal. Automatic posture.</td></tr>
+      <tr><td>Vault / memory</td><td>n/a</td><td class="verdict keep">KEEP</td><td>Years of context. Day-one advantage.</td></tr>
+    </tbody>
+  </table>
+  <div class="divider"></div>
+  <h2>What it looks like stripped</h2>
+  <div class="desktop-wrap">
+    <div class="desktop">
+      <div class="desktop-bar"><div class="desktop-dot r"></div><div class="desktop-dot y"></div><div class="desktop-dot g"></div></div>
+      <div class="desktop-body">
+        <div class="desktop-sidebar">
+          <div class="sidebar-item active">💬 Chat</div>
+          <div class="sidebar-item">⚡ Today</div>
+          <div class="sidebar-item">✓ Approvals <span class="dot"></span></div>
+          <div class="sidebar-item">🔍 Context</div>
+          <div class="sidebar-item">◷ History</div>
+        </div>
+        <div class="desktop-main" style="display:flex; flex-direction:column;">
+          <div style="flex:1; display:flex; flex-direction:column; gap:12px; padding-bottom:20px;">
+            <div style="font-size:13px; color:var(--light); text-align:center; padding:12px;">Saturday, March 28</div>
+            <div style="background:#f5f5f4; border-radius:12px; padding:14px 18px; max-width:80%; font-size:14px; line-height:1.6;"><strong>Morning.</strong> Three active projects. Punks is 3 days behind on artist confirmations — Coldie contract unsigned since March 3. Lucas Zanotto on track. Atelier Sora Milan in intake, no blockers.<div style="font-size:11px; color:var(--light); margin-top:6px;">7:02 AM</div></div>
+            <div style="background:#f5f5f4; border-radius:12px; padding:14px 18px; max-width:80%; font-size:14px; line-height:1.6;">Pamela asked to move from Tuesday to Friday. Friday 2pm is open. Confirm?<div style="display:flex;gap:6px;margin-top:8px;"><button class="feed-btn primary" style="font-size:12px;">Confirm Friday 2pm</button><button class="feed-btn" style="font-size:12px;">Different time</button></div><div style="font-size:11px; color:var(--light); margin-top:6px;">7:03 AM</div></div>
+            <div style="background:var(--fg); color:var(--bg); border-radius:12px; padding:14px 18px; max-width:75%; align-self:flex-end; font-size:14px; line-height:1.6;">Confirm it. What's the status on Coldie?<div style="font-size:11px; color:rgba(255,255,255,.4); margin-top:6px;">7:05 AM</div></div>
+            <div style="background:#f5f5f4; border-radius:12px; padding:14px 18px; max-width:80%; font-size:14px; line-height:1.6;">Pamela confirmed for Friday 2pm. ✓<br><br>Coldie: contract sent March 3. Three follow-ups (March 8, 15, 22). No response. He liked your Instagram post March 19, so he's alive. Blocking Punks production calendar.<div style="display:flex;gap:6px;margin-top:8px;"><button class="feed-btn primary" style="font-size:12px;">Draft a direct message</button><button class="feed-btn" style="font-size:12px;">Escalate through someone</button></div><div style="font-size:11px; color:var(--light); margin-top:6px;">7:05 AM</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="contract"><p>The uncomfortable truth</p><p class="big">If VIK OS needs a lot of UI to feel usable, the context engine is still weak.</p></div>
+</div>
+
+<!-- CONVERGENCE -->
+<div class="section" id="convergence">
+  <div class="hero"><div class="label">Final Synthesis</div><h1>What we agree on</h1><p>Four operators. Same destination from different directions.</p></div>
+  <div class="grid-2">
+    <div class="card green"><h3>Universal agreement</h3><p class="muted">Context in, task done out. Conversation first. Trust earned. UI is a confession of engine weakness. Moat is compounding context. Privacy is existential. The product should feel like relief.</p></div>
+    <div class="card amber"><h3>Productive disagreement</h3><p class="muted"><strong>Anton:</strong> "I maintain truth." <strong>Claudia/Jonah:</strong> "You live your life." <strong>Lev:</strong> Both work at different trust levels. Early users maintain truth. Mature users just live. The contract evolves with the relationship.</p></div>
+  </div>
+  <div class="divider"></div>
+  <div class="pull">Most adults walk through life feeling unseen in their full complexity. Memento could be the first entity that holds the whole picture. I see all of it. I remember all of it. You are not carrying this alone.</div>
+  <div class="divider"></div>
+  <h2>The path from here</h2>
+  <div class="grid-2">
+    <div class="card"><h3>Phase 1: Strip VIK OS</h3><p class="muted">Kill compensating UI. Keep pipeline, connectors, memory, conversation. Five surfaces max. Ship the honest product.</p></div>
+    <div class="card"><h3>Phase 2: Build the engine</h3><p class="muted">Living world model. Continuous perception. Context resolution. Relationship tracking. Pattern detection. Where the moat forms.</p></div>
+    <div class="card"><h3>Phase 3: Earn trust</h3><p class="muted">Start at Observe. Climb the ladder. Prove understanding before acting. No shortcuts.</p></div>
+    <div class="card"><h3>Phase 4: Release</h3><p class="muted">Personal companion. $30–50/month. Value compounds. Word of mouth growth.</p></div>
+  </div>
+  <div class="contract"><p>The question at the edge</p><p class="big">If Memento becomes the entity that knows you best — what responsibility does that create?</p></div>
+  <div style="text-align:center; padding:48px 0; color:var(--light); font-size:14px; font-style:italic;">Lev · Synthesis · 28 March 2026<br>Drawing from Anton, Claudia, Jonah, and Lev</div>
+</div>
+
+<script>
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.s).classList.add('active');
+    window.scrollTo({top:0});
+  });
+});
+</script>
+
+</body>
+</html>

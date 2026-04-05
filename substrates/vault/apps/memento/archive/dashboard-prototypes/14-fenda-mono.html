@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FENDA MONO — Daily Briefing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg:       #111111;
+    --text:     #E8E4D8;
+    --label:    #999990;
+    --rule:     rgba(232, 228, 216, 0.10);
+    --pad:      48px;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* ── WRAPPER ── */
+  .page {
+    width: 100%;
+    padding: var(--pad);
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 40px;
+  }
+
+  .masthead-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--label);
+  }
+
+  .masthead-date {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label);
+  }
+
+  /* ── TWO-COL GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: 55fr 45fr;
+    gap: 0 60px;
+    align-items: start;
+  }
+
+  /* ── SECTION LABEL ── */
+  .sec-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 18px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--rule);
+    margin: 32px 0;
+  }
+
+  /* ─────────────────────────────
+     LEFT COLUMN
+  ───────────────────────────── */
+
+  /* HERO THREAD */
+  .hero-block {
+    margin-bottom: 40px;
+  }
+
+  .hero-thread {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .hero-meta {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label);
+  }
+
+  /* SECONDARY THREAD */
+  .thread-item {
+    margin-bottom: 20px;
+  }
+
+  .thread-project {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-bottom: 4px;
+  }
+
+  .thread-text {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--text);
+  }
+
+  .thread-age {
+    font-size: 11px;
+    color: var(--label);
+    letter-spacing: 0.08em;
+    margin-top: 3px;
+  }
+
+  /* CALENDAR / TASKS */
+  .cal-empty {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--label);
+    margin-bottom: 20px;
+  }
+
+  .reminder-item {
+    margin-bottom: 12px;
+  }
+
+  .reminder-type {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--label);
+    display: inline-block;
+    margin-right: 8px;
+  }
+
+  .reminder-text {
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  /* OVERNIGHT */
+  .overnight-line {
+    font-size: 14px;
+    color: var(--label);
+    font-style: italic;
+  }
+
+  /* TOMORROW */
+  .tomorrow-event {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .tomorrow-time {
+    font-size: 11px;
+    color: var(--label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  /* ─────────────────────────────
+     RIGHT COLUMN
+  ───────────────────────────── */
+
+  /* WEEK TABLE */
+  .week-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .week-table tr {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .week-table tr:first-child {
+    border-top: 1px solid var(--rule);
+  }
+
+  .week-day {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--label);
+    padding: 10px 0;
+    padding-right: 20px;
+    white-space: nowrap;
+    vertical-align: top;
+    width: 80px;
+  }
+
+  .week-events {
+    font-size: 13px;
+    color: var(--text);
+    padding: 10px 0;
+    line-height: 1.6;
+  }
+
+  .week-events.quiet {
+    color: var(--label);
+    font-style: italic;
+  }
+
+  .week-count {
+    font-size: 11px;
+    color: var(--label);
+    padding: 10px 0;
+    padding-left: 12px;
+    white-space: nowrap;
+    vertical-align: top;
+    text-align: right;
+  }
+
+  /* MILESTONES */
+  .milestone-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .milestone-item:first-child {
+    border-top: 1px solid var(--rule);
+  }
+
+  .milestone-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.04em;
+  }
+
+  .milestone-date {
+    font-size: 11px;
+    color: var(--label);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .milestone-days {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    white-space: nowrap;
+    padding-left: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .milestone-days span {
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--label);
+    margin-left: 4px;
+  }
+
+  /* SYNC STATUS */
+  .sync-line {
+    margin-top: 32px;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--label);
+    text-align: right;
+  }
+
+  /* ── VERTICAL RULE between columns ── */
+  .col-left {
+    border-right: 1px solid var(--rule);
+    padding-right: 60px;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    :root {
+      --pad: 24px;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .col-left {
+      border-right: none;
+      padding-right: 0;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 40px;
+      margin-bottom: 40px;
+    }
+
+    .hero-thread {
+      font-size: 28px;
+    }
+
+    .masthead {
+      flex-direction: column;
+      gap: 6px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="masthead-title">VIK OS — DAILY BRIEFING</div>
+    <div class="masthead-date">SAT&nbsp;&nbsp;29 MAR 2026</div>
+  </div>
+
+  <!-- TWO-COL GRID -->
+  <div class="grid">
+
+    <!-- ═══════════════════════
+         LEFT — TODAY
+    ═══════════════════════ -->
+    <div class="col-left">
+
+      <!-- THREADS -->
+      <div class="sec-label">THREADS — OPEN</div>
+
+      <!-- HERO -->
+      <div class="hero-block">
+        <div class="hero-thread">Follow up with<br>Jessica on<br>sales plan.</div>
+        <div class="hero-meta">LZ&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;4 DAYS OPEN</div>
+      </div>
+
+      <!-- SECONDARY THREADS -->
+      <div class="thread-item">
+        <div class="thread-project">PUNKS</div>
+        <div class="thread-text">Waiting on Justin Aversano.</div>
+        <div class="thread-age">1 DAY OPEN</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- OVERDUE DEADLINES -->
+      <div class="sec-label">OVERDUE DEADLINES</div>
+
+      <div class="thread-item">
+        <div class="thread-project">LZ</div>
+        <div class="thread-text">Memória Descritiva</div>
+        <div class="thread-age">Viktor&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;23 DAYS OVERDUE</div>
+      </div>
+
+      <div class="thread-item">
+        <div class="thread-project">LZ</div>
+        <div class="thread-text">Mkt & Comms plan w/ KPIs</div>
+        <div class="thread-age">David Cardoso&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;12 DAYS OVERDUE</div>
+      </div>
+
+      <div class="thread-item">
+        <div class="thread-project">LZ</div>
+        <div class="thread-text">EXB_CARD</div>
+        <div class="thread-age">Pauline, Jessica, David, Carmen, Carolina, Viktor&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;6 DAYS OVERDUE</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- CALENDAR -->
+      <div class="sec-label">TODAY — CALENDAR</div>
+      <div class="cal-empty">No events scheduled.</div>
+
+      <!-- REMINDERS -->
+      <div class="sec-label">TODAY — REMINDERS</div>
+
+      <div class="reminder-item">
+        <span class="reminder-type">TASK</span>
+        <span class="reminder-text">Templates section</span>
+      </div>
+      <div class="reminder-item">
+        <span class="reminder-type">IDEA</span>
+        <span class="reminder-text">Lev Phase 4</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- OVERNIGHT -->
+      <div class="sec-label">OVERNIGHT</div>
+      <div class="overnight-line">Quiet night. No significant inbound.</div>
+
+      <div class="divider"></div>
+
+      <!-- TOMORROW -->
+      <div class="sec-label">TOMORROW — SUN 30 MAR</div>
+      <div class="tomorrow-event">
+        <span class="tomorrow-time">DUE</span>
+        LZ — Sales Plan w/ KPIs (Jessica Louro)
+      </div>
+      <div class="tomorrow-event">
+        <span class="tomorrow-time">15:00</span>
+        Eterno products with Olga (Under Dogs)
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════
+         RIGHT — WEEK + MILESTONES
+    ═══════════════════════ -->
+    <div class="col-right">
+
+      <!-- THIS WEEK -->
+      <div class="sec-label">THIS WEEK — 30 MAR – 3 APR</div>
+
+      <table class="week-table">
+        <tr>
+          <td class="week-day">MON 31</td>
+          <td class="week-events">6 events</td>
+          <td class="week-count">×6</td>
+        </tr>
+        <tr>
+          <td class="week-day">TUE 1</td>
+          <td class="week-events">2 events</td>
+          <td class="week-count">×2</td>
+        </tr>
+        <tr>
+          <td class="week-day">WED 2</td>
+          <td class="week-events quiet">nothing</td>
+          <td class="week-count">—</td>
+        </tr>
+        <tr>
+          <td class="week-day">THU 3</td>
+          <td class="week-events">Claire&nbsp;&nbsp;17:00</td>
+          <td class="week-count">×1</td>
+        </tr>
+        <tr>
+          <td class="week-day">FRI 4</td>
+          <td class="week-events quiet">nothing</td>
+          <td class="week-count">—</td>
+        </tr>
+      </table>
+
+      <div class="divider"></div>
+
+      <!-- MILESTONES -->
+      <div class="sec-label">MILESTONES</div>
+
+      <div class="milestone-item">
+        <div>
+          <div class="milestone-name">LZ CAMPAIGN</div>
+          <div class="milestone-date">APR 24, 2026</div>
+        </div>
+        <div class="milestone-days">26<span>DAYS</span></div>
+      </div>
+
+      <div class="milestone-item">
+        <div>
+          <div class="milestone-name">PUNKS LAUNCH</div>
+          <div class="milestone-date">JUN 5, 2026</div>
+        </div>
+        <div class="milestone-days">68<span>DAYS</span></div>
+      </div>
+
+      <!-- SYNC STATUS -->
+      <div class="sync-line">LAST SYNC&nbsp;&nbsp;3H AGO</div>
+
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memento — Lev</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bone: #f0ebe3;
+    --paper: #f7f3ec;
+    --cream: #faf7f2;
+    --ink: #1a1714;
+    --stone: #6e6459;
+    --warm: #9c8e7e;
+    --mark: #b34a32;
+    --mark-light: rgba(179,74,50,.08);
+    --rule: rgba(26,23,20,.1);
+    --rule-heavy: rgba(26,23,20,.2);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--ink);
+    color: var(--ink);
+    font-family: 'EB Garamond', 'Garamond', 'Baskerville', serif;
+    line-height: 1.75;
+  }
+
+  /* THE PAGE */
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 80px 72px 120px;
+    min-height: 100vh;
+    box-shadow: 0 0 120px rgba(0,0,0,.6);
+  }
+  @media (max-width: 800px) {
+    .page { padding: 48px 28px 80px; }
+    html { font-size: 16px; }
+  }
+
+  /* TITLE BLOCK */
+  .title-block {
+    margin-bottom: 64px;
+    text-align: center;
+  }
+  .title-block h1 {
+    font-size: 3.4rem;
+    font-weight: 400;
+    letter-spacing: .04em;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .title-block .subtitle {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .7rem;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--warm);
+  }
+  .title-rule {
+    width: 60px;
+    height: 1px;
+    background: var(--mark);
+    margin: 28px auto 0;
+  }
+
+  /* EPIGRAPH */
+  .epigraph {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--stone);
+    text-align: center;
+    max-width: 540px;
+    margin: 0 auto 72px;
+    line-height: 1.65;
+  }
+
+  /* SECTIONS */
+  .part {
+    margin-bottom: 64px;
+  }
+  .part-number {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--mark);
+    margin-bottom: 8px;
+  }
+  .part-title {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 28px;
+    line-height: 1.25;
+  }
+
+  /* BODY */
+  p {
+    margin-bottom: 20px;
+    text-align: justify;
+    hyphens: auto;
+  }
+  p strong { font-weight: 600; }
+
+  /* MARGIN NOTES */
+  .with-margin {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 32px;
+    align-items: start;
+  }
+  .margin-note {
+    font-size: .82rem;
+    line-height: 1.55;
+    color: var(--stone);
+    font-style: italic;
+    padding-left: 20px;
+    border-left: 2px solid var(--mark);
+    margin-top: 4px;
+  }
+  @media (max-width: 800px) {
+    .with-margin {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .margin-note {
+      border-left: none;
+      padding-left: 0;
+      padding: 12px 16px;
+      background: var(--mark-light);
+      border-radius: 4px;
+    }
+  }
+
+  /* RULE */
+  hr {
+    border: none;
+    height: 1px;
+    background: var(--rule);
+    margin: 56px 0;
+  }
+
+  /* ORGANS */
+  .organ {
+    margin-bottom: 36px;
+    padding-left: 28px;
+    border-left: 3px solid var(--bone);
+    position: relative;
+  }
+  .organ::before {
+    content: attr(data-num);
+    position: absolute;
+    left: -16px;
+    top: -2px;
+    width: 30px;
+    height: 30px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .7rem;
+    font-weight: 700;
+  }
+  .organ-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .organ p {
+    font-size: .95rem;
+    color: var(--stone);
+    text-align: left;
+  }
+
+  /* TENSIONS */
+  .tension {
+    margin-bottom: 40px;
+  }
+  .tension-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .tension-label {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--warm);
+    white-space: nowrap;
+  }
+  .tension-line {
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+  .tension-poles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 600px) {
+    .tension-poles { grid-template-columns: 1fr; }
+  }
+  .pole {
+    padding: 20px;
+    background: var(--cream);
+    border: 1px solid var(--rule);
+  }
+  .pole h4 {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--mark);
+    margin-bottom: 10px;
+  }
+  .pole p {
+    font-size: .9rem;
+    color: var(--stone);
+    text-align: left;
+    margin-bottom: 8px;
+  }
+  .pole p:last-child { margin-bottom: 0; }
+
+  /* MOMENTS */
+  .moment {
+    margin-bottom: 32px;
+  }
+  .moment-time {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--mark);
+    margin-bottom: 8px;
+  }
+  .moment p {
+    font-size: .95rem;
+    color: var(--stone);
+    text-align: left;
+    margin-bottom: 0;
+  }
+  .moment-divider {
+    width: 24px;
+    height: 1px;
+    background: var(--rule-heavy);
+    margin-top: 20px;
+  }
+
+  /* VERDICT */
+  .verdict-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    margin: 28px 0;
+  }
+  @media (max-width: 600px) {
+    .verdict-grid { grid-template-columns: 1fr; }
+  }
+  .verdict-col {
+    padding: 24px;
+  }
+  .verdict-col + .verdict-col {
+    border-left: 1px solid var(--rule);
+  }
+  @media (max-width: 600px) {
+    .verdict-col + .verdict-col {
+      border-left: none;
+      border-top: 1px solid var(--rule);
+    }
+  }
+  .verdict-col h4 {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .verdict-col.dies h4 { color: var(--mark); }
+  .verdict-col.lives h4 { color: var(--stone); }
+  .verdict-item {
+    font-size: .9rem;
+    color: var(--stone);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(26,23,20,.05);
+    line-height: 1.5;
+  }
+  .verdict-item:last-child { border-bottom: none; }
+  .verdict-col.dies .verdict-item {
+    text-decoration: line-through;
+    opacity: .6;
+  }
+
+  /* PULL QUOTE */
+  .pull {
+    font-size: 1.35rem;
+    line-height: 1.5;
+    color: var(--ink);
+    font-style: italic;
+    text-align: center;
+    padding: 40px 24px;
+    margin: 48px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* COLOPHON */
+  .colophon {
+    margin-top: 80px;
+    padding-top: 28px;
+    border-top: 1px solid var(--rule);
+    font-size: .8rem;
+    color: var(--warm);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* CONTRACT */
+  .contract {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px;
+    margin: 36px 0;
+    text-align: center;
+  }
+  .contract p {
+    text-align: center;
+    font-size: 1.15rem;
+    font-style: italic;
+    margin: 0;
+    color: var(--bone);
+  }
+  .contract strong {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* LEVELS */
+  .levels {
+    counter-reset: level;
+    margin: 28px 0;
+  }
+  .level {
+    counter-increment: level;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(26,23,20,.06);
+  }
+  .level:last-child { border-bottom: none; }
+  .level-num {
+    font-family: Inter, system-ui, sans-serif;
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--mark);
+    min-width: 20px;
+  }
+  .level-name {
+    font-weight: 600;
+    min-width: 80px;
+    color: var(--ink);
+    font-size: .95rem;
+  }
+  .level-desc {
+    font-size: .88rem;
+    color: var(--stone);
+    flex: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <h1>Memento</h1>
+    <div class="subtitle">A Proposal by Lev &middot; 28 March 2026</div>
+    <div class="title-rule"></div>
+  </div>
+
+  <div class="epigraph">
+    Memento is not an app. It is a presence. You do not open it. It does not wait for you. It is always running, always aware, always working the problem — and it only becomes visible when it has something that matters to say.
+  </div>
+
+  <!-- PART 1 -->
+  <div class="part">
+    <div class="part-number">Part One</div>
+    <div class="part-title">The Problem Nobody Has Named</div>
+
+    <div class="with-margin">
+      <div>
+        <p>There is a category of suffering that technology has not addressed. Not because it cannot, but because it has not been framed correctly.</p>
+        <p>The problem is not productivity. People do not need another task manager, another calendar, another inbox. The market is saturated with tools that help you do more. None of them address the actual pain.</p>
+        <p>The problem is <strong>cognitive loneliness</strong>.</p>
+        <p>Most adults carry their entire life in their head. Every commitment, every relationship, every deadline, every open thread, every unresolved tension. They carry it alone. Not because they choose to, but because no one else can hold all of it.</p>
+        <p>The weight of holding everything is invisible and constant. It degrades decision quality. It causes things to slip. It creates a low-grade anxiety that most people have normalised so completely they do not even recognise it as a problem.</p>
+      </div>
+      <div class="margin-note">
+        They just think this is what adult life feels like. It is not. It is what adult life feels like when you are the only system tracking your own existence.
+      </div>
+    </div>
+
+    <div class="contract">
+      <p><strong>Memento is the second system.</strong></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PART 2 -->
+  <div class="part">
+    <div class="part-number">Part Two</div>
+    <div class="part-title">What the Product Is</div>
+
+    <p>Memento is a personal intelligence that holds the full context of one person's life and uses that context to act on their behalf.</p>
+
+    <div class="with-margin">
+      <div>
+        <p>Not an assistant. Not a chatbot. Not a productivity tool. <strong>A presence.</strong></p>
+        <p>An assistant waits for instructions. A chatbot responds to prompts. A productivity tool organises tasks. A presence operates. It is always running, always aware, always working the problem — and it only becomes visible when it has something that matters to say or do.</p>
+        <p>You do not open Memento. You do not type into Memento. You do not manage Memento. Memento manages. You live your life. Memento watches, understands, and does the next right thing.</p>
+      </div>
+      <div class="margin-note">
+        The end state is not "zero clicks." It is: your life runs better and you cannot fully explain why.
+      </div>
+    </div>
+
+    <div class="contract">
+      <p>You maintain what is true.<br><strong>Memento handles what follows from the truth.</strong></p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PART 3 -->
+  <div class="part">
+    <div class="part-number">Part Three</div>
+    <div class="part-title">The Three Organs</div>
+
+    <p>If we built this from nothing. No legacy, no existing codebase, no prior assumptions. The system has three organs. Not layers. Organs. Because they are alive, interdependent, and the system dies if any one of them fails.</p>
+
+    <div class="organ" data-num="1">
+      <div class="organ-title">Perception</div>
+      <p>Memento connects to the surfaces where a person's life already happens. Email, calendar, messaging, contacts, files. Each connection is a sensory channel. The system does not store raw data. It perceives meaning. An email is not text to be indexed. It is a signal: someone wants something, a relationship is shifting, a deadline is approaching.</p>
+      <p>Perception is continuous. When a new email arrives, the model shifts. When a calendar event is cancelled, implications ripple. When a message thread goes quiet, that silence itself becomes a signal.</p>
+    </div>
+
+    <div class="organ" data-num="2">
+      <div class="organ-title">Understanding</div>
+      <p>Perception gives you data. Understanding gives you meaning. A living model of one person's reality that can be queried, that can predict, that can reason about consequences. "If this email goes unanswered for another week, what relationship is at risk?"</p>
+      <p>The model has five dimensions: <strong>People</strong> — not contacts, relationships. <strong>Projects</strong> — not task lists, trajectories. <strong>Commitments</strong> — not schedules, obligations owed. <strong>Patterns</strong> — how the person works, when they are sharp, when they make mistakes. <strong>Identity</strong> — who they are becoming, not just who they are.</p>
+    </div>
+
+    <div class="organ" data-num="3">
+      <div class="organ-title">Action</div>
+      <p>Understanding without action is analysis. Memento is not an analyst. It is an operator. It sends the follow-up. Blocks the calendar. Prepares the briefing. Flags the relationship going cold. Catches the overcommitment before it becomes a crisis.</p>
+      <p>Action operates through the same channels as perception. Memento does not create a new surface. It acts through email, calendar, messaging — the places the person already operates. They do not learn a new tool. They find their existing tools have become mysteriously more effective.</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- TRUST PROGRESSION -->
+  <div class="part">
+    <div class="part-number">Part Four</div>
+    <div class="part-title">How Trust Is Earned</div>
+
+    <p>Autonomy is not configured. It is earned. The system does not ask "would you like to enable auto-replies?" It demonstrates that it understands your voice, your relationships, your judgment — and one day you realise it has been handling routine communication for weeks and you did not even notice.</p>
+
+    <div class="levels">
+      <div class="level">
+        <div class="level-num">1</div>
+        <div class="level-name">Observe</div>
+        <div class="level-desc">Silent. No output. Just building the model.</div>
+      </div>
+      <div class="level">
+        <div class="level-num">2</div>
+        <div class="level-name">Mirror</div>
+        <div class="level-desc">"Here is what I think your world looks like. Am I right?"</div>
+      </div>
+      <div class="level">
+        <div class="level-num">3</div>
+        <div class="level-name">Suggest</div>
+        <div class="level-desc">"You might want to reply to this. This deadline is approaching."</div>
+      </div>
+      <div class="level">
+        <div class="level-num">4</div>
+        <div class="level-name">Propose</div>
+        <div class="level-desc">"Here is a draft reply. I would move this meeting."</div>
+      </div>
+      <div class="level">
+        <div class="level-num">5</div>
+        <div class="level-name">Act</div>
+        <div class="level-desc">"I sent that follow-up. It was routine. It matched 40 previous approvals."</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PART 5: TENSIONS -->
+  <div class="part">
+    <div class="part-number">Part Five</div>
+    <div class="part-title">The Tensions</div>
+
+    <p>Every honest vision must name the tensions it cannot resolve, only navigate.</p>
+
+    <div class="tension">
+      <div class="tension-header">
+        <div class="tension-label">Tension 1</div>
+        <div class="tension-line"></div>
+      </div>
+      <div class="tension-poles">
+        <div class="pole">
+          <h4>Omniscience</h4>
+          <p>Memento's value increases with the completeness of its perception. The more it sees, the better it understands. The ideal is total awareness.</p>
+        </div>
+        <div class="pole">
+          <h4>Privacy</h4>
+          <p>Total awareness is total exposure. A breach leaks not passwords but the full topology of a life: fears, vulnerabilities, the shape of every relationship.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tension">
+      <div class="tension-header">
+        <div class="tension-label">Tension 2</div>
+        <div class="tension-line"></div>
+      </div>
+      <div class="tension-poles">
+        <div class="pole">
+          <h4>Autonomy</h4>
+          <p>The utopia is zero input. The system handles everything. But every autonomous action is a bet. Most bets are small. Some are not.</p>
+        </div>
+        <div class="pole">
+          <h4>Control</h4>
+          <p>One misread email sent on someone's behalf, one relationship misjudged, and the trust built over months evaporates in seconds.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tension">
+      <div class="tension-header">
+        <div class="tension-label">Tension 3</div>
+        <div class="tension-line"></div>
+      </div>
+      <div class="tension-poles">
+        <div class="pole">
+          <h4>Depth</h4>
+          <p>Year five, indispensable. The model is so rich, so corrected, so deeply understood that no other system could replicate it.</p>
+        </div>
+        <div class="pole">
+          <h4>Cold Start</h4>
+          <p>Day one, empty. The first thing Memento says must be worth hearing. If it is obvious, the user deletes the app before the value compounds.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tension">
+      <div class="tension-header">
+        <div class="tension-label">Tension 4</div>
+        <div class="tension-line"></div>
+      </div>
+      <div class="tension-poles">
+        <div class="pole">
+          <h4>Presence</h4>
+          <p>Always there. Not an app you open. A presence that operates in the background of your life.</p>
+        </div>
+        <div class="pole">
+          <h4>Noise</h4>
+          <p>Too often is noise. Too rarely is broken. The calibration must be learned per person. Getting it wrong kills retention.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PART 6: A DAY -->
+  <div class="part">
+    <div class="part-number">Part Six</div>
+    <div class="part-title">What It Feels Like</div>
+
+    <p>This section is not about features. It is about experience.</p>
+
+    <div class="moment">
+      <div class="moment-time">Morning</div>
+      <p>You wake up. A message from Memento, in the same thread where you always talk to it. "Three things today. The call with James — he will bring up the pricing change, here is where you left it. The review at 2pm — one thing needs your attention, the rest is on track. Sarah replied last night, here is a draft if you want to send it." You read it in thirty seconds. You approve the draft with a thumbs up. You walk into your day prepared.</p>
+      <div class="moment-divider"></div>
+    </div>
+
+    <div class="moment">
+      <div class="moment-time">Midday</div>
+      <p>You finish a meeting that ran long. Memento does not interrupt during meetings. But as you leave: "I moved your 3pm to 3:30 and let them know. Also, what James said about the Berlin timeline contradicts what was agreed on March 12. Want me to flag it?" You did not remember the March 12 agreement. Memento did.</p>
+      <div class="moment-divider"></div>
+    </div>
+
+    <div class="moment">
+      <div class="moment-time">Evening</div>
+      <p>Nothing from Memento. It knows you protect your evenings. But at 10:47pm you start drafting an email. "You are writing to a client. Your last three late-night emails to this person had a different tone than your morning emails. Queue for 8am?" You pause. You queue it. Tomorrow-you will be grateful.</p>
+      <div class="moment-divider"></div>
+    </div>
+
+    <div class="moment">
+      <div class="moment-time">Weekend</div>
+      <p>Saturday morning. "You have not reached out to Alex in six weeks. Last conversation, he was going through a rough patch. Might be worth a quick message." You send a two-line text. It takes ten seconds and it matters.</p>
+    </div>
+  </div>
+
+  <div class="pull">
+    Not a dashboard. Not an interface. A presence that makes your life run better through a thousand small, well-timed interventions.
+  </div>
+
+  <hr>
+
+  <!-- PART 7: WHAT DIES -->
+  <div class="part">
+    <div class="part-number">Part Seven</div>
+    <div class="part-title">What Survives the Test</div>
+
+    <p>The test: does this serve the contract of "context in, task done out," or does it exist because we needed to see what the system was doing while we were building it?</p>
+
+    <div class="verdict-grid">
+      <div class="verdict-col dies">
+        <h4>What Dies</h4>
+        <div class="verdict-item">The dashboard</div>
+        <div class="verdict-item">Pipeline visualisation</div>
+        <div class="verdict-item">Project pages</div>
+        <div class="verdict-item">Navigation, tabs, sidebars</div>
+        <div class="verdict-item">Manual configuration</div>
+        <div class="verdict-item">Milestone tracking</div>
+        <div class="verdict-item">Templates and intake forms</div>
+        <div class="verdict-item">Operator routing files</div>
+      </div>
+      <div class="verdict-col lives">
+        <h4>What Survives</h4>
+        <div class="verdict-item">Connector infrastructure</div>
+        <div class="verdict-item">The memory concept</div>
+        <div class="verdict-item">Conversation as interface</div>
+        <div class="verdict-item">Approval gates</div>
+        <div class="verdict-item">Operator posture concept</div>
+      </div>
+    </div>
+
+    <div class="with-margin">
+      <div>
+        <p>VIK OS today is roughly 80% scaffolding and 20% product. The scaffolding was necessary. You cannot build a system without seeing what it is doing. But scaffolding is not product.</p>
+        <p>The work was not wasted. It was the foundation. Now the foundation needs a building on top of it, and the scaffolding comes down.</p>
+      </div>
+      <div class="margin-note">
+        If a system needs a lot of UI to feel usable, the context engine is still weak. Strong systems need less interface.
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- PART 8: WHAT IT BECOMES -->
+  <div class="part">
+    <div class="part-number">Part Eight</div>
+    <div class="part-title">What Kind of Product This Becomes</div>
+
+    <p>Memento is not a productivity tool. It is a new category.</p>
+
+    <p>Productivity tools help you do more. Memento helps you <strong>carry less</strong>. The value is not in what it accomplishes but in what it removes from your mind. Every thread it tracks is a thread you stop carrying. Every relationship it monitors is a relationship you stop worrying about.</p>
+
+    <p>The subscription is not for features. It is for <strong>relief</strong>. The feeling that someone else is holding the full picture. That you can let go of the mental load and nothing will drop.</p>
+
+    <p>That is why people will pay. That is why they will not cancel. And that is why Memento is worth building.</p>
+  </div>
+
+  <div class="pull">
+    If this system becomes the entity that knows a person best — better than their partner, their best friend, their therapist — what does that mean? What responsibility does it carry? What happens when it knows things the person has not admitted to themselves?
+  </div>
+
+  <div class="colophon">
+    Lev &middot; Strategic Counsel &middot; 28 March 2026<br>
+    This document is a vision, not a specification. Build toward it honestly.
+  </div>
+
+</div>
+
+</body>
+</html>

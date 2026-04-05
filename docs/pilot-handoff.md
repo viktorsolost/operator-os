@@ -20,8 +20,7 @@ Before you start:
 - [ ] Git installed
 - [ ] At least one AI runtime: Claude Code (`claude`), Codex CLI (`codex`), Gemini CLI, or OpenClaw
 - [ ] Clone this repo: `git clone https://github.com/viktorsolost/operator-os.git`
-- [ ] Get a copy of the reference vault (I'll send you this separately)
-- [ ] Get a copy of Memento (required — I'll send you this separately. Memento is core substrate, not optional.)
+- [ ] The repo includes bundled substrates (reference vault + Memento) — no separate download needed
 - [ ] If connecting Gmail: install the `gws` CLI (Google Workspace CLI)
 - [ ] If connecting Basecamp: create a Basecamp integration at https://launchpad.37signals.com/integrations and have your Client ID + Secret ready
 
@@ -29,8 +28,10 @@ Before you start:
 
 ```
 cd operator-os
-node install.js /path/to/reference-vault /path/to/memento
+node install.js
 ```
+
+The installer uses bundled substrates by default. Override paths only if you have a custom vault or Memento source.
 
 The installer is interactive. It takes about 5 minutes if connecting accounts, 2 minutes if deferring.
 
