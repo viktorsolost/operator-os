@@ -326,7 +326,7 @@ async function main() {
     console.error(`\nOnboarding failed at phase: ${slice2Result.phase}`);
     if (slice2Result.errors && slice2Result.errors.length > 0) {
       for (const e of slice2Result.errors) {
-        console.error(`  ${e}`);
+        console.error(`  ${typeof e === 'object' ? (e.id ? `[${e.id}] ${e.error || JSON.stringify(e)}` : JSON.stringify(e)) : e}`);
       }
     }
     process.exit(1);

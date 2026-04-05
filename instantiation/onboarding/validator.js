@@ -74,15 +74,19 @@ function checkCompleteness(installerManifest, targetInstallRoot, packet) {
 // ---------------------------------------------------------------------------
 // Checkpoint B: No Viktor residue
 // ---------------------------------------------------------------------------
-function checkNoViktorResidue(targetInstallRoot, homeRoot) {
+function checkNoViktorResidue(targetInstallRoot, homeRoot, installerManifest) {
   const findings = [];
   const forbidden = ['Viktor', 'viktorsl', '/Users/viktorsl', 'VIK OS', '~/VIK/ObsidianVault/VIK_OS', '~/VIK/Coding/Memento'];
+
+  // Only check files the installer wrote, not entire pre-existing runtime dirs
+  const installerWrittenRuntimeFiles = [
+    ...(installerManifest.bridgeTemplates || []).map(b => b.target),
+    ...(installerManifest.safeScaffolds || []).map(s => s.target),
+  ].filter(f => fs.existsSync(f));
+
   const allFiles = [
     ...walkDir(targetInstallRoot),
-    ...walkDir(path.join(homeRoot, '.claude')),
-    ...walkDir(path.join(homeRoot, '.gemini')),
-    ...walkDir(path.join(homeRoot, '.codex')),
-    ...walkDir(path.join(homeRoot, '.openclaw')),
+    ...installerWrittenRuntimeFiles,
   ];
 
   for (const filePath of allFiles) {
@@ -101,14 +105,18 @@ function checkNoViktorResidue(targetInstallRoot, homeRoot) {
 // ---------------------------------------------------------------------------
 // Checkpoint C: Path integrity
 // ---------------------------------------------------------------------------
-function checkPathIntegrity(targetInstallRoot, homeRoot, packet) {
+function checkPathIntegrity(targetInstallRoot, homeRoot, packet, installerManifest) {
   const findings = [];
+
+  // Only check files the installer wrote, not entire pre-existing runtime dirs
+  const installerWrittenRuntimeFiles = [
+    ...(installerManifest.bridgeTemplates || []).map(b => b.target),
+    ...(installerManifest.safeScaffolds || []).map(s => s.target),
+  ].filter(f => fs.existsSync(f));
+
   const allFiles = [
     ...walkDir(targetInstallRoot),
-    ...walkDir(path.join(homeRoot, '.claude')),
-    ...walkDir(path.join(homeRoot, '.gemini')),
-    ...walkDir(path.join(homeRoot, '.codex')),
-    ...walkDir(path.join(homeRoot, '.openclaw')),
+    ...installerWrittenRuntimeFiles,
   ];
 
   let ownerPathFound = false;
@@ -221,14 +229,18 @@ function checkFunctionalContent(targetInstallRoot, packet, installerManifest) {
 // ---------------------------------------------------------------------------
 // Checkpoint F: Template cleanliness
 // ---------------------------------------------------------------------------
-function checkTemplateCleanliness(targetInstallRoot, homeRoot) {
+function checkTemplateCleanliness(targetInstallRoot, homeRoot, installerManifest) {
   const findings = [];
+
+  // Only check files the installer wrote, not entire pre-existing runtime dirs
+  const installerWrittenRuntimeFiles = [
+    ...(installerManifest.bridgeTemplates || []).map(b => b.target),
+    ...(installerManifest.safeScaffolds || []).map(s => s.target),
+  ].filter(f => fs.existsSync(f));
+
   const allFiles = [
     ...walkDir(targetInstallRoot),
-    ...walkDir(path.join(homeRoot, '.claude')),
-    ...walkDir(path.join(homeRoot, '.gemini')),
-    ...walkDir(path.join(homeRoot, '.codex')),
-    ...walkDir(path.join(homeRoot, '.openclaw')),
+    ...installerWrittenRuntimeFiles,
   ];
 
   for (const filePath of allFiles) {
@@ -250,21 +262,32 @@ function checkTemplateCleanliness(targetInstallRoot, homeRoot) {
 // ---------------------------------------------------------------------------
 // Checkpoint G: Runtime gating
 // ---------------------------------------------------------------------------
-function checkRuntimeGating(homeRoot, packet) {
+function checkRuntimeGating(homeRoot, packet, installerManifest) {
   const findings = [];
 
-  const runtimeDirs = {
+  // Map runtime names to the prefix patterns used in installer manifest target paths
+  const runtimePrefixes = {
     Codex: path.join(homeRoot, '.codex'),
     Claude: path.join(homeRoot, '.claude'),
     Gemini: path.join(homeRoot, '.gemini'),
     OpenClaw: path.join(homeRoot, '.openclaw'),
   };
 
-  for (const [runtime, dir] of Object.entries(runtimeDirs)) {
+  // Collect all installer-written runtime files per runtime
+  const allInstallerTargets = [
+    ...(installerManifest.bridgeTemplates || []).map(b => b.target),
+    ...(installerManifest.safeScaffolds || []).map(s => s.target),
+  ];
+
+  for (const [runtime, prefix] of Object.entries(runtimePrefixes)) {
     const enabled = isRuntimeEnabled(packet.runtimeSelection, runtime);
-    const dirFiles = walkDir(dir);
-    if (!enabled && dirFiles.length > 0) {
-      findings.push({ severity: 'fail', message: `Disabled runtime "${runtime}" has files at ${dir}` });
+    if (!enabled) {
+      // Check if any installer-written file targets belong to this disabled runtime
+      const writtenFiles = allInstallerTargets.filter(t => t.startsWith(prefix + path.sep) || t.startsWith(prefix + '/'));
+      const existingWrittenFiles = writtenFiles.filter(f => fs.existsSync(f));
+      if (existingWrittenFiles.length > 0) {
+        findings.push({ severity: 'fail', message: `Disabled runtime "${runtime}" has installer-written files: ${existingWrittenFiles.join(', ')}` });
+      }
     }
   }
 
@@ -277,12 +300,12 @@ function checkRuntimeGating(homeRoot, packet) {
 function validateOnboardingOutput(installerManifest, packet, targetInstallRoot, homeRoot) {
   const checkpoints = {
     A_completeness: checkCompleteness(installerManifest, targetInstallRoot, packet),
-    B_no_viktor_residue: checkNoViktorResidue(targetInstallRoot, homeRoot),
-    C_path_integrity: checkPathIntegrity(targetInstallRoot, homeRoot, packet),
+    B_no_viktor_residue: checkNoViktorResidue(targetInstallRoot, homeRoot, installerManifest),
+    C_path_integrity: checkPathIntegrity(targetInstallRoot, homeRoot, packet, installerManifest),
     D_boot_chain: checkBootChain(targetInstallRoot),
     E_functional_content: checkFunctionalContent(targetInstallRoot, packet, installerManifest),
-    F_template_cleanliness: checkTemplateCleanliness(targetInstallRoot, homeRoot),
-    G_runtime_gating: checkRuntimeGating(homeRoot, packet),
+    F_template_cleanliness: checkTemplateCleanliness(targetInstallRoot, homeRoot, installerManifest),
+    G_runtime_gating: checkRuntimeGating(homeRoot, packet, installerManifest),
   };
 
   const allFindings = [];
