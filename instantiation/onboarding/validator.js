@@ -260,34 +260,16 @@ function checkTemplateCleanliness(targetInstallRoot, homeRoot, installerManifest
 }
 
 // ---------------------------------------------------------------------------
-// Checkpoint G: Runtime gating
+// Checkpoint G: Vault-local bridge files exist for enabled runtimes
 // ---------------------------------------------------------------------------
 function checkRuntimeGating(homeRoot, packet, installerManifest) {
   const findings = [];
 
-  // Map runtime names to the prefix patterns used in installer manifest target paths
-  const runtimePrefixes = {
-    Codex: path.join(homeRoot, '.codex'),
-    Claude: path.join(homeRoot, '.claude'),
-    Gemini: path.join(homeRoot, '.gemini'),
-    OpenClaw: path.join(homeRoot, '.openclaw'),
-  };
-
-  // Collect all installer-written runtime files per runtime
-  const allInstallerTargets = [
-    ...(installerManifest.bridgeTemplates || []).map(b => b.target),
-    ...(installerManifest.safeScaffolds || []).map(s => s.target),
-  ];
-
-  for (const [runtime, prefix] of Object.entries(runtimePrefixes)) {
-    const enabled = isRuntimeEnabled(packet.runtimeSelection, runtime);
-    if (!enabled) {
-      // Check if any installer-written file targets belong to this disabled runtime
-      const writtenFiles = allInstallerTargets.filter(t => t.startsWith(prefix + path.sep) || t.startsWith(prefix + '/'));
-      const existingWrittenFiles = writtenFiles.filter(f => fs.existsSync(f));
-      if (existingWrittenFiles.length > 0) {
-        findings.push({ severity: 'fail', message: `Disabled runtime "${runtime}" has installer-written files: ${existingWrittenFiles.join(', ')}` });
-      }
+  // Since bridge files now live in the vault root (not home dirs), verify that
+  // each enabled runtime's bridge file was written by the installer.
+  for (const item of (installerManifest.bridgeTemplates || [])) {
+    if (!fs.existsSync(item.target)) {
+      findings.push({ severity: 'fail', message: `Enabled runtime "${item.runtime}" is missing vault-local bridge: ${item.target}` });
     }
   }
 

@@ -18,7 +18,7 @@ Before you start:
 
 - [ ] Node.js 18+ installed
 - [ ] Git installed
-- [ ] At least one AI runtime: Claude Code (`claude`), Codex CLI (`codex`), Gemini CLI, or OpenClaw
+- [ ] At least one AI runtime: Claude Code (`claude`), Codex CLI (`codex`), or Gemini CLI
 - [ ] Clone this repo: `git clone https://github.com/viktorsolost/operator-os.git`
 - [ ] The repo includes bundled substrates (reference vault + Memento) — no separate download needed
 - [ ] If connecting Gmail: install the `gws` CLI (Google Workspace CLI)
@@ -40,10 +40,16 @@ The installer is interactive. It takes about 5 minutes if connecting accounts, 2
 After install you should see:
 - "Installation complete" with file counts and connector summary
 - A vault directory at your chosen location with BOOT.md, ROUTING.md, operator files, and memory
+- Bridge files in the vault root: `CLAUDE.md` (if Claude enabled), `AGENTS.md` (if Codex enabled), `GEMINI.md` (if Gemini enabled)
 - A workspace directory with pipeline_config.json and registry.json
-- Runtime bridge files at `~/.claude/CLAUDE.md` (or equivalent for your chosen runtime)
+- No files written to `~/.claude/`, `~/.codex/`, or `~/.gemini/`
 
-Test it by opening your AI runtime and saying: "Hi Claudia, what should I focus on today?"
+Test it by navigating into your vault and launching your runtime:
+```
+cd {vault_location}
+claude     # or: codex / gemini
+```
+Then say: "Hi Claudia, what should I focus on today?"
 
 If accounts are connected and first sync ran, Claudia should have real context. If accounts were deferred, she'll have the system structure but no external data yet.
 

@@ -192,13 +192,8 @@ async function runDryTest() {
   // DT-3: Zero Viktor residue
   // ---------------------------------------------------------------------------
   console.log('\n--- DT-3: Zero Viktor residue ---');
-  const allFiles = [
-    ...walkDir(TARGET_VAULT),
-    ...walkDir(path.join(TARGET_HOME, '.claude')),
-    ...walkDir(path.join(TARGET_HOME, '.gemini')),
-    ...walkDir(path.join(TARGET_HOME, '.codex')),
-    ...walkDir(path.join(TARGET_HOME, '.openclaw')),
-  ];
+  // Bridge files are now in vault root — no need to scan home runtime dirs
+  const allFiles = walkDir(TARGET_VAULT);
   const forbidden = ['Viktor', 'viktorsl', '/Users/viktorsl', 'VIK OS', '~/VIK/ObsidianVault/VIK_OS', '~/VIK/Coding/Memento'];
   let residueFound = [];
   for (const fp of allFiles) {
@@ -271,15 +266,20 @@ async function runDryTest() {
   assert(!idContent.includes('Viktor'), 'identity.md does NOT contain Viktor');
 
   // ---------------------------------------------------------------------------
-  // DT-8: Runtime gating
+  // DT-8: Runtime gating — bridge files are in vault root, not home dirs
   // ---------------------------------------------------------------------------
   console.log('\n--- DT-8: Runtime gating ---');
-  assert(fs.existsSync(path.join(TARGET_HOME, '.claude', 'CLAUDE.md')), 'Claude bridge exists');
-  assert(fs.existsSync(path.join(TARGET_HOME, '.gemini', 'GEMINI.md')), 'Gemini bridge exists');
-  const codexFiles = walkDir(path.join(TARGET_HOME, '.codex'));
-  assert(codexFiles.length === 0, `Codex dir has no files (found ${codexFiles.length})`);
-  const openclawFiles = walkDir(path.join(TARGET_HOME, '.openclaw'));
-  assert(openclawFiles.length === 0, `OpenClaw dir has no files (found ${openclawFiles.length})`);
+  // Pauline selected Claude + Gemini. CLAUDE.md is handled by the claude_md
+  // rewrite-template (not a bridge entry), Gemini bridge goes to vault root.
+  assert(fs.existsSync(path.join(TARGET_VAULT, 'CLAUDE.md')), 'Claude bridge exists in vault root');
+  assert(fs.existsSync(path.join(TARGET_VAULT, 'GEMINI.md')), 'Gemini bridge exists in vault root');
+  // Codex not selected — AGENTS.md should not exist
+  assert(!fs.existsSync(path.join(TARGET_VAULT, 'AGENTS.md')), 'Codex bridge (AGENTS.md) not present when Codex not selected');
+  // No files should be written to home runtime dirs
+  const homeDotClaude = walkDir(path.join(TARGET_HOME, '.claude'));
+  assert(homeDotClaude.length === 0, `~/.claude dir has no installer-written files (found ${homeDotClaude.length})`);
+  const homeDotGemini = walkDir(path.join(TARGET_HOME, '.gemini'));
+  assert(homeDotGemini.length === 0, `~/.gemini dir has no installer-written files (found ${homeDotGemini.length})`);
 
   // ---------------------------------------------------------------------------
   // DT-9: Template cleanliness

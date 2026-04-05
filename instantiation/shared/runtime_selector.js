@@ -4,12 +4,15 @@
  * runtime_selector.js
  * Normalizes and validates runtime selection for the VIK OS instantiation system.
  *
- * Allowed runtimes: Codex, Claude, Gemini, OpenClaw (case-sensitive)
+ * Allowed runtimes: Codex, Claude, Gemini (case-sensitive)
+ * OpenClaw is deferred — it requires manual runtime-specific setup and is not
+ * part of the zero-global install path. Remove this comment when re-enabled.
  * This module does NOT read runtime-specific detail fields, resolve paths,
  * infer enablement from file presence, or write files.
  */
 
-const ALLOWED_RUNTIMES = Object.freeze(['Codex', 'Claude', 'Gemini', 'OpenClaw']);
+const ALLOWED_RUNTIMES = Object.freeze(['Codex', 'Claude', 'Gemini']);
+// OpenClaw deferred — remove from ALLOWED_RUNTIMES when re-enabled
 
 /**
  * Takes a raw selected_runtimes array and returns a normalized selection object.

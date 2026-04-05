@@ -333,14 +333,8 @@ async function runE2ETest() {
     assert(marcusSlice2.success === true, 'Marcus: Slice 2 pipeline completes');
     assert(marcusSlice3.success === true, 'Marcus: Slice 3 pipeline completes');
 
-    // Zero Viktor residue
-    const marcusAllFiles = [
-      ...walkDir(MARCUS_VAULT),
-      ...walkDir(path.join(MARCUS_HOME, '.claude')),
-      ...walkDir(path.join(MARCUS_HOME, '.codex')),
-      ...walkDir(path.join(MARCUS_HOME, '.gemini')),
-      ...walkDir(path.join(MARCUS_HOME, '.openclaw')),
-    ];
+    // Zero Viktor residue — bridge files now live in vault root, no home dir scanning needed
+    const marcusAllFiles = walkDir(MARCUS_VAULT);
     const forbidden = ['Viktor', 'viktorsl', '/Users/viktorsl', 'VIK OS', '~/VIK/ObsidianVault/VIK_OS', '~/VIK/Coding/Memento'];
     let marcusResidueFound = [];
     for (const fp of marcusAllFiles) {
@@ -376,9 +370,12 @@ async function runE2ETest() {
     assert(marcusNameFound, 'Marcus: Marcus name appears in generated files');
     assert(marcusRoleFound, 'Marcus: Marcus role (solo founder) appears in generated files');
 
-    // Runtime gating: Claude and Codex YES, Gemini and OpenClaw NO
-    assert(fs.existsSync(path.join(MARCUS_HOME, '.claude', 'CLAUDE.md')), 'Marcus: Claude bridge exists');
-    assert(fs.existsSync(path.join(MARCUS_HOME, '.codex')), 'Marcus: Codex dir exists');
+    // Runtime gating: Claude and Codex YES (bridges in vault root), Gemini NO
+    // CLAUDE.md is handled by the claude_md rewrite-template (not a bridge entry)
+    assert(fs.existsSync(path.join(MARCUS_VAULT, 'CLAUDE.md')), 'Marcus: Claude bridge exists in vault root');
+    assert(fs.existsSync(path.join(MARCUS_VAULT, 'AGENTS.md')), 'Marcus: Codex bridge (AGENTS.md) exists in vault root');
+    assert(!fs.existsSync(path.join(MARCUS_VAULT, 'GEMINI.md')), 'Marcus: Gemini bridge does NOT exist (Gemini not selected)');
+    // No files written to home runtime dirs
     const marcusGeminiFiles = walkDir(path.join(MARCUS_HOME, '.gemini'));
     assert(marcusGeminiFiles.length === 0, `Marcus: Gemini dir has no files (found ${marcusGeminiFiles.length})`);
     const marcusOpenclawFiles = walkDir(path.join(MARCUS_HOME, '.openclaw'));
@@ -599,14 +596,16 @@ async function runE2ETest() {
     }
     assert(templatesMissing === 0, `Manifest completeness: All non-gated template surfaces exist (missing: ${templatesMissing})`);
 
-    // Runtime-gated surfaces exist ONLY for selected runtimes (Claude, Codex)
-    const claudeBridge = path.join(MARCUS_HOME, '.claude', 'CLAUDE.md');
-    const codexDir = path.join(MARCUS_HOME, '.codex');
-    const geminiBridgePath = path.join(MARCUS_HOME, '.gemini', 'GEMINI.md');
+    // Runtime-gated surfaces exist ONLY for selected runtimes (Claude, Codex).
+    // Bridge files now live in vault root, not home dirs.
+    // CLAUDE.md is handled by the claude_md rewrite-template, not a bridge entry.
+    const claudeBridge = path.join(MARCUS_VAULT, 'CLAUDE.md');
+    const codexBridge  = path.join(MARCUS_VAULT, 'AGENTS.md');
+    const geminiBridgePath = path.join(MARCUS_VAULT, 'GEMINI.md');
     const openclawBridgePath = path.join(MARCUS_HOME, '.openclaw', 'START_HERE.md');
 
-    assert(fs.existsSync(claudeBridge), 'Manifest completeness: Claude bridge exists (selected runtime)');
-    assert(fs.existsSync(codexDir), 'Manifest completeness: Codex dir exists (selected runtime)');
+    assert(fs.existsSync(claudeBridge), 'Manifest completeness: Claude bridge exists in vault root (selected runtime)');
+    assert(fs.existsSync(codexBridge), 'Manifest completeness: Codex bridge (AGENTS.md) exists in vault root (selected runtime)');
     assert(!fs.existsSync(geminiBridgePath), 'Manifest completeness: Gemini bridge does NOT exist (unselected runtime)');
     assert(!fs.existsSync(openclawBridgePath), 'Manifest completeness: OpenClaw bridge does NOT exist (unselected runtime)');
 

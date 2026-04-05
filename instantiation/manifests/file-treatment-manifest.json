@@ -2263,11 +2263,11 @@
     },
     {
       "id": "bridge_codex",
-      "path": "~/.codex/instructions.md",
+      "path": "AGENTS.md",
       "layer": "template-and-rewrite",
       "treatment": "rewrite-template",
       "owner_phase": "onboarding",
-      "location": "runtime-home",
+      "location": "vault",
       "runtime": "Codex",
       "runtime_gated": true,
       "inputs": [
@@ -2278,41 +2278,27 @@
     },
     {
       "id": "bridge_claude",
-      "path": "~/.claude/CLAUDE.md",
+      "path": "CLAUDE.md",
       "layer": "template-and-rewrite",
-      "treatment": "rewrite-template",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "Claude",
-      "runtime_gated": true,
-      "inputs": [
-        "owner_name",
-        "system_name",
-        "vault_location"
-      ]
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "config_claude_settings",
       "path": "~/.claude/settings.json",
       "layer": "user-generated",
-      "treatment": "generate-fresh",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "Claude",
-      "runtime_gated": true,
-      "inputs": [
-        "system_name",
-        "vault_location"
-      ],
-      "scaffold_safe": true
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "bridge_gemini",
-      "path": "~/.gemini/GEMINI.md",
+      "path": "GEMINI.md",
       "layer": "template-and-rewrite",
       "treatment": "rewrite-template",
       "owner_phase": "onboarding",
-      "location": "runtime-home",
+      "location": "vault",
       "runtime": "Gemini",
       "runtime_gated": true,
       "inputs": [
@@ -2325,107 +2311,57 @@
       "id": "bridge_openclaw_start",
       "path": "~/.openclaw/workspace/START_HERE.md",
       "layer": "template-and-rewrite",
-      "treatment": "rewrite-template",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "OpenClaw",
-      "runtime_gated": true,
-      "inputs": [
-        "owner_name",
-        "system_name",
-        "vault_location"
-      ]
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "bridge_openclaw_agents",
       "path": "~/.openclaw/workspace/AGENTS.md",
       "layer": "template-and-rewrite",
-      "treatment": "rewrite-template",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "OpenClaw",
-      "runtime_gated": true,
-      "inputs": [
-        "owner_name",
-        "system_name",
-        "vault_location",
-        "timezone"
-      ]
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "config_codex_toml",
       "path": "~/.codex/config.toml",
       "layer": "user-generated",
-      "treatment": "generate-fresh",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "Codex",
-      "runtime_gated": true,
-      "inputs": [
-        "home_root",
-        "workspace_root",
-        "vault_location",
-        "codex_projects"
-      ],
-      "scaffold_safe": true
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "config_gemini_settings",
       "path": "~/.gemini/settings.json",
       "layer": "user-generated",
-      "treatment": "generate-fresh",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "Gemini",
-      "runtime_gated": true,
-      "inputs": [
-        "selected_runtimes"
-      ],
-      "scaffold_safe": true
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "config_gemini_projects",
       "path": "~/.gemini/projects.json",
       "layer": "user-generated",
-      "treatment": "generate-fresh",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "Gemini",
-      "runtime_gated": true,
-      "inputs": [
-        "gemini_project_paths"
-      ],
-      "scaffold_safe": true
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "config_gemini_trusted",
       "path": "~/.gemini/trustedFolders.json",
       "layer": "user-generated",
-      "treatment": "generate-fresh",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "Gemini",
-      "runtime_gated": true,
-      "inputs": [
-        "gemini_trusted_folders"
-      ],
-      "scaffold_safe": true
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "config_openclaw_json",
       "path": "~/.openclaw/openclaw.json",
       "layer": "user-generated",
-      "treatment": "generate-fresh",
-      "owner_phase": "onboarding",
-      "location": "runtime-home",
-      "runtime": "OpenClaw",
-      "runtime_gated": true,
-      "inputs": [
-        "openclaw_workspace",
-        "openclaw_channels",
-        "selected_runtimes"
-      ],
-      "scaffold_safe": true
+      "treatment": "exclude",
+      "owner_phase": "never",
+      "location": "vault"
     },
     {
       "id": "auth_codex",

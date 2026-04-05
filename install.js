@@ -394,7 +394,6 @@ async function main() {
   const coreCount = installerManifest.copyCore.length;
   const templateCount = installerManifest.templateSources.length;
   const bridgeCount = installerManifest.bridgeTemplates.length;
-  const scaffoldCount = installerManifest.safeScaffolds.length;
 
   const anyConnected = connectedGmail > 0 || basecampConnected;
   const anyFailed = connect_accounts_now === 'now' && !anyConnected;
@@ -406,16 +405,22 @@ async function main() {
 Installation complete.
 
 What was installed:
-  ${coreCount} core doctrine files, ${templateCount} rendered templates, ${bridgeCount} runtime bridges, ${scaffoldCount} config scaffolds
+  ${coreCount} core doctrine files, ${templateCount} rendered templates, ${bridgeCount} runtime bridges
 
 Vault:      ${vault_location}
 Workspace:  ${workspace_root}
 Runtimes:   ${selected_runtimes.join(', ')}
 Accounts:   ${accountsSummary}
 ${connectorSummaryBlock}
-${reconnectLine}Start a conversation with any operator:
-  "Hi Claudia, what should I focus on today?"
-  "Hi Anton, review this architecture."
+${reconnectLine}To start using your system:
+  cd ${vault_location}
+
+Then launch any runtime:
+  claude                  # if Claude is enabled
+  codex                   # if Codex is enabled
+  gemini                  # if Gemini is enabled
+
+The runtime will discover the boot files in this directory automatically.
 `);
 }
 

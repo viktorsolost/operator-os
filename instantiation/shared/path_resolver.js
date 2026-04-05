@@ -41,47 +41,24 @@ function assertNoForbiddenRoots(value, name) {
 }
 
 // ---------------------------------------------------------------------------
-// Runtime path builders
+// Runtime path builders — bridge files now live in the vault root
 // ---------------------------------------------------------------------------
-function buildCodexPaths(home_root) {
-  const root = path.join(home_root, '.codex');
-  return {
-    bridge: path.join(root, 'instructions.md'),
-    config: path.join(root, 'config.toml'),
-    root,
-  };
+function buildCodexPaths(vault_location) {
+  return { bridge: path.join(vault_location, 'AGENTS.md') };
 }
 
-function buildClaudePaths(home_root) {
-  const root = path.join(home_root, '.claude');
-  return {
-    bridge: path.join(root, 'CLAUDE.md'),
-    settings: path.join(root, 'settings.json'),
-    root,
-  };
+function buildClaudePaths(vault_location) {
+  return { bridge: path.join(vault_location, 'CLAUDE.md') };
 }
 
-function buildGeminiPaths(home_root) {
-  const root = path.join(home_root, '.gemini');
-  return {
-    bridge: path.join(root, 'GEMINI.md'),
-    settings: path.join(root, 'settings.json'),
-    projects: path.join(root, 'projects.json'),
-    trustedFolders: path.join(root, 'trustedFolders.json'),
-    root,
-  };
+function buildGeminiPaths(vault_location) {
+  return { bridge: path.join(vault_location, 'GEMINI.md') };
 }
 
-function buildOpenClawPaths(home_root) {
-  const root = path.join(home_root, '.openclaw');
-  const workspace = path.join(root, 'workspace');
-  return {
-    bridgeStart: path.join(workspace, 'START_HERE.md'),
-    bridgeAgents: path.join(workspace, 'AGENTS.md'),
-    config: path.join(root, 'openclaw.json'),
-    workspace,
-    root,
-  };
+// OpenClaw is deferred — returns empty object so any code referencing it
+// gracefully finds no paths rather than crashing.
+function buildOpenClawPaths(_vault_location) {
+  return {};
 }
 
 const RUNTIME_BUILDERS = {
@@ -130,11 +107,11 @@ function resolveInstallerPaths({
     identity: path.join(vault_location, 'operator', 'identity.md'),
   };
 
-  // --- Build enabled runtime paths ---
+  // --- Build enabled runtime paths (all bridge targets now in vault, not home dirs) ---
   const runtimes = {};
   for (const [runtimeName, builder] of Object.entries(RUNTIME_BUILDERS)) {
     if (isRuntimeEnabled(runtimeSelection, runtimeName)) {
-      runtimes[runtimeName] = builder(home_root);
+      runtimes[runtimeName] = builder(vault_location);
     }
   }
 
