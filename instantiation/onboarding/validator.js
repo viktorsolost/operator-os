@@ -218,8 +218,10 @@ function checkFunctionalContent(targetInstallRoot, packet, installerManifest) {
   }
 
   // At least one runtime bridge exists
-  const hasBridge = (installerManifest.bridgeTemplates || []).some(b => fileExists(b.target));
-  if (!hasBridge) {
+  // Claude's bridge (CLAUDE.md) is a rewrite-template in templateSources, not in bridgeTemplates
+  const hasBridgeTemplate = (installerManifest.bridgeTemplates || []).some(b => fileExists(b.target));
+  const hasClaudeBridge = fileExists(path.join(targetInstallRoot, 'CLAUDE.md'));
+  if (!hasBridgeTemplate && !hasClaudeBridge) {
     findings.push({ severity: 'fail', message: 'No runtime bridge files found' });
   }
 
