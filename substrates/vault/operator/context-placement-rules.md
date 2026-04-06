@@ -86,6 +86,12 @@ Good fit:
 Write the full trail here.
 Push only the distilled result upward.
 
+Required files per initiative:
+- `session-log.md` — chronological work trail
+- `decisions.md` — architecture choices that outlive the session
+
+Initiatives do not need summary.md, open-questions.md, or references.md. They are internal system work, not external projects. Do not force the full project template on them.
+
 ### `operator/*.md`
 
 Use for operator behavior, doctrine, and lane rules.
@@ -116,6 +122,14 @@ Good fit:
 - lifecycle rules
 - approval rules
 - patterns shared by many projects of one type
+
+### `apps/...`
+
+Use for product design and development context.
+
+Apps are a separate class from projects. They accumulate prototypes, proposals, brainstorms, and plans. The project template does not apply to apps.
+
+No required file structure. Each app organizes around its own needs.
 
 ### `brands/...`
 
