@@ -333,6 +333,15 @@ async function main() {
         console.error(`  ${typeof e === 'object' ? (e.id ? `[${e.id}] ${e.error || JSON.stringify(e)}` : JSON.stringify(e)) : e}`);
       }
     }
+    if (slice2Result.validation && slice2Result.validation.findings) {
+      const failures = slice2Result.validation.findings.filter(f => f.severity === 'fail');
+      if (failures.length > 0) {
+        console.error(`\nValidation failures (${failures.length}):`);
+        for (const f of failures) {
+          console.error(`  [${f.checkpoint}] ${f.message}`);
+        }
+      }
+    }
     process.exit(1);
   }
   console.log('  Onboarding complete.');
