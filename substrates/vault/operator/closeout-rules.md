@@ -1,6 +1,6 @@
 # Closeout Rules
 
-These rules decide what must be logged before an operator says work is done.
+These rules decide what must be logged when work completes.
 
 Keep closeout small.
 Write the minimum useful record in the right place.
@@ -8,15 +8,27 @@ Do not spray the same update everywhere.
 
 ## Core rule
 
-Before declaring a task complete, do a closeout pass.
+Log when work finishes, not when the session ends.
 
-The closeout pass decides:
+There is no reliable session-end signal. Operators do not know which response is the last one. Deferring logging to "the end" means it gets skipped when Viktor closes the terminal, asks an unrelated follow-up, or the context window compresses.
+
+When a discrete piece of work completes, log it immediately as part of that response. A session may produce 0, 1, or several log entries depending on how many pieces of work finished.
+
+The closeout check for each completed piece of work:
 - what changed
 - whether the change matters beyond the current reply
 - where the result should be logged
 - whether a handoff needs a completion note
 
 If nothing durable changed, no file write is required.
+
+## Minimum format
+
+The floor is one line: date, operator, one sentence describing what shipped or decided, and a pointer to where the detail lives.
+
+Example: `- 2026-04-06 (Anton): Reframed closeout from session-end to work-completion timing. -> closeout-rules.md`
+
+Operators can write more when the work warrants it. The one-liner is the minimum, not the target.
 
 ## Approval rule
 
@@ -74,6 +86,18 @@ When multiple destinations are possible, prefer this order:
 4. memory.md
 
 Write upward only when the result genuinely matters at that wider level.
+
+## Session log rotation
+
+Session logs grow unbounded without rotation.
+
+Rule: if the active `session-log.md` exceeds 150 lines, move entries older than 7 days to `session-log-archive.md` in the same directory.
+
+- The archive file is append-only, newest entries at the bottom.
+- The archive is never loaded during normal work. It exists for explicit history questions only.
+- The active log keeps a one-line pointer at the top: `Older entries: session-log-archive.md`
+- Rotation can happen during closeout or as a standalone maintenance pass.
+- Do not distill or summarize during rotation. Move raw entries as-is.
 
 ## Anti-patterns
 

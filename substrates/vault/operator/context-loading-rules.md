@@ -33,6 +33,7 @@ Example:
 ### Task-conditional
 
 Load these only when the live task needs them:
+- `operator/tools.md` when the task requires calling external services, CLIs, or pipelines
 - `operator/working-style.md` for phrasing, presentation, and answer shape
 - `operator/identity.md` for Viktor substrate and priorities
 - `operator/agent-role.md` for autonomy, approval boundaries, and action limits
