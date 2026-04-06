@@ -2286,10 +2286,13 @@
     },
     {
       "id": "config_claude_settings",
-      "path": "~/.claude/settings.json",
+      "path": ".claude/settings.json",
       "layer": "user-generated",
-      "treatment": "exclude",
-      "owner_phase": "never",
+      "treatment": "generate-fresh",
+      "scaffold_safe": true,
+      "runtime_gated": true,
+      "runtime": "Claude",
+      "owner_phase": "install",
       "location": "vault"
     },
     {

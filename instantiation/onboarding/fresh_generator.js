@@ -40,7 +40,7 @@ const VAULT_FRESH_SURFACES = [
 function validateSurfaceListAgainstManifest(manifestPath) {
   const matrix = loadFileMatrix(manifestPath);
   const manifestIds = matrix.getGenerateFresh()
-    .filter(s => s.location === 'vault')
+    .filter(s => s.location === 'vault' && !s.scaffold_safe)
     .map(s => s.id)
     .sort();
   const hardcodedIds = VAULT_FRESH_SURFACES.map(s => s.id).sort();

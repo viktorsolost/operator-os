@@ -18,8 +18,9 @@ const BRIDGE_TEMPLATE_MAP = Object.freeze({
   bridge_gemini: 'runtime-bridges/gemini/GEMINI.md.tmpl',
 });
 
-// No global config scaffolds — all scaffold entries are now excluded.
-const SCAFFOLD_TEMPLATE_MAP = Object.freeze({});
+const SCAFFOLD_TEMPLATE_MAP = Object.freeze({
+  config_claude_settings: 'runtime-configs/claude/settings.json.tmpl',
+});
 
 // Surface IDs that have a dedicated .tmpl file under template_source_root/
 const OPERATOR_TEMPLATE_MAP = Object.freeze({
@@ -36,8 +37,9 @@ const BRIDGE_PATH_KEY_MAP = Object.freeze({
   bridge_gemini: { runtime: 'Gemini', key: 'bridge' },
 });
 
-// No scaffold path keys — scaffolds are excluded.
-const SCAFFOLD_PATH_KEY_MAP = Object.freeze({});
+const SCAFFOLD_PATH_KEY_MAP = Object.freeze({
+  config_claude_settings: { runtime: 'Claude', key: 'config' },
+});
 
 // ---------------------------------------------------------------------------
 // Vault surface → resolved target path

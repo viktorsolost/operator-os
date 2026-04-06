@@ -48,7 +48,10 @@ function buildCodexPaths(vault_location) {
 }
 
 function buildClaudePaths(vault_location) {
-  return { bridge: path.join(vault_location, 'CLAUDE.md') };
+  return {
+    bridge: path.join(vault_location, 'CLAUDE.md'),
+    config: path.join(vault_location, '.claude', 'settings.json'),
+  };
 }
 
 function buildGeminiPaths(vault_location) {
